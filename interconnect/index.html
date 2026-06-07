@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect — Week of June 7, 2026</title>
+<style>
+:root {
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 28px 42px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.masthead h1 {
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: .2px;
+  margin-bottom: 14px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.meta-bar strong { color: var(--ink); }
+
+/* ── BODY ── */
+.body { padding: 0 42px 32px; }
+
+/* ── LEDE ── */
+.lede {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lede p + p { margin-top: 10px; }
+.lede .author {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
+}
+.sec-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
+
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.connector-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flag-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e8dfc8;
+}
+.flag-item:last-child { border-bottom: none; }
+.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
+.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #b0b8c4;
+  padding: 20px 42px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ══ MASTHEAD ══ -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup style="font-size:16px;vertical-align:super;font-weight:400;color:var(--muted)">™</sup></h1>
+    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of June 7, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 1</span>
+      <span>nexphaseadvisory.net</span>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div class="body">
+
+    <!-- LEDE -->
+    <div class="lede">
+      <p>The race for grid capacity is reshaping where data centers get built, who builds them, and how fast they can get power. This week: PJM's fragmentation risk hits the mainstream press, Google's Texas co-location model signals a structural shift in how hyperscalers think about generation, and two gigawatt-scale campuses in Ohio and Illinois surface with unmet power origination needs. Queue data across PJM and WECC puts supply context behind each of these signals.</p>
+      <p>This brief is written by a practitioner — 20+ years in power origination and interconnection, 5+ GW delivered to NTP, two FERC Order 1000 competitive transmission wins. The analysis here connects public news to what's actually moving in the interconnection queue.</p>
+      <div class="author">Chris Santiago &nbsp;·&nbsp; NexPhase Advisory &nbsp;·&nbsp; info@nexphaseadvisory.net</div>
+    </div>
+
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>Connector Markets — Load & Supply in the Same Geography</h2>
+    </div>
+
+    <div class="connector-section">
+      <p class="connector-intro">A "connector market" exists where a known data center load announcement overlaps with viable generation in the same ISO/state footprint. These are the highest-value origination windows — one conversation can structure both sides of a deal. Three markets stand out this week.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Load Signal</th>
+            <th>MW</th>
+            <th>Viable Supply in Queue</th>
+            <th>Strategic Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="market-tag">OH · PJM</span></td>
+            <td><span class="load-name">QTS</span><div class="queue-note">Van Wert mega-site · $10B campus</div></td>
+            <td><span class="mw-val">~2,000+</span></td>
+            <td><span class="supply-count">23 projects ≥ Score 6</span><div class="queue-note">Top: PJM-AE1-092 (207 MW Solar, Score 7)<br>PJM-AG2-329 (200 MW Battery, Score 7)</div></td>
+            <td style="font-size:11px;color:#374151">AEP Ohio territory. Strong Columbus-area queue density. Multiple Feasibility-stage projects with motivated sellers.</td>
+          </tr>
+          <tr>
+            <td><span class="market-tag">IL · PJM</span></td>
+            <td><span class="load-name">Eagle Rock</span><div class="queue-note">Christian County · No in-house power team</div></td>
+            <td><span class="mw-val">1,000</span></td>
+            <td><span class="supply-count">5 projects Score 7</span><div class="queue-note">PJM-AD1-100 (850 MW Wind, IA Executed)<br>PJM-AI1-149 (250 MW Battery, Cook)</div></td>
+            <td style="font-size:11px;color:#374151">Property developer with no apparent origination capability. 2029–2030 construction start = early engagement window now.</td>
+          </tr>
+          <tr>
+            <td><span class="market-tag">VA · PJM</span></td>
+            <td><span class="load-name">Northern Virginia Corridor</span><div class="queue-note">Multiple hyperscaler campuses active</div></td>
+            <td><span class="mw-val">Multi-GW</span></td>
+            <td><span class="supply-count">12 projects Score 7+</span><div class="queue-note">PJM-AG2-518 (80 MW Battery, Score 8, Lightshift)<br>PJM-AI1-018 (300 MW Battery, Spotsylvania)</div></td>
+            <td style="font-size:11px;color:#374151">Dominion territory. Most congested PJM queue. Premium location, high network upgrade costs. Acquisition plays require deep queue knowledge.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="queue-spotlight">
+        <div class="qs-label">Queue Spotlight — Highest-Score Acquisition Targets This Week</div>
+        <div class="qs-row">
+          <div class="qs-item">
+            <div class="qs-id">PJM-AG2-518</div>
+            <div class="qs-desc">80 MW Battery · Montgomery, VA · Score 8<br>Lightshift Energy · System Impact Study</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">West-G0998</div>
+            <div class="qs-desc">1,120 MW Nuclear · Benton, WA · Score 7<br>BPA · Early study · BTM/co-location candidate</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">PJM-AD1-100</div>
+            <div class="qs-desc">850 MW Wind · Kankakee, IL · Score 7<br>IA Executed · 7+ years · Motivated seller signal</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">West-Q278</div>
+            <div class="qs-desc">250 MW Battery · Maricopa, AZ · Score 7<br>APS territory · Phoenix load pocket</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Interconnection</div>
+      <h2>PJM Fragmentation Risk — What It Means for Power Procurement</h2>
+    </div>
+
+    <div class="lead-story">
+      <p class="dek">AI load growth is straining the country's largest grid operator to a potential breaking point — and that creates both risk and arbitrage for developers who understand queue dynamics.</p>
+      <p class="body-text">Reports this week flagged the possibility of PJM — which serves 13 states and 67 million customers — fragmenting under the weight of data center load growth. The mechanism: state-by-state energy policy divergence, transmission cost allocation disputes, and a reformed queue that drew 220 GW of new requests in Cycle 1 alone against a grid that took decades to build. PJM expects electricity demand to increase by more than 30 GW between 2024 and 2030, driven largely by data centers.</p>
+      <p class="body-text">For power procurement teams, fragmentation risk cuts two ways. On the supply side, queue projects in contested transmission zones face higher network upgrade cost exposure — a 500 kV POI in a congested corridor may look attractive until the SIS comes back. On the demand side, any ISO restructuring resets the tariff and interconnection rules mid-cycle, potentially invalidating PPA assumptions baked into financial models years earlier.</p>
+      <p class="body-text">The practical read: projects currently in System Impact Study in PJM's most congested zones (Northern Virginia, ComEd, AEP Ohio) should be stress-tested against both current tariff rules and a fragmentation scenario. Greenfield data center siting decisions made today will be executing against whatever grid structure exists in 2028–2030.</p>
+
+      <div class="data-box">
+        <div class="data-label">PJM Queue — Current Snapshot (Source: PJM, May 2026)</div>
+        <div class="data-grid">
+          <div class="data-item"><div class="num">220 GW</div><div class="lbl">Cycle 1 requests — 811 projects, first reformed queue cycle</div></div>
+          <div class="data-item"><div class="num">30+ GW</div><div class="lbl">Expected demand growth 2024–2030, driven by data centers (PJM forecast)</div></div>
+          <div class="data-item"><div class="num">160+ GW</div><div class="lbl">Studied since 2023 reforms; ~46 GW transition projects remaining through 2026</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Campus Announcements — Scale & Power Implications</h2>
+    </div>
+
+    <div class="story-grid">
+      <div class="story">
+        <div class="hed">Google's Texas Co-Location Model Changes the Conversation</div>
+        <div class="dek">1 GW+ generation paired directly with a data center campus in Gray County, TX</div>
+        <p class="body-text">Google and Intersect — a clean energy developer Google acquired for $4.75B in March 2026 — broke ground this week on the Meitner Energy Center, a co-located data center and generation complex in Gray and Roberts Counties, Texas Panhandle — wind, solar, storage, and gas firming in one package. This is the "power-first" siting model in practice: find the generation, then build the campus around it.</p>
+        <p class="body-text" style="margin-top:8px">For developers without Google's balance sheet, this model is instructive. The interconnection queue strategy, PPA structure, and site control sequence that makes a 1 GW co-location work are exactly the skills that transfer to smaller campuses — and most data center developers don't have them in-house.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Eagle Rock: 1 GW in Illinois, No Power Team</div>
+        <div class="dek">$8.8B campus proposed in Christian County — construction 2029–2030, community opposition emerging</div>
+        <p class="body-text">Eagle Rock's Christian County, Illinois announcement is a textbook early-stage origination opportunity. A property developer — not an energy company — is proposing 1 GW of data center load in MISO with a 3–4 year construction horizon and no apparent in-house power origination capability. The $8.8B campus would span 475 acres with ten 100 MW buildings.</p>
+        <p class="body-text" style="margin-top:8px">The Illinois queue has viable supply: five Score 7 projects within the state including an 850 MW wind project with IA Executed status. One watch item: community opposition is active, with a petition for an 18-month moratorium gathering ~700 signatures. Project approval is not guaranteed — engagement now, while the project is still in early discussions with no formal application filed, is the right timing.</p>
+      </div>
+      <div class="story">
+        <div class="hed">QTS Van Wert: $10B in AEP Ohio Territory</div>
+        <div class="dek">Mega-site acquisition signals multi-GW demand in Columbus corridor</div>
+        <p class="body-text">QTS's acquisition of the Van Wert, Ohio mega-site — with a $10 billion campus announcement — puts gigawatt-scale load directly in AEP Ohio territory. The Columbus load pocket already has 23 queue projects scoring ≥6 within reach, including multiple Feasibility-stage solar and battery projects in Marion, Logan, and Madison counties.</p>
+        <p class="body-text" style="margin-top:8px">The interconnection path in this corridor runs through the Marysville-Flatlick 765 kV hub — a known congestion point. Network upgrade cost exposure is real, but project selection at the right POI can thread that needle.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Stargate Expands to Michigan — Massive Load on DTE Grid</div>
+        <div class="dek">Oracle/OpenAI break ground in Saline Township; Governor Whitmer attends</div>
+        <p class="body-text">The Oracle/OpenAI Stargate campus in Saline Township, Michigan — "The Barn" — marks the first major hyperscale data center build in Michigan in years. DTE Energy's transmission system will be the interconnection path, and the state's relatively clean queue (compared to Northern Virginia or ComEd) means earlier-stage projects may still have viable interconnection economics.</p>
+        <p class="body-text" style="margin-top:8px">Michigan's queue is thin on supply-side candidates relative to load growth implied by this campus, which creates scarcity value for any project with a credible IA path in DTE territory.</p>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory & Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+        <span class="flag-co">Eagle Rock · Christian Co. IL</span>
+        <span class="flag-note">Community opposition petition (~700 signatures) seeks 18-month moratorium on data center development. No formal application filed yet — project approval not guaranteed. Watch county board proceedings.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">PJM Fragmentation</span>
+        <span class="flag-note">Mainstream press coverage elevates political risk of ISO restructuring mid-cycle. Monitor FERC docket for any state withdrawal filings or tariff revision proposals.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Google–Xcel PPA · MN</span>
+        <span class="flag-note">$1.5B projected customer savings validates utility-hyperscaler PPA model. Sets pricing precedent for MISO-zone load-serving deals in 2026–2027 procurement cycles.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">SoftBank · France · 5 GW</span>
+        <span class="flag-note">EDF partnership on former power plant sites — repurposing existing interconnection rights. Model directly applicable to US coal retirement sites in PJM and MISO.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Compass · Ellis County TX</span>
+        <span class="flag-note">$15M community investment to resolve opposition to 830-acre campus. Community benefit agreements increasingly required for large campuses in constrained markets.</span>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA & Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+      <p class="body-text">The Google–Xcel deal in Minnesota — projected at $1.5B in customer savings over 15 years on a data center PPA — provides a useful public benchmark for utility-scale PPA economics tied to hyperscaler load. The deal structure (utility-administered, load-serving agreement) differs from a direct corporate PPA but reflects the pricing dynamic: hyperscalers are willing to pay above-market rates for certainty and deliverability, and utilities are willing to structure creative vehicles to land the load.</p>
+      <p class="body-text" style="margin-top:8px">The Crusoe–Bergen Engines deal (750 MW, gas reciprocating engines) represents the other end of the spectrum — behind-the-meter, firm capacity, no ISO queue exposure. For campuses that can't wait for queue projects to clear study phases, BTM gas remains the fastest path to firm power, at the cost of carbon exposure and regulatory scrutiny.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About This Brief</div>
+      <h2>NexPhase Advisory</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is produced by NexPhase Advisory — a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Questions, feedback, or to discuss a specific market or project: <a href="mailto:info@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">info@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of June 7, 2026 &nbsp;·&nbsp; Vol. 1, No. 1</div>
+      </div>
+    </div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, CAISO, Southeast) as of May 24, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+    </div>
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
