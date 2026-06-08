@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Loose report source files (publish via interconnect/index.html only)
+the_interconnect_*.html
