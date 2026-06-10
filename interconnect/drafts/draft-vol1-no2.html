@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect&#8482; — Week of June 9, 2026</title>
+<style>
+:root {
+  --ink:    #16191d;
+  --muted:  #54606e;
+  --faint:  #8a93a1;
+  --line:   #d8dce4;
+  --accent: #0b5d4e;
+  --a-soft: #e7f2ef;
+  --gold:   #a06d18;
+  --g-soft: #f9f1de;
+  --flag:   #8b2020;
+  --paper:  #fdfcfa;
+  --data:   #1a3a6b;
+  --d-soft: #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #d6d2cb;
+  line-height: 1.6;
+  padding: 32px 12px 56px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 840px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 6px 40px rgba(20,24,31,.22);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 32px 44px 20px;
+  border-bottom: 3px double var(--ink);
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.masthead h1 {
+  font-size: 58px;
+  letter-spacing: -2px;
+  line-height: .93;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.masthead h1 sup {
+  font-size: 22px;
+  vertical-align: super;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+  max-width: 560px;
+  margin-bottom: 18px;
+}
+
+/* ── DATELINE BAR ── */
+.dateline-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 44px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10.5px;
+  letter-spacing: .5px;
+}
+.dateline-bar .vol {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.dateline-bar .vol span {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.dateline-bar .site {
+  color: var(--muted);
+  font-size: 9.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── BODY ── */
+.body-wrap {
+  padding: 36px 44px;
+}
+
+/* ── LEDE ── */
+.lede {
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--accent);
+  display: inline-block;
+}
+
+/* ── SIGNAL CARDS ── */
+.signal-card {
+  border-left: 3px solid var(--accent);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  background: #fafaf8;
+}
+.signal-card.flag {
+  border-left-color: var(--flag);
+}
+.signal-card.gold {
+  border-left-color: var(--gold);
+  background: var(--g-soft);
+}
+.signal-card .signal-meta {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 6px;
+}
+.signal-card .signal-meta .badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 2px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-right: 6px;
+}
+.badge-pjm  { background: var(--d-soft); color: var(--data); }
+.badge-wecc { background: var(--a-soft); color: var(--accent); }
+.badge-miso { background: #f0eaf8;       color: #4a2080; }
+.badge-ercot{ background: #fef0e0;       color: #8a4400; }
+.badge-caiso{ background: #fde8e8;       color: var(--flag); }
+.badge-frcc { background: #e8f5e0;       color: #2d5a1b; }
+.badge-serc { background: #ede8f5;       color: #3a1a6b; }
+.signal-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.signal-card p {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.signal-card .angle {
+  font-size: 13px;
+  color: var(--ink);
+  font-style: italic;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.signal-card .angle strong {
+  font-style: normal;
+  color: var(--accent);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* ── CONNECTOR MARKETS ── */
+.connector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.connector-cell {
+  padding: 14px 16px;
+  background: var(--a-soft);
+  border: 1px solid #c2ddd8;
+}
+.connector-cell.demand { background: var(--g-soft); border-color: #d8c48a; }
+.connector-cell .cell-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.connector-cell.demand .cell-label { color: var(--gold); }
+.connector-cell h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.connector-cell p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  margin-bottom: 8px;
+}
+.queue-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.queue-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: top;
+}
+.queue-table tr:nth-child(even) td { background: #f5f4f1; }
+.queue-table .mw { font-weight: 700; color: var(--data); }
+
+/* ── DIVIDER ── */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 32px 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #8a93a1;
+  padding: 24px 44px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10.5px;
+  line-height: 1.7;
+}
+.footer a { color: #b0bcc8; text-decoration: none; }
+.footer strong { color: #d0d8e0; }
+
+@media (max-width: 600px) {
+  .masthead, .dateline-bar, .body-wrap, .footer { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 38px; }
+  .connector-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup>&#8482;</sup></h1>
+    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
+  </div>
+
+  <!-- DATELINE BAR -->
+  <div class="dateline-bar">
+    <div class="vol">Week of June 9, 2026 <span>· Vol. 1, No. 2</span></div>
+    <div class="site">NexPhaseAdvisory.net</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body-wrap">
+
+    <!-- LEDE -->
+    <p class="lede">Capital formation for data center capacity accelerated on multiple fronts this week, with Stark Power's $140M acquisition of Sagebrush's 5.6GW portfolio and Hut 8's $4.25B note offering for a hyperscaler-pre-leased Texas campus signaling that institutional money is moving decisively from pipeline to balance sheet. The geographic spread of announced projects—Nueces County, Christian County, Mississippi, Albany, Adelaide—confirms that developers are no longer anchoring solely to Tier 1 interconnection queues but are actively hunting stranded grid infrastructure, favorable regulatory environments, and utility-led offtake structures. Cipher Mining's play on a retired coal plant outside Waco is emblematic of a broader strategy: inherited transmission capacity is now a primary site selection criterion, not a secondary consideration. Regulators and utilities are entering the frame as active participants rather than gatekeepers, with Evergy's Topeka exploration and Compass's decision to advance in Mississippi despite a declined ruling both illustrating that developers are pricing regulatory friction as a manageable variable. Executives tracking load interconnection timelines should note that the Eagle Rock Illinois proposal—1GW with a 2029–2030 construction start—reflects the queue reality that is quietly shaping the true delivery schedule behind today's headline announcements.</p>
+
+    <!-- SIGNALS SECTION -->
+    <div class="section-label">This Week's Signals</div>
+
+    <!-- SIGNAL CARD — repeat block per signal, swap badge class per ISO -->
+    <div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-ercot">ERCOT</span>
+        Nueces County, TX · Demand Signal
+      </div>
+      <h3>Beacon Point AI Eyes Massive Nueces County Data Center</h3>
+      <p>Beacon Point AI has announced plans for a large-scale data center development in Nueces County, Texas. The project adds to a growing wave of hyperscale and AI-driven load pursuing ERCOT interconnection along the Gulf Coast corridor. Specific MW figures have not yet been disclosed publicly.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Nueces County sits in a congested ERCOT South zone with constrained transmission — early interconnection queue positioning and transmission study engagement are critical before site control is locked.
+      </div>
+    </div>
+<div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-pjm">PJM</span>
+        Multi-region (Sagebrush Portfolio) · M&amp;A
+      </div>
+      <h3>Stark Power Acquires 5.6GW Sagebrush DC Portfolio for ~$140M</h3>
+      <p>Stark Power has acquired Sagebrush's 5.6GW data center development portfolio, raising approximately $140 million to fund the transaction. The deal represents one of the larger bulk data center pipeline acquisitions in recent memory, signaling strong investor appetite for pre-developed capacity. Portfolio locations span multiple ISOs, though PJM assets are likely core given Sagebrush's historical footprint.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Portfolio deals of this scale compress available shovel-ready sites — developers and power marketers should accelerate due diligence on any remaining Sagebrush-adjacent queue positions before they get absorbed or repriced.
+      </div>
+    </div>
+<div class="signal-card flag">
+      <div class="signal-meta">
+        <span class="badge badge-miso">MISO</span>
+        Mississippi · Regulatory
+      </div>
+      <h3>Compass Datacenters Advances Mississippi Project Despite Regulatory Gap</h3>
+      <p>Compass Datacenters is pushing forward with its Mississippi data center development even after the state declined to issue a regulatory ruling on the project. The move suggests the developer is willing to absorb regulatory uncertainty to maintain timeline. Mississippi sits within MISO South, where interconnection queues and load growth planning are increasingly stressed.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Proceeding without a state regulatory ruling creates title and financing risk — lenders and offtake counterparties should pressure-test whether utility service agreements and local permits are fully secured before committing capital.
+      </div>
+    </div>
+<div class="signal-card">
+      <div class="signal-meta">
+        <span class="badge badge-miso">MISO</span>
+        Christian County, IL · Demand Signal
+      </div>
+      <h3>Eagle Rock Proposes 1GW Illinois Data Center, Start Date 2029–2030</h3>
+      <p>Eagle Rock has proposed a 1GW data center development in Christian County, Illinois, though construction is not expected to begin until 2029–2030. The project would represent a significant load addition to MISO's Illinois footprint, an area already managing coal retirements and renewable buildout simultaneously. The long lead time suggests queue positioning and transmission studies are still in early stages.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        A 2029–2030 start means this is a planning-horizon signal, not near-term revenue — useful for shaping long-dated PPA and transmission capacity conversations, but too early to underwrite merchant generation against.
+      </div>
+    </div>
+<div class="signal-card flag">
+      <div class="signal-meta">
+        <span class="badge badge-pjm">SPP</span>
+        Topeka, KS · Demand Signal
+      </div>
+      <h3>Evergy Explores Utility-Led Data Center Siting in Topeka</h3>
+      <p>Evergy, the incumbent utility serving Kansas and Missouri, is actively exploring siting a data center in Topeka, Kansas. Utility-led development signals a shift toward vertically integrated load attraction strategies, where the utility controls site, power, and customer relationships. This trend, if successful, could reshape how developers compete for prime Kansas locations.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Utility-sponsored data centers can crowd out independent developers by offering pre-permitted, rate-advantaged service — monitor Evergy's IRP filings and SPP queue activity in Topeka for signs of reserved capacity that limits third-party access.
+      </div>
+    </div>
+<div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-ercot">ERCOT</span>
+        Waco, TX · Demand Signal
+      </div>
+      <h3>Cipher Mining Targets 500MW Campus Near Retired Waco Coal Plant</h3>
+      <p>Cipher Mining plans to develop a 500MW data center campus near a retired coal plant outside Waco, Texas, with the intent to leverage existing grid infrastructure including transmission lines and substation assets. Brownfield coal sites offer expedited interconnection timelines by utilizing existing high-voltage infrastructure. The Waco area sits within ERCOT's load-heavy North zone.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Retired coal plant conversions are among the fastest paths to large-load interconnection in ERCOT right now — if Cipher has secured site control and utility coordination, this is a credible near-term load addition that will tighten North zone capacity margins.
+      </div>
+    </div>
+<div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-ercot">ERCOT</span>
+        Texas (Multi-site) · M&amp;A
+      </div>
+      <h3>Hut 8 Prices $4.25B Note to Fund 352MW Hyperscaler-Leased TX Campus</h3>
+      <p>Hut 8 has priced a $4.25 billion note offering to finance a 352MW Texas data center campus that has been pre-leased to an undisclosed hyperscaler. The financing structure and lease pre-commitment signal strong institutional confidence in Texas data center fundamentals. The undisclosed hyperscaler tenant adds intrigue but limits counterparty risk assessment for third parties.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        A fully pre-leased 352MW campus backed by $4.25B in debt financing sets a high pricing benchmark for Texas colocation capacity — use this as a comparable when structuring power supply agreements or evaluating land values near ERCOT load pockets.
+      </div>
+    </div>
+<div class="signal-card">
+      <div class="signal-meta">
+        <span class="badge badge-ercot">ERCOT</span>
+        Childress, TX · Demand Signal
+      </div>
+      <h3>IREN Expands Childress Data Center with Low-Water Footprint Focus</h3>
+      <p>IREN is expanding its Childress, Texas data center campus, citing job creation and a deliberately limited water use profile as key project attributes. Childress sits in the ERCOT Northwest zone, an area with growing wind resource availability but limited local load historically. The low-water positioning may be a response to increasing regulatory and community scrutiny of large data center water consumption.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        IREN's water-efficiency messaging in a rural Texas market is strategic — it lowers local opposition risk and may accelerate permitting, making Childress a potentially smoother development path than more congested urban ERCOT nodes.
+      </div>
+    </div>
+<div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-pjm">NYISO</span>
+        Albany Area, NY · Demand Signal
+      </div>
+      <h3>Prime Companies Unveils $2.8B Kenwood Tech and Data Center Campus</h3>
+      <p>Developer Prime Companies has announced a $2.8 billion Kenwood technology campus and data center plan in the Albany, New York area. The Albany region sits within NYISO Zone F, which has historically benefited from relatively affordable hydropower access and state economic development incentives. New York's data center sector has faced mixed regulatory signals at the state level regarding energy use and emissions.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Albany's proximity to clean hydro supply and Empire State Development incentives makes it attractive, but NYISO interconnection queues and New York's evolving Climate Leadership and Community Protection Act compliance requirements will be key cost drivers to model early.
+      </div>
+    </div>
+    <!-- Example signal card structure:
+    <div class="signal-card [flag|gold]">
+      <div class="signal-meta">
+        <span class="badge badge-pjm">PJM</span>
+        LOCATION · CATEGORY
+      </div>
+      <h3>HEADLINE</h3>
+      <p>DETAIL</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        PRACTITIONER COMMENTARY
+      </div>
+    </div>
+    -->
+
+    <hr class="section-divider">
+
+    <!-- CONNECTOR MARKETS -->
+    <div class="section-label">Connector Markets</div>
+    <div class="connector-grid">
+      <div class="connector-cell demand">
+        <div class="cell-label">Demand Signal</div>
+        <h4>Texas</h4>
+        <p>Cipher Mining plans a 500MW data center campus near a retired coal plant outside Waco, Texas, leveraging existing grid infrastructure for faster interconnection. Multiple additional Texas-focused projects—including Beacon Point AI in Nueces County, Hut 8's 352MW hyperscaler-leased campus, and IREN's Childress expansion—signal sustained, large-scale Texas power demand.</p>
+      </div>
+      <div class="connector-cell">
+        <div class="cell-label">Supply Context</div>
+        <h4>Kincaid-Pana 345kV (MISO)</h4>
+        <p>84.1 MW active solar project at the Kincaid-Pana 345kV substation in MISO; advantage is high-voltage 345kV interconnection enabling bulk power delivery, though geographic mismatch with Texas ERCOT requires cross-market coordination.</p>
+      </div>
+<div class="connector-cell demand">
+        <div class="cell-label">Demand Signal</div>
+        <h4>Illinois / MISO</h4>
+        <p>Eagle Rock proposes a 1GW data center in Christian County, Illinois with construction beginning 2029–2030, representing one of the largest single-site power loads in the MISO footprint. The long lead time creates a well-defined window to pair the project with queued generation capacity in MISO.</p>
+      </div>
+      <div class="connector-cell">
+        <div class="cell-label">Supply Context</div>
+        <h4>19CVTRY (MISO)</h4>
+        <p>100 MW active battery storage project at the 19CVTRY substation in MISO; dispatchable storage is a key advantage for data center baseload reliability, though additional generation capacity beyond 100 MW would be needed to serve the full 1GW load at scale.</p>
+      </div>
+      <!-- Example:
+      <div class="connector-cell demand">
+        <div class="cell-label">Demand Signal</div>
+        <h4>MARKET NAME</h4>
+        <p>DEMAND CONTEXT</p>
+      </div>
+      <div class="connector-cell">
+        <div class="cell-label">Supply Context</div>
+        <h4>QUEUE / CORRIDOR</h4>
+        <p>MW AVAILABLE · KEY CONSTRAINT</p>
+      </div>
+      -->
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- QUEUE SPOTLIGHT -->
+    <div class="section-label">Queue Spotlight</div>
+    <table class="queue-table">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>ISO</th>
+          <th>Type</th>
+          <th>MW</th>
+          <th>Status</th>
+          <th>POI / Substation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+<tr>
+          <td>Pleasant Grove Solar</td>
+          <td>ComEd</td>
+          <td>Solar</td>
+          <td class="mw">300</td>
+          <td>active</td>
+          <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
+        </tr>
+        <!-- Example row:
+        <tr>
+          <td>PROJECT NAME</td>
+          <td>PJM</td>
+          <td>Solar + BESS</td>
+          <td class="mw">300</td>
+          <td>Active</td>
+          <td>SUBSTATION 345kV</td>
+        </tr>
+        -->
+      </tbody>
+    </table>
+
+  </div><!-- /body-wrap -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>NexPhase Advisory</strong> &nbsp;·&nbsp; Power Market Intelligence<br>
+    Questions or comments: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a><br><br>
+    This publication is provided for informational purposes only. Nothing herein constitutes legal, financial, or investment advice.
+    All queue data derived from public ISO sources. &copy; 2026 NexPhase Advisory. All rights reserved.<br><br>
+    To unsubscribe, reply with "unsubscribe" in the subject line.
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
