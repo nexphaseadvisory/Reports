@@ -1,0 +1,854 @@
+{
+    "updatedAt": "2026-06-10T02:08:55.027Z",
+    "createdAt": "2026-06-07T23:56:43.555Z",
+    "id": "hAbUSOEUyZRxXEWm",
+    "name": "Interconnect Publisher \u2014 Weekly",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 5 * * 0"
+                        }
+                    ]
+                }
+            },
+            "id": "80da480d-220d-4059-8e67-81186cf3c296",
+            "name": "Every Sunday 5am",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                2720,
+                608
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "search",
+                "base": {
+                    "__rl": true,
+                    "value": "appoTkXUnQ9aulmkE",
+                    "mode": "id"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tblLLpsGrLBpgezYx",
+                    "mode": "id"
+                },
+                "filterByFormula": "IS_AFTER(CREATED_TIME(), DATEADD(TODAY(), -30, 'days'))",
+                "options": {}
+            },
+            "id": "44d2a5b5-3fcc-420f-8050-ad6dbedfc572",
+            "name": "Fetch Market Signals",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                2960,
+                608
+            ],
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "RoOhi6fE6lI3cI1c",
+                    "name": "Airtable Personal Access Token account 2"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "search",
+                "base": {
+                    "__rl": true,
+                    "value": "appoTkXUnQ9aulmkE",
+                    "mode": "id"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tblkazcIqMkDoISu7",
+                    "mode": "id"
+                },
+                "returnAll": false,
+                "limit": 20,
+                "options": {
+                    "fields": []
+                }
+            },
+            "id": "42c55d97-d34e-4427-aebd-63216e22df71",
+            "name": "Fetch Queue Records",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                2960,
+                800
+            ],
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "RoOhi6fE6lI3cI1c",
+                    "name": "Airtable Personal Access Token account 2"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Vol/No hardcoded for now; auto-increment later.\nreturn [{ json: { dateline, vol: 1, no: 2 } }];"
+            },
+            "id": "fbdbcda1-49cd-44e7-aba9-1b18b5051744",
+            "name": "Set Metadata",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                688,
+                224
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "anthropic-version",
+                            "value": "2023-06-01"
+                        },
+                        {
+                            "name": "content-type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1024, messages: [{ role: 'user', content: 'You are the editorial voice of The Interconnect\u2122, a weekly power market intelligence publication by NexPhase Advisory. Given the signals below, write a 3\u20135 sentence lede paragraph that connects the week\\'s themes for an audience of power developers, data center operators, and IPP executives. Practitioner voice \u2014 no hype, no filler. Return ONLY this JSON: { \"lede\": \"...\" }' + '\\n\\nSIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) }] }) }}",
+                "options": {
+                    "timeout": 120000
+                }
+            },
+            "id": "94f59db9-9e66-4f27-8f9b-571fe6b02a29",
+            "name": "Generate Lede",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                912,
+                224
+            ],
+            "retryOnFail": true,
+            "maxTries": 2,
+            "waitBetweenTries": 3000,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "FJA7PZjCaMHaj0Ir",
+                    "name": "Header Auth Claude API"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "anthropic-version",
+                            "value": "2023-06-01"
+                        },
+                        {
+                            "name": "content-type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 6000, messages: [{ role: 'user', content: 'You are a power market analyst. Given the signals below, return ONLY a JSON array of signal objects. Each object must have these exact fields:\\n- iso: string (PJM | WECC | MISO | ERCOT | CAISO | NYISO | SPP)\\n- location: string (city/state or region)\\n- category: string (e.g. Demand Signal | Queue Movement | Regulatory | M&A)\\n- headline: string (punchy, max 12 words)\\n- detail: string (2\u20133 sentences of factual context)\\n- angle: string (1\u20132 sentences practitioner commentary \u2014 what this means for someone building in this market)\\n- variant: string (empty string for standard | \\'flag\\' for risk/avoid | \\'gold\\' for high opportunity)\\nReturn ONLY the JSON array, no wrapper object, no markdown.' + '\\n\\nSIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) }] }) }}",
+                "options": {
+                    "timeout": 120000
+                }
+            },
+            "id": "00bc86c7-3786-4d26-a57c-d16c6ada2f55",
+            "name": "Generate Signals",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1120,
+                224
+            ],
+            "retryOnFail": true,
+            "maxTries": 2,
+            "waitBetweenTries": 3000,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "FJA7PZjCaMHaj0Ir",
+                    "name": "Header Auth Claude API"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.anthropic.com/v1/messages",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "anthropic-version",
+                            "value": "2023-06-01"
+                        },
+                        {
+                            "name": "content-type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, messages: [{ role: 'user', content: 'Given the demand signals and queue data below, identify the 1\u20132 strongest demand/supply pairings this week. Return ONLY a JSON array where each object has:\\n- demand_market: string\\n- demand_text: string (1\u20132 sentences on the demand signal)\\n- supply_market: string (queue corridor or substation name)\\n- supply_text: string (MW available \u00b7 key constraint or advantage)\\nReturn ONLY the JSON array, no markdown.' + '\\n\\nDEMAND SIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) + '\\n\\nQUEUE DATA:\\n' + JSON.stringify($('Fetch Queue Records').all().map(i => ({ project: i.json['Project Name'], region: i.json['Region'], type: i.json['Generation Type'], mw: i.json['MW Capacity'], status: i.json['Status'], poi: i.json['POI Name'] }))) }] }) }}",
+                "options": {
+                    "timeout": 120000
+                }
+            },
+            "id": "1efcecf9-cf3b-4cb8-a286-0711aa69ceae",
+            "name": "Generate Connectors",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1344,
+                224
+            ],
+            "retryOnFail": true,
+            "maxTries": 2,
+            "waitBetweenTries": 3000,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "FJA7PZjCaMHaj0Ir",
+                    "name": "Header Auth Claude API"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// interconnect_inject.js\n// Final Code node (\"Code \u2014 Inject\") for the Interconnect Publisher workflow.\n// Pulls STRUCTURED JSON from upstream nodes and injects it into the LOCKED design\n// template via string replacement. NO HTML is generated by AI \u2014 the shell is fixed.\n//\n// UPSTREAM FIELD CONTRACT (what each node must provide):\n//   Set Metadata        -> json: { dateline, vol, no }\n//   Generate Lede       -> Claude API response; parsed JSON: { lede: string }\n//   Generate Signals    -> Claude API response; parsed JSON: array of\n//                          { iso, location, category, headline, detail, angle, variant }\n//                          variant: '' (standard) | 'flag' (risk) | 'gold' (opportunity)\n//                          iso: PJM | WECC | MISO | ERCOT | CAISO | NYISO | SPP\n//   Generate Connectors -> Claude API response; parsed JSON: array of\n//                          { demand_market, demand_text, supply_market, supply_text }\n//   Fetch Queue Records -> Airtable rows, mapped here:\n//                          project <- 'Project Name', iso <- 'Region', type <- 'Generation Type',\n//                          mw <- 'MW Capacity', status <- 'Status', poi <- 'POI Name'\n//\n// OUTPUT: json: { html, filename, vol, no, dateline }\n//   filename = \"interconnect-vol{vol}-no{no}.html\"  (GitHub node writes to interconnect/{filename})\n//\n// NOTE: TEMPLATE below is a verbatim copy of the locked design shell at\n//   interconnect/template/the_interconnect_TEMPLATE.html\n// If you edit that file, re-sync this constant. The template must contain no\n// backtick or ${ } sequences (it does not today).\n\nconst TEMPLATE = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>The Interconnect&#8482; \u2014 {{DATELINE}}</title>\n<style>\n:root {\n  --ink:    #16191d;\n  --muted:  #54606e;\n  --faint:  #8a93a1;\n  --line:   #d8dce4;\n  --accent: #0b5d4e;\n  --a-soft: #e7f2ef;\n  --gold:   #a06d18;\n  --g-soft: #f9f1de;\n  --flag:   #8b2020;\n  --paper:  #fdfcfa;\n  --data:   #1a3a6b;\n  --d-soft: #eaf0f8;\n}\n*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n\nbody {\n  font-family: Georgia, \"Times New Roman\", serif;\n  color: var(--ink);\n  background: #d6d2cb;\n  line-height: 1.6;\n  padding: 32px 12px 56px;\n  -webkit-font-smoothing: antialiased;\n}\n\n.sheet {\n  max-width: 840px;\n  margin: 0 auto;\n  background: var(--paper);\n  box-shadow: 0 6px 40px rgba(20,24,31,.22);\n}\n\n/* \u2500\u2500 MASTHEAD \u2500\u2500 */\n.masthead {\n  padding: 32px 44px 20px;\n  border-bottom: 3px double var(--ink);\n}\n.kicker {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 9px;\n  letter-spacing: 4px;\n  text-transform: uppercase;\n  color: var(--accent);\n  font-weight: 700;\n  margin-bottom: 8px;\n}\n.masthead h1 {\n  font-size: 58px;\n  letter-spacing: -2px;\n  line-height: .93;\n  font-weight: 700;\n  margin-bottom: 12px;\n}\n.masthead h1 em {\n  font-style: normal;\n  color: var(--accent);\n}\n.masthead h1 sup {\n  font-size: 22px;\n  vertical-align: super;\n  letter-spacing: 0;\n  color: var(--accent);\n}\n.tagline {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 13px;\n  color: var(--muted);\n  line-height: 1.45;\n  max-width: 560px;\n  margin-bottom: 18px;\n}\n\n/* \u2500\u2500 DATELINE BAR \u2500\u2500 */\n.dateline-bar {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  padding: 10px 44px;\n  border-top: 1px solid var(--ink);\n  border-bottom: 2px solid var(--ink);\n  background: var(--paper);\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 10.5px;\n  letter-spacing: .5px;\n}\n.dateline-bar .vol {\n  font-weight: 700;\n  text-transform: uppercase;\n  letter-spacing: 1.5px;\n}\n.dateline-bar .vol span {\n  font-weight: 400;\n  color: var(--muted);\n  margin-left: 8px;\n}\n.dateline-bar .site {\n  color: var(--muted);\n  font-size: 9.5px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n}\n\n/* \u2500\u2500 BODY \u2500\u2500 */\n.body-wrap {\n  padding: 36px 44px;\n}\n\n/* \u2500\u2500 LEDE \u2500\u2500 */\n.lede {\n  font-size: 16.5px;\n  line-height: 1.65;\n  color: var(--ink);\n  margin-bottom: 28px;\n  padding-bottom: 24px;\n  border-bottom: 1px solid var(--line);\n}\n\n/* \u2500\u2500 SECTION LABELS \u2500\u2500 */\n.section-label {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 8.5px;\n  font-weight: 700;\n  letter-spacing: 3.5px;\n  text-transform: uppercase;\n  color: var(--accent);\n  margin-bottom: 14px;\n  padding-bottom: 5px;\n  border-bottom: 1px solid var(--accent);\n  display: inline-block;\n}\n\n/* \u2500\u2500 SIGNAL CARDS \u2500\u2500 */\n.signal-card {\n  border-left: 3px solid var(--accent);\n  padding: 16px 18px;\n  margin-bottom: 18px;\n  background: #fafaf8;\n}\n.signal-card.flag {\n  border-left-color: var(--flag);\n}\n.signal-card.gold {\n  border-left-color: var(--gold);\n  background: var(--g-soft);\n}\n.signal-card .signal-meta {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 9px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: var(--faint);\n  margin-bottom: 6px;\n}\n.signal-card .signal-meta .badge {\n  display: inline-block;\n  padding: 1px 7px;\n  border-radius: 2px;\n  font-size: 8.5px;\n  font-weight: 700;\n  letter-spacing: 1.5px;\n  margin-right: 6px;\n}\n.badge-pjm  { background: var(--d-soft); color: var(--data); }\n.badge-wecc { background: var(--a-soft); color: var(--accent); }\n.badge-miso { background: #f0eaf8;       color: #4a2080; }\n.badge-ercot{ background: #fef0e0;       color: #8a4400; }\n.badge-caiso{ background: #fde8e8;       color: var(--flag); }\n.signal-card h3 {\n  font-size: 16px;\n  font-weight: 700;\n  line-height: 1.3;\n  margin-bottom: 8px;\n  color: var(--ink);\n}\n.signal-card p {\n  font-size: 13.5px;\n  color: var(--muted);\n  line-height: 1.6;\n  margin-bottom: 8px;\n}\n.signal-card .angle {\n  font-size: 13px;\n  color: var(--ink);\n  font-style: italic;\n  border-top: 1px solid var(--line);\n  padding-top: 8px;\n  margin-top: 4px;\n}\n.signal-card .angle strong {\n  font-style: normal;\n  color: var(--accent);\n  font-size: 9px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  display: block;\n  margin-bottom: 3px;\n}\n\n/* \u2500\u2500 CONNECTOR MARKETS \u2500\u2500 */\n.connector-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 16px;\n  margin-bottom: 24px;\n}\n.connector-cell {\n  padding: 14px 16px;\n  background: var(--a-soft);\n  border: 1px solid #c2ddd8;\n}\n.connector-cell.demand { background: var(--g-soft); border-color: #d8c48a; }\n.connector-cell .cell-label {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 8px;\n  font-weight: 700;\n  letter-spacing: 3px;\n  text-transform: uppercase;\n  color: var(--accent);\n  margin-bottom: 6px;\n}\n.connector-cell.demand .cell-label { color: var(--gold); }\n.connector-cell h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }\n.connector-cell p  { font-size: 12px; color: var(--muted); line-height: 1.5; }\n\n/* \u2500\u2500 QUEUE SPOTLIGHT \u2500\u2500 */\n.queue-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 11.5px;\n  margin-bottom: 8px;\n}\n.queue-table th {\n  background: var(--ink);\n  color: #fff;\n  padding: 7px 10px;\n  text-align: left;\n  font-size: 8.5px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  font-weight: 600;\n}\n.queue-table td {\n  padding: 7px 10px;\n  border-bottom: 1px solid var(--line);\n  color: var(--ink);\n  vertical-align: top;\n}\n.queue-table tr:nth-child(even) td { background: #f5f4f1; }\n.queue-table .mw { font-weight: 700; color: var(--data); }\n\n/* \u2500\u2500 DIVIDER \u2500\u2500 */\n.section-divider {\n  border: none;\n  border-top: 1px solid var(--line);\n  margin: 32px 0;\n}\n\n/* \u2500\u2500 FOOTER \u2500\u2500 */\n.footer {\n  background: var(--ink);\n  color: #8a93a1;\n  padding: 24px 44px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 10.5px;\n  line-height: 1.7;\n}\n.footer a { color: #b0bcc8; text-decoration: none; }\n.footer strong { color: #d0d8e0; }\n\n@media (max-width: 600px) {\n  .masthead, .dateline-bar, .body-wrap, .footer { padding-left: 20px; padding-right: 20px; }\n  .masthead h1 { font-size: 38px; }\n  .connector-grid { grid-template-columns: 1fr; }\n}\n</style>\n</head>\n<body>\n<div class=\"sheet\">\n\n  <!-- MASTHEAD -->\n  <div class=\"masthead\">\n    <div class=\"kicker\">NexPhase Advisory &nbsp;\u00b7&nbsp; Power Market Intelligence</div>\n    <h1>The <em>Inter</em>connect<sup>&#8482;</sup></h1>\n    <p class=\"tagline\">Weekly intelligence on power procurement, interconnection queues, and data center development \u2014 for teams building at the grid edge.</p>\n  </div>\n\n  <!-- DATELINE BAR -->\n  <div class=\"dateline-bar\">\n    <div class=\"vol\">{{DATELINE}} <span>\u00b7 Vol. {{VOL}}, No. {{NO}}</span></div>\n    <div class=\"site\">NexPhaseAdvisory.net</div>\n  </div>\n\n  <!-- BODY -->\n  <div class=\"body-wrap\">\n\n    <!-- LEDE -->\n    <p class=\"lede\">{{LEDE}}</p>\n\n    <!-- SIGNALS SECTION -->\n    <div class=\"section-label\">This Week's Signals</div>\n    {{SIGNAL_CARDS}}\n\n    <hr class=\"section-divider\">\n\n    <!-- CONNECTOR MARKETS -->\n    <div class=\"section-label\">Connector Markets</div>\n    <div class=\"connector-grid\">\n      {{CONNECTOR_MARKETS}}\n    </div>\n\n    <hr class=\"section-divider\">\n\n    <!-- QUEUE SPOTLIGHT -->\n    <div class=\"section-label\">Queue Spotlight</div>\n    <table class=\"queue-table\">\n      <thead>\n        <tr>\n          <th>Project</th>\n          <th>ISO</th>\n          <th>Type</th>\n          <th>MW</th>\n          <th>Status</th>\n          <th>POI / Substation</th>\n        </tr>\n      </thead>\n      <tbody>\n        {{QUEUE_ROWS}}\n      </tbody>\n    </table>\n\n  </div><!-- /body-wrap -->\n\n  <!-- FOOTER -->\n  <div class=\"footer\">\n    <strong>NexPhase Advisory</strong> &nbsp;\u00b7&nbsp; Power Market Intelligence<br>\n    Questions or comments: <a href=\"mailto:info@nexphaseadvisory.net\">info@nexphaseadvisory.net</a><br><br>\n    This publication is provided for informational purposes only. Nothing herein constitutes legal, financial, or investment advice.\n    All queue data derived from public ISO sources. &copy; {{YEAR}} NexPhase Advisory. All rights reserved.<br><br>\n    To unsubscribe, reply with \"unsubscribe\" in the subject line.\n  </div>\n\n</div><!-- /sheet -->\n</body>\n</html>`;\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  // resp is the raw Anthropic /v1/messages response object from a Generate node.\n  try {\n    const content = (resp && resp.content) || [];\n    const text = content.filter(b => b && b.type === 'text').map(b => b.text).join('').trim();\n    const cleaned = text.replace(/```json|```/g, '').trim();\n    return JSON.parse(cleaned);\n  } catch (e) {\n    return null;\n  }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nconst ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', NYISO: 'badge-pjm', SPP: 'badge-pjm' };\nfunction badgeClass(iso) { return ISO_BADGE[String(iso || '').toUpperCase()] || 'badge-pjm'; }\n// Queue \"ISO\" derived from the Utility field (queue table has no true ISO field).\nfunction isoFromUtility(u) {\n  const s = String(u || '');\n  if (/PJM/i.test(s)) return 'PJM';\n  if (/CAISO/i.test(s)) return 'CAISO';\n  if (/MISO/i.test(s)) return 'MISO';\n  if (/FPL|Duke|Southeast/i.test(s)) return 'SERC';\n  return s; // default: utility value as-is\n}\n\n// ---------- pull upstream ----------\nconst meta = $('Set Metadata').first().json;\nconst ledeObj = claudeJSON($('Generate Lede').first().json) || { lede: '' };\nconst signals = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors = claudeJSON($('Generate Connectors').first().json) || [];\nconst queueRaw = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- build SIGNAL_CARDS ----------\nconst signalCards = (Array.isArray(signals) ? signals : []).map(s => {\n  const variant = (s.variant === 'flag' || s.variant === 'gold') ? ' ' + s.variant : '';\n  return '<div class=\"signal-card' + variant + '\">\\n' +\n    '      <div class=\"signal-meta\">\\n' +\n    '        <span class=\"badge ' + badgeClass(s.iso) + '\">' + esc(s.iso) + '</span>\\n' +\n    '        ' + esc(s.location) + ' \u00b7 ' + esc(s.category) + '\\n' +\n    '      </div>\\n' +\n    '      <h3>' + esc(s.headline) + '</h3>\\n' +\n    '      <p>' + esc(s.detail) + '</p>\\n' +\n    '      <div class=\"angle\">\\n' +\n    '        <strong>The Angle</strong>\\n' +\n    '        ' + esc(s.angle) + '\\n' +\n    '      </div>\\n' +\n    '    </div>';\n}).join('\\n');\n\n// ---------- build CONNECTOR_MARKETS (each pairing = demand cell + supply cell) ----------\nconst connectorCells = (Array.isArray(connectors) ? connectors : []).map(c => {\n  return '<div class=\"connector-cell demand\">\\n' +\n    '        <div class=\"cell-label\">Demand Signal</div>\\n' +\n    '        <h4>' + esc(c.demand_market) + '</h4>\\n' +\n    '        <p>' + esc(c.demand_text) + '</p>\\n' +\n    '      </div>\\n' +\n    '      <div class=\"connector-cell\">\\n' +\n    '        <div class=\"cell-label\">Supply Context</div>\\n' +\n    '        <h4>' + esc(c.supply_market) + '</h4>\\n' +\n    '        <p>' + esc(c.supply_text) + '</p>\\n' +\n    '      </div>';\n}).join('\\n');\n\n// ---------- build QUEUE_ROWS (map Airtable fields; cap for spotlight) ----------\nconst QUEUE_CAP = 8;\nconst queueRows = queueRaw.map(q => ({\n  project: q['Project Name'] || q['POI Name'] || '',\n  iso: isoFromUtility(q['Utility']),\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  status: q['Status'] || '',\n  poi: q['POI Name'] || ''\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .slice(0, QUEUE_CAP)\n  .map(q =>\n    '<tr>\\n' +\n    '          <td>' + esc(q.project) + '</td>\\n' +\n    '          <td>' + esc(q.iso) + '</td>\\n' +\n    '          <td>' + esc(q.type) + '</td>\\n' +\n    '          <td class=\"mw\">' + esc(q.mw) + '</td>\\n' +\n    '          <td>' + esc(q.status) + '</td>\\n' +\n    '          <td>' + esc(q.poi) + '</td>\\n' +\n    '        </tr>'\n  ).join('\\n');\n\n// ---------- inject ----------\nconst year = new Date().getFullYear();\nconst html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{LEDE}}').join(esc(ledeObj.lede))\n  .split('{{SIGNAL_CARDS}}').join(signalCards)\n  .split('{{CONNECTOR_MARKETS}}').join(connectorCells)\n  .split('{{QUEUE_ROWS}}').join(queueRows)\n  .split('{{YEAR}}').join(String(year));\n\nconst filename = 'interconnect-vol' + meta.vol + '-no' + meta.no + '.html';\n\nreturn [{ json: { html, filename, vol: meta.vol, no: meta.no, dateline: meta.dateline } }];\n"
+            },
+            "id": "2e9a5fab-d57a-4ca6-a3a7-758901c2327c",
+            "name": "Code \u2014 Inject",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1568,
+                224
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": "nexphaseadvisory",
+                "repository": "Reports",
+                "filePath": "={{ 'interconnect/' + $json.filename }}",
+                "fileContent": "={{ $json.html }}",
+                "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}"
+            },
+            "id": "f4ae0f31-f28e-4e49-9176-4bff020d80d6",
+            "name": "GitHub \u2014 Publish",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                1792,
+                224
+            ],
+            "webhookId": "3ea9bb9b-9528-4adf-a370-9009753282e4",
+            "credentials": {
+                "githubApi": {
+                    "id": "DA7vXaQHWtnFdSFY",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "interconnect-publisher",
+                "authentication": "headerAuth",
+                "responseMode": "onReceived",
+                "options": {}
+            },
+            "id": "63be41a6-d023-4a09-84bb-6515e48e6b3e",
+            "name": "Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                240,
+                460
+            ],
+            "webhookId": "c8731e41-e2e2-4a8b-93e0-a7f8b8b5751f",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "SreCeQNb5uXikMw4",
+                    "name": "NexPhase Webhook Auth"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Every Sunday 5am": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Market Signals",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Fetch Queue Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Market Signals": {
+            "main": [
+                [
+                    {
+                        "node": "Set Metadata",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Metadata": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Lede",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Lede": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Signals",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Signals": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Connectors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Connectors": {
+            "main": [
+                [
+                    {
+                        "node": "Code \u2014 Inject",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code \u2014 Inject": {
+            "main": [
+                [
+                    {
+                        "node": "GitHub \u2014 Publish",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Market Signals",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Fetch Queue Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": {
+        "node:Every Sunday 5am": {
+            "recurrenceRules": []
+        }
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+    "activeVersionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+    "versionCounter": 56,
+    "triggerCount": 2,
+    "shared": [
+        {
+            "updatedAt": "2026-06-07T23:56:43.559Z",
+            "createdAt": "2026-06-07T23:56:43.559Z",
+            "role": "workflow:owner",
+            "workflowId": "hAbUSOEUyZRxXEWm",
+            "projectId": "yyu8mrsL1yrdUgiZ",
+            "project": {
+                "updatedAt": "2026-05-07T03:46:52.701Z",
+                "createdAt": "2026-05-07T03:46:45.027Z",
+                "id": "yyu8mrsL1yrdUgiZ",
+                "name": "Chris   <santiago4801@gmail.com>",
+                "type": "personal",
+                "icon": null,
+                "description": null,
+                "creatorId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            }
+        }
+    ],
+    "tags": [],
+    "activeVersion": {
+        "updatedAt": "2026-06-10T02:08:55.028Z",
+        "createdAt": "2026-06-10T02:08:55.028Z",
+        "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+        "workflowId": "hAbUSOEUyZRxXEWm",
+        "nodes": [
+            {
+                "parameters": {
+                    "rule": {
+                        "interval": [
+                            {
+                                "field": "cronExpression",
+                                "expression": "0 5 * * 0"
+                            }
+                        ]
+                    }
+                },
+                "id": "80da480d-220d-4059-8e67-81186cf3c296",
+                "name": "Every Sunday 5am",
+                "type": "n8n-nodes-base.scheduleTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    2720,
+                    608
+                ]
+            },
+            {
+                "parameters": {
+                    "operation": "search",
+                    "base": {
+                        "__rl": true,
+                        "value": "appoTkXUnQ9aulmkE",
+                        "mode": "id"
+                    },
+                    "table": {
+                        "__rl": true,
+                        "value": "tblLLpsGrLBpgezYx",
+                        "mode": "id"
+                    },
+                    "filterByFormula": "IS_AFTER(CREATED_TIME(), DATEADD(TODAY(), -30, 'days'))",
+                    "options": {}
+                },
+                "id": "44d2a5b5-3fcc-420f-8050-ad6dbedfc572",
+                "name": "Fetch Market Signals",
+                "type": "n8n-nodes-base.airtable",
+                "typeVersion": 2.1,
+                "position": [
+                    2960,
+                    608
+                ],
+                "credentials": {
+                    "airtableTokenApi": {
+                        "id": "RoOhi6fE6lI3cI1c",
+                        "name": "Airtable Personal Access Token account 2"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "operation": "search",
+                    "base": {
+                        "__rl": true,
+                        "value": "appoTkXUnQ9aulmkE",
+                        "mode": "id"
+                    },
+                    "table": {
+                        "__rl": true,
+                        "value": "tblkazcIqMkDoISu7",
+                        "mode": "id"
+                    },
+                    "returnAll": false,
+                    "limit": 20,
+                    "options": {
+                        "fields": []
+                    }
+                },
+                "id": "42c55d97-d34e-4427-aebd-63216e22df71",
+                "name": "Fetch Queue Records",
+                "type": "n8n-nodes-base.airtable",
+                "typeVersion": 2.1,
+                "position": [
+                    2960,
+                    800
+                ],
+                "credentials": {
+                    "airtableTokenApi": {
+                        "id": "RoOhi6fE6lI3cI1c",
+                        "name": "Airtable Personal Access Token account 2"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Vol/No hardcoded for now; auto-increment later.\nreturn [{ json: { dateline, vol: 1, no: 2 } }];"
+                },
+                "id": "fbdbcda1-49cd-44e7-aba9-1b18b5051744",
+                "name": "Set Metadata",
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    688,
+                    224
+                ]
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "https://api.anthropic.com/v1/messages",
+                    "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "anthropic-version",
+                                "value": "2023-06-01"
+                            },
+                            {
+                                "name": "content-type",
+                                "value": "application/json"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1024, messages: [{ role: 'user', content: 'You are the editorial voice of The Interconnect\u2122, a weekly power market intelligence publication by NexPhase Advisory. Given the signals below, write a 3\u20135 sentence lede paragraph that connects the week\\'s themes for an audience of power developers, data center operators, and IPP executives. Practitioner voice \u2014 no hype, no filler. Return ONLY this JSON: { \"lede\": \"...\" }' + '\\n\\nSIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) }] }) }}",
+                    "options": {
+                        "timeout": 120000
+                    }
+                },
+                "id": "94f59db9-9e66-4f27-8f9b-571fe6b02a29",
+                "name": "Generate Lede",
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.2,
+                "position": [
+                    912,
+                    224
+                ],
+                "retryOnFail": true,
+                "maxTries": 2,
+                "waitBetweenTries": 3000,
+                "credentials": {
+                    "httpHeaderAuth": {
+                        "id": "FJA7PZjCaMHaj0Ir",
+                        "name": "Header Auth Claude API"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "https://api.anthropic.com/v1/messages",
+                    "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "anthropic-version",
+                                "value": "2023-06-01"
+                            },
+                            {
+                                "name": "content-type",
+                                "value": "application/json"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 6000, messages: [{ role: 'user', content: 'You are a power market analyst. Given the signals below, return ONLY a JSON array of signal objects. Each object must have these exact fields:\\n- iso: string (PJM | WECC | MISO | ERCOT | CAISO | NYISO | SPP)\\n- location: string (city/state or region)\\n- category: string (e.g. Demand Signal | Queue Movement | Regulatory | M&A)\\n- headline: string (punchy, max 12 words)\\n- detail: string (2\u20133 sentences of factual context)\\n- angle: string (1\u20132 sentences practitioner commentary \u2014 what this means for someone building in this market)\\n- variant: string (empty string for standard | \\'flag\\' for risk/avoid | \\'gold\\' for high opportunity)\\nReturn ONLY the JSON array, no wrapper object, no markdown.' + '\\n\\nSIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) }] }) }}",
+                    "options": {
+                        "timeout": 120000
+                    }
+                },
+                "id": "00bc86c7-3786-4d26-a57c-d16c6ada2f55",
+                "name": "Generate Signals",
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.2,
+                "position": [
+                    1120,
+                    224
+                ],
+                "retryOnFail": true,
+                "maxTries": 2,
+                "waitBetweenTries": 3000,
+                "credentials": {
+                    "httpHeaderAuth": {
+                        "id": "FJA7PZjCaMHaj0Ir",
+                        "name": "Header Auth Claude API"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "https://api.anthropic.com/v1/messages",
+                    "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "anthropic-version",
+                                "value": "2023-06-01"
+                            },
+                            {
+                                "name": "content-type",
+                                "value": "application/json"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1500, messages: [{ role: 'user', content: 'Given the demand signals and queue data below, identify the 1\u20132 strongest demand/supply pairings this week. Return ONLY a JSON array where each object has:\\n- demand_market: string\\n- demand_text: string (1\u20132 sentences on the demand signal)\\n- supply_market: string (queue corridor or substation name)\\n- supply_text: string (MW available \u00b7 key constraint or advantage)\\nReturn ONLY the JSON array, no markdown.' + '\\n\\nDEMAND SIGNALS:\\n' + JSON.stringify($('Fetch Market Signals').all().map(i => ({ company: i.json.Company, detail: i.json['Signal Detail'], category: i.json['Signal Type'], location: i.json.Location, mw: i.json['MW Size'], actionability: i.json.Actionability })).sort((a,b)=>(Number(b.actionability)||0)-(Number(a.actionability)||0)).slice(0,12)) + '\\n\\nQUEUE DATA:\\n' + JSON.stringify($('Fetch Queue Records').all().map(i => ({ project: i.json['Project Name'], region: i.json['Region'], type: i.json['Generation Type'], mw: i.json['MW Capacity'], status: i.json['Status'], poi: i.json['POI Name'] }))) }] }) }}",
+                    "options": {
+                        "timeout": 120000
+                    }
+                },
+                "id": "1efcecf9-cf3b-4cb8-a286-0711aa69ceae",
+                "name": "Generate Connectors",
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.2,
+                "position": [
+                    1344,
+                    224
+                ],
+                "retryOnFail": true,
+                "maxTries": 2,
+                "waitBetweenTries": 3000,
+                "credentials": {
+                    "httpHeaderAuth": {
+                        "id": "FJA7PZjCaMHaj0Ir",
+                        "name": "Header Auth Claude API"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "jsCode": "// interconnect_inject.js\n// Final Code node (\"Code \u2014 Inject\") for the Interconnect Publisher workflow.\n// Pulls STRUCTURED JSON from upstream nodes and injects it into the LOCKED design\n// template via string replacement. NO HTML is generated by AI \u2014 the shell is fixed.\n//\n// UPSTREAM FIELD CONTRACT (what each node must provide):\n//   Set Metadata        -> json: { dateline, vol, no }\n//   Generate Lede       -> Claude API response; parsed JSON: { lede: string }\n//   Generate Signals    -> Claude API response; parsed JSON: array of\n//                          { iso, location, category, headline, detail, angle, variant }\n//                          variant: '' (standard) | 'flag' (risk) | 'gold' (opportunity)\n//                          iso: PJM | WECC | MISO | ERCOT | CAISO | NYISO | SPP\n//   Generate Connectors -> Claude API response; parsed JSON: array of\n//                          { demand_market, demand_text, supply_market, supply_text }\n//   Fetch Queue Records -> Airtable rows, mapped here:\n//                          project <- 'Project Name', iso <- 'Region', type <- 'Generation Type',\n//                          mw <- 'MW Capacity', status <- 'Status', poi <- 'POI Name'\n//\n// OUTPUT: json: { html, filename, vol, no, dateline }\n//   filename = \"interconnect-vol{vol}-no{no}.html\"  (GitHub node writes to interconnect/{filename})\n//\n// NOTE: TEMPLATE below is a verbatim copy of the locked design shell at\n//   interconnect/template/the_interconnect_TEMPLATE.html\n// If you edit that file, re-sync this constant. The template must contain no\n// backtick or ${ } sequences (it does not today).\n\nconst TEMPLATE = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>The Interconnect&#8482; \u2014 {{DATELINE}}</title>\n<style>\n:root {\n  --ink:    #16191d;\n  --muted:  #54606e;\n  --faint:  #8a93a1;\n  --line:   #d8dce4;\n  --accent: #0b5d4e;\n  --a-soft: #e7f2ef;\n  --gold:   #a06d18;\n  --g-soft: #f9f1de;\n  --flag:   #8b2020;\n  --paper:  #fdfcfa;\n  --data:   #1a3a6b;\n  --d-soft: #eaf0f8;\n}\n*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n\nbody {\n  font-family: Georgia, \"Times New Roman\", serif;\n  color: var(--ink);\n  background: #d6d2cb;\n  line-height: 1.6;\n  padding: 32px 12px 56px;\n  -webkit-font-smoothing: antialiased;\n}\n\n.sheet {\n  max-width: 840px;\n  margin: 0 auto;\n  background: var(--paper);\n  box-shadow: 0 6px 40px rgba(20,24,31,.22);\n}\n\n/* \u2500\u2500 MASTHEAD \u2500\u2500 */\n.masthead {\n  padding: 32px 44px 20px;\n  border-bottom: 3px double var(--ink);\n}\n.kicker {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 9px;\n  letter-spacing: 4px;\n  text-transform: uppercase;\n  color: var(--accent);\n  font-weight: 700;\n  margin-bottom: 8px;\n}\n.masthead h1 {\n  font-size: 58px;\n  letter-spacing: -2px;\n  line-height: .93;\n  font-weight: 700;\n  margin-bottom: 12px;\n}\n.masthead h1 em {\n  font-style: normal;\n  color: var(--accent);\n}\n.masthead h1 sup {\n  font-size: 22px;\n  vertical-align: super;\n  letter-spacing: 0;\n  color: var(--accent);\n}\n.tagline {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 13px;\n  color: var(--muted);\n  line-height: 1.45;\n  max-width: 560px;\n  margin-bottom: 18px;\n}\n\n/* \u2500\u2500 DATELINE BAR \u2500\u2500 */\n.dateline-bar {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  padding: 10px 44px;\n  border-top: 1px solid var(--ink);\n  border-bottom: 2px solid var(--ink);\n  background: var(--paper);\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 10.5px;\n  letter-spacing: .5px;\n}\n.dateline-bar .vol {\n  font-weight: 700;\n  text-transform: uppercase;\n  letter-spacing: 1.5px;\n}\n.dateline-bar .vol span {\n  font-weight: 400;\n  color: var(--muted);\n  margin-left: 8px;\n}\n.dateline-bar .site {\n  color: var(--muted);\n  font-size: 9.5px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n}\n\n/* \u2500\u2500 BODY \u2500\u2500 */\n.body-wrap {\n  padding: 36px 44px;\n}\n\n/* \u2500\u2500 LEDE \u2500\u2500 */\n.lede {\n  font-size: 16.5px;\n  line-height: 1.65;\n  color: var(--ink);\n  margin-bottom: 28px;\n  padding-bottom: 24px;\n  border-bottom: 1px solid var(--line);\n}\n\n/* \u2500\u2500 SECTION LABELS \u2500\u2500 */\n.section-label {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 8.5px;\n  font-weight: 700;\n  letter-spacing: 3.5px;\n  text-transform: uppercase;\n  color: var(--accent);\n  margin-bottom: 14px;\n  padding-bottom: 5px;\n  border-bottom: 1px solid var(--accent);\n  display: inline-block;\n}\n\n/* \u2500\u2500 SIGNAL CARDS \u2500\u2500 */\n.signal-card {\n  border-left: 3px solid var(--accent);\n  padding: 16px 18px;\n  margin-bottom: 18px;\n  background: #fafaf8;\n}\n.signal-card.flag {\n  border-left-color: var(--flag);\n}\n.signal-card.gold {\n  border-left-color: var(--gold);\n  background: var(--g-soft);\n}\n.signal-card .signal-meta {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 9px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: var(--faint);\n  margin-bottom: 6px;\n}\n.signal-card .signal-meta .badge {\n  display: inline-block;\n  padding: 1px 7px;\n  border-radius: 2px;\n  font-size: 8.5px;\n  font-weight: 700;\n  letter-spacing: 1.5px;\n  margin-right: 6px;\n}\n.badge-pjm  { background: var(--d-soft); color: var(--data); }\n.badge-wecc { background: var(--a-soft); color: var(--accent); }\n.badge-miso { background: #f0eaf8;       color: #4a2080; }\n.badge-ercot{ background: #fef0e0;       color: #8a4400; }\n.badge-caiso{ background: #fde8e8;       color: var(--flag); }\n.signal-card h3 {\n  font-size: 16px;\n  font-weight: 700;\n  line-height: 1.3;\n  margin-bottom: 8px;\n  color: var(--ink);\n}\n.signal-card p {\n  font-size: 13.5px;\n  color: var(--muted);\n  line-height: 1.6;\n  margin-bottom: 8px;\n}\n.signal-card .angle {\n  font-size: 13px;\n  color: var(--ink);\n  font-style: italic;\n  border-top: 1px solid var(--line);\n  padding-top: 8px;\n  margin-top: 4px;\n}\n.signal-card .angle strong {\n  font-style: normal;\n  color: var(--accent);\n  font-size: 9px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  display: block;\n  margin-bottom: 3px;\n}\n\n/* \u2500\u2500 CONNECTOR MARKETS \u2500\u2500 */\n.connector-grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 16px;\n  margin-bottom: 24px;\n}\n.connector-cell {\n  padding: 14px 16px;\n  background: var(--a-soft);\n  border: 1px solid #c2ddd8;\n}\n.connector-cell.demand { background: var(--g-soft); border-color: #d8c48a; }\n.connector-cell .cell-label {\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 8px;\n  font-weight: 700;\n  letter-spacing: 3px;\n  text-transform: uppercase;\n  color: var(--accent);\n  margin-bottom: 6px;\n}\n.connector-cell.demand .cell-label { color: var(--gold); }\n.connector-cell h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }\n.connector-cell p  { font-size: 12px; color: var(--muted); line-height: 1.5; }\n\n/* \u2500\u2500 QUEUE SPOTLIGHT \u2500\u2500 */\n.queue-table {\n  width: 100%;\n  border-collapse: collapse;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 11.5px;\n  margin-bottom: 8px;\n}\n.queue-table th {\n  background: var(--ink);\n  color: #fff;\n  padding: 7px 10px;\n  text-align: left;\n  font-size: 8.5px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  font-weight: 600;\n}\n.queue-table td {\n  padding: 7px 10px;\n  border-bottom: 1px solid var(--line);\n  color: var(--ink);\n  vertical-align: top;\n}\n.queue-table tr:nth-child(even) td { background: #f5f4f1; }\n.queue-table .mw { font-weight: 700; color: var(--data); }\n\n/* \u2500\u2500 DIVIDER \u2500\u2500 */\n.section-divider {\n  border: none;\n  border-top: 1px solid var(--line);\n  margin: 32px 0;\n}\n\n/* \u2500\u2500 FOOTER \u2500\u2500 */\n.footer {\n  background: var(--ink);\n  color: #8a93a1;\n  padding: 24px 44px;\n  font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n  font-size: 10.5px;\n  line-height: 1.7;\n}\n.footer a { color: #b0bcc8; text-decoration: none; }\n.footer strong { color: #d0d8e0; }\n\n@media (max-width: 600px) {\n  .masthead, .dateline-bar, .body-wrap, .footer { padding-left: 20px; padding-right: 20px; }\n  .masthead h1 { font-size: 38px; }\n  .connector-grid { grid-template-columns: 1fr; }\n}\n</style>\n</head>\n<body>\n<div class=\"sheet\">\n\n  <!-- MASTHEAD -->\n  <div class=\"masthead\">\n    <div class=\"kicker\">NexPhase Advisory &nbsp;\u00b7&nbsp; Power Market Intelligence</div>\n    <h1>The <em>Inter</em>connect<sup>&#8482;</sup></h1>\n    <p class=\"tagline\">Weekly intelligence on power procurement, interconnection queues, and data center development \u2014 for teams building at the grid edge.</p>\n  </div>\n\n  <!-- DATELINE BAR -->\n  <div class=\"dateline-bar\">\n    <div class=\"vol\">{{DATELINE}} <span>\u00b7 Vol. {{VOL}}, No. {{NO}}</span></div>\n    <div class=\"site\">NexPhaseAdvisory.net</div>\n  </div>\n\n  <!-- BODY -->\n  <div class=\"body-wrap\">\n\n    <!-- LEDE -->\n    <p class=\"lede\">{{LEDE}}</p>\n\n    <!-- SIGNALS SECTION -->\n    <div class=\"section-label\">This Week's Signals</div>\n    {{SIGNAL_CARDS}}\n\n    <hr class=\"section-divider\">\n\n    <!-- CONNECTOR MARKETS -->\n    <div class=\"section-label\">Connector Markets</div>\n    <div class=\"connector-grid\">\n      {{CONNECTOR_MARKETS}}\n    </div>\n\n    <hr class=\"section-divider\">\n\n    <!-- QUEUE SPOTLIGHT -->\n    <div class=\"section-label\">Queue Spotlight</div>\n    <table class=\"queue-table\">\n      <thead>\n        <tr>\n          <th>Project</th>\n          <th>ISO</th>\n          <th>Type</th>\n          <th>MW</th>\n          <th>Status</th>\n          <th>POI / Substation</th>\n        </tr>\n      </thead>\n      <tbody>\n        {{QUEUE_ROWS}}\n      </tbody>\n    </table>\n\n  </div><!-- /body-wrap -->\n\n  <!-- FOOTER -->\n  <div class=\"footer\">\n    <strong>NexPhase Advisory</strong> &nbsp;\u00b7&nbsp; Power Market Intelligence<br>\n    Questions or comments: <a href=\"mailto:info@nexphaseadvisory.net\">info@nexphaseadvisory.net</a><br><br>\n    This publication is provided for informational purposes only. Nothing herein constitutes legal, financial, or investment advice.\n    All queue data derived from public ISO sources. &copy; {{YEAR}} NexPhase Advisory. All rights reserved.<br><br>\n    To unsubscribe, reply with \"unsubscribe\" in the subject line.\n  </div>\n\n</div><!-- /sheet -->\n</body>\n</html>`;\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  // resp is the raw Anthropic /v1/messages response object from a Generate node.\n  try {\n    const content = (resp && resp.content) || [];\n    const text = content.filter(b => b && b.type === 'text').map(b => b.text).join('').trim();\n    const cleaned = text.replace(/```json|```/g, '').trim();\n    return JSON.parse(cleaned);\n  } catch (e) {\n    return null;\n  }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nconst ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', NYISO: 'badge-pjm', SPP: 'badge-pjm' };\nfunction badgeClass(iso) { return ISO_BADGE[String(iso || '').toUpperCase()] || 'badge-pjm'; }\n// Queue \"ISO\" derived from the Utility field (queue table has no true ISO field).\nfunction isoFromUtility(u) {\n  const s = String(u || '');\n  if (/PJM/i.test(s)) return 'PJM';\n  if (/CAISO/i.test(s)) return 'CAISO';\n  if (/MISO/i.test(s)) return 'MISO';\n  if (/FPL|Duke|Southeast/i.test(s)) return 'SERC';\n  return s; // default: utility value as-is\n}\n\n// ---------- pull upstream ----------\nconst meta = $('Set Metadata').first().json;\nconst ledeObj = claudeJSON($('Generate Lede').first().json) || { lede: '' };\nconst signals = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors = claudeJSON($('Generate Connectors').first().json) || [];\nconst queueRaw = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- build SIGNAL_CARDS ----------\nconst signalCards = (Array.isArray(signals) ? signals : []).map(s => {\n  const variant = (s.variant === 'flag' || s.variant === 'gold') ? ' ' + s.variant : '';\n  return '<div class=\"signal-card' + variant + '\">\\n' +\n    '      <div class=\"signal-meta\">\\n' +\n    '        <span class=\"badge ' + badgeClass(s.iso) + '\">' + esc(s.iso) + '</span>\\n' +\n    '        ' + esc(s.location) + ' \u00b7 ' + esc(s.category) + '\\n' +\n    '      </div>\\n' +\n    '      <h3>' + esc(s.headline) + '</h3>\\n' +\n    '      <p>' + esc(s.detail) + '</p>\\n' +\n    '      <div class=\"angle\">\\n' +\n    '        <strong>The Angle</strong>\\n' +\n    '        ' + esc(s.angle) + '\\n' +\n    '      </div>\\n' +\n    '    </div>';\n}).join('\\n');\n\n// ---------- build CONNECTOR_MARKETS (each pairing = demand cell + supply cell) ----------\nconst connectorCells = (Array.isArray(connectors) ? connectors : []).map(c => {\n  return '<div class=\"connector-cell demand\">\\n' +\n    '        <div class=\"cell-label\">Demand Signal</div>\\n' +\n    '        <h4>' + esc(c.demand_market) + '</h4>\\n' +\n    '        <p>' + esc(c.demand_text) + '</p>\\n' +\n    '      </div>\\n' +\n    '      <div class=\"connector-cell\">\\n' +\n    '        <div class=\"cell-label\">Supply Context</div>\\n' +\n    '        <h4>' + esc(c.supply_market) + '</h4>\\n' +\n    '        <p>' + esc(c.supply_text) + '</p>\\n' +\n    '      </div>';\n}).join('\\n');\n\n// ---------- build QUEUE_ROWS (map Airtable fields; cap for spotlight) ----------\nconst QUEUE_CAP = 8;\nconst queueRows = queueRaw.map(q => ({\n  project: q['Project Name'] || q['POI Name'] || '',\n  iso: isoFromUtility(q['Utility']),\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  status: q['Status'] || '',\n  poi: q['POI Name'] || ''\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .slice(0, QUEUE_CAP)\n  .map(q =>\n    '<tr>\\n' +\n    '          <td>' + esc(q.project) + '</td>\\n' +\n    '          <td>' + esc(q.iso) + '</td>\\n' +\n    '          <td>' + esc(q.type) + '</td>\\n' +\n    '          <td class=\"mw\">' + esc(q.mw) + '</td>\\n' +\n    '          <td>' + esc(q.status) + '</td>\\n' +\n    '          <td>' + esc(q.poi) + '</td>\\n' +\n    '        </tr>'\n  ).join('\\n');\n\n// ---------- inject ----------\nconst year = new Date().getFullYear();\nconst html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{LEDE}}').join(esc(ledeObj.lede))\n  .split('{{SIGNAL_CARDS}}').join(signalCards)\n  .split('{{CONNECTOR_MARKETS}}').join(connectorCells)\n  .split('{{QUEUE_ROWS}}').join(queueRows)\n  .split('{{YEAR}}').join(String(year));\n\nconst filename = 'interconnect-vol' + meta.vol + '-no' + meta.no + '.html';\n\nreturn [{ json: { html, filename, vol: meta.vol, no: meta.no, dateline: meta.dateline } }];\n"
+                },
+                "id": "2e9a5fab-d57a-4ca6-a3a7-758901c2327c",
+                "name": "Code \u2014 Inject",
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    1568,
+                    224
+                ]
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": "nexphaseadvisory",
+                    "repository": "Reports",
+                    "filePath": "={{ 'interconnect/' + $json.filename }}",
+                    "fileContent": "={{ $json.html }}",
+                    "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}"
+                },
+                "id": "f4ae0f31-f28e-4e49-9176-4bff020d80d6",
+                "name": "GitHub \u2014 Publish",
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1,
+                "position": [
+                    1792,
+                    224
+                ],
+                "webhookId": "3ea9bb9b-9528-4adf-a370-9009753282e4",
+                "credentials": {
+                    "githubApi": {
+                        "id": "DA7vXaQHWtnFdSFY",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "httpMethod": "POST",
+                    "path": "interconnect-publisher",
+                    "authentication": "headerAuth",
+                    "responseMode": "onReceived",
+                    "options": {}
+                },
+                "id": "63be41a6-d023-4a09-84bb-6515e48e6b3e",
+                "name": "Webhook Trigger",
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2,
+                "position": [
+                    240,
+                    460
+                ],
+                "webhookId": "c8731e41-e2e2-4a8b-93e0-a7f8b8b5751f",
+                "credentials": {
+                    "httpHeaderAuth": {
+                        "id": "SreCeQNb5uXikMw4",
+                        "name": "NexPhase Webhook Auth"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "Every Sunday 5am": {
+                "main": [
+                    [
+                        {
+                            "node": "Fetch Market Signals",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Fetch Queue Records",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Fetch Market Signals": {
+                "main": [
+                    [
+                        {
+                            "node": "Set Metadata",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Set Metadata": {
+                "main": [
+                    [
+                        {
+                            "node": "Generate Lede",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Generate Lede": {
+                "main": [
+                    [
+                        {
+                            "node": "Generate Signals",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Generate Signals": {
+                "main": [
+                    [
+                        {
+                            "node": "Generate Connectors",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Generate Connectors": {
+                "main": [
+                    [
+                        {
+                            "node": "Code \u2014 Inject",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code \u2014 Inject": {
+                "main": [
+                    [
+                        {
+                            "node": "GitHub \u2014 Publish",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook Trigger": {
+                "main": [
+                    [
+                        {
+                            "node": "Fetch Market Signals",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Fetch Queue Records",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "authors": "Chris  ",
+        "name": null,
+        "description": null,
+        "autosaved": false,
+        "workflowPublishHistory": [
+            {
+                "createdAt": "2026-06-10T02:08:55.543Z",
+                "id": 11,
+                "workflowId": "hAbUSOEUyZRxXEWm",
+                "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+                "event": "activated",
+                "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            }
+        ]
+    }
+}
