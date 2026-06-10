@@ -198,6 +198,7 @@ body {
 .badge-miso { background: #f0eaf8;       color: #4a2080; }
 .badge-ercot{ background: #fef0e0;       color: #8a4400; }
 .badge-caiso{ background: #fde8e8;       color: var(--flag); }
+.badge-frcc { background: #e8f5e0;       color: #2d5a1b; }
 .signal-card h3 {
   font-size: 16px;
   font-weight: 700;
@@ -393,15 +394,19 @@ function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-const ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', NYISO: 'badge-pjm', SPP: 'badge-pjm' };
+const ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', FRCC: 'badge-frcc', NYISO: 'badge-pjm', SPP: 'badge-pjm' };
 function badgeClass(iso) { return ISO_BADGE[String(iso || '').toUpperCase()] || 'badge-pjm'; }
 // Queue "ISO" derived from the Utility field (queue table has no true ISO field).
 function isoFromUtility(u) {
   const s = String(u || '');
+  // Florida utilities -> FRCC (check before the generic Duke -> SERC rule)
+  if (/Florida Power|Duke Energy Florida|Tampa Electric|Gulf Power/i.test(s)) return 'FRCC';
+  // Duke Carolinas / other Duke -> SERC
+  if (/Duke/i.test(s)) return 'SERC';
+  // RTOs
   if (/PJM/i.test(s)) return 'PJM';
   if (/CAISO/i.test(s)) return 'CAISO';
   if (/MISO/i.test(s)) return 'MISO';
-  if (/FPL|Duke|Southeast/i.test(s)) return 'SERC';
   return s; // default: utility value as-is
 }
 
