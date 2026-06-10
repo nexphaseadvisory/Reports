@@ -2,7 +2,8 @@
 .DS_Store
 
 # Secrets — never commit
-.env
+.env*
+*.save
 
 # Loose report source files (publish via interconnect/index.html only)
 the_interconnect_*.html
