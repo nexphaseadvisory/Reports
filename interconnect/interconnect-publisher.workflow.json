@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-06-10T02:08:55.027Z",
+    "updatedAt": "2026-06-10T02:14:55.442Z",
     "createdAt": "2026-06-07T23:56:43.555Z",
     "id": "hAbUSOEUyZRxXEWm",
     "name": "Interconnect Publisher \u2014 Weekly",
@@ -308,11 +308,6 @@
                         "node": "Fetch Market Signals",
                         "type": "main",
                         "index": 0
-                    },
-                    {
-                        "node": "Fetch Queue Records",
-                        "type": "main",
-                        "index": 0
                     }
                 ]
             ]
@@ -321,7 +316,7 @@
             "main": [
                 [
                     {
-                        "node": "Set Metadata",
+                        "node": "Fetch Queue Records",
                         "type": "main",
                         "index": 0
                     }
@@ -390,9 +385,15 @@
                         "node": "Fetch Market Signals",
                         "type": "main",
                         "index": 0
-                    },
+                    }
+                ]
+            ]
+        },
+        "Fetch Queue Records": {
+            "main": [
+                [
                     {
-                        "node": "Fetch Queue Records",
+                        "node": "Set Metadata",
                         "type": "main",
                         "index": 0
                     }
@@ -413,9 +414,9 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
-    "activeVersionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
-    "versionCounter": 56,
+    "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
+    "activeVersionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
+    "versionCounter": 61,
     "triggerCount": 2,
     "shared": [
         {
@@ -438,9 +439,9 @@
     ],
     "tags": [],
     "activeVersion": {
-        "updatedAt": "2026-06-10T02:08:55.028Z",
-        "createdAt": "2026-06-10T02:08:55.028Z",
-        "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+        "updatedAt": "2026-06-10T02:14:55.443Z",
+        "createdAt": "2026-06-10T02:14:55.443Z",
+        "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
         "workflowId": "hAbUSOEUyZRxXEWm",
         "nodes": [
             {
@@ -744,11 +745,6 @@
                             "node": "Fetch Market Signals",
                             "type": "main",
                             "index": 0
-                        },
-                        {
-                            "node": "Fetch Queue Records",
-                            "type": "main",
-                            "index": 0
                         }
                     ]
                 ]
@@ -757,7 +753,7 @@
                 "main": [
                     [
                         {
-                            "node": "Set Metadata",
+                            "node": "Fetch Queue Records",
                             "type": "main",
                             "index": 0
                         }
@@ -826,9 +822,15 @@
                             "node": "Fetch Market Signals",
                             "type": "main",
                             "index": 0
-                        },
+                        }
+                    ]
+                ]
+            },
+            "Fetch Queue Records": {
+                "main": [
+                    [
                         {
-                            "node": "Fetch Queue Records",
+                            "node": "Set Metadata",
                             "type": "main",
                             "index": 0
                         }
@@ -842,11 +844,35 @@
         "autosaved": false,
         "workflowPublishHistory": [
             {
-                "createdAt": "2026-06-10T02:08:55.543Z",
-                "id": 11,
+                "createdAt": "2026-06-10T02:14:55.673Z",
+                "id": 13,
                 "workflowId": "hAbUSOEUyZRxXEWm",
-                "versionId": "03f4e571-544f-42c9-9f99-8f0920c23e29",
+                "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
                 "event": "activated",
+                "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            },
+            {
+                "createdAt": "2026-06-10T02:14:56.335Z",
+                "id": 15,
+                "workflowId": "hAbUSOEUyZRxXEWm",
+                "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
+                "event": "activated",
+                "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            },
+            {
+                "createdAt": "2026-06-10T02:14:55.561Z",
+                "id": 12,
+                "workflowId": "hAbUSOEUyZRxXEWm",
+                "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
+                "event": "deactivated",
+                "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            },
+            {
+                "createdAt": "2026-06-10T02:14:56.204Z",
+                "id": 14,
+                "workflowId": "hAbUSOEUyZRxXEWm",
+                "versionId": "bb455a44-e289-4bba-ad96-eaae0cf0ab51",
+                "event": "deactivated",
                 "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
             }
         ]
