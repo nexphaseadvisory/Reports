@@ -274,7 +274,8 @@
                     "id": "DA7vXaQHWtnFdSFY",
                     "name": "GitHub account"
                 }
-            }
+            },
+            "onError": "continueErrorOutput"
         },
         {
             "parameters": {
@@ -376,6 +377,33 @@
                 }
             },
             "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "create",
+                "owner": "nexphaseadvisory",
+                "repository": "Reports",
+                "filePath": "={{ 'interconnect/' + $json.filename }}",
+                "fileContent": "={{ $json.html }}",
+                "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}",
+                "additionalParameters": {}
+            },
+            "id": "e150aad0-32e0-452a-aee7-58aae6f9445b",
+            "name": "GitHub \u2014 Publish (new file)",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                2240,
+                620
+            ],
+            "credentials": {
+                "githubApi": {
+                    "id": "DA7vXaQHWtnFdSFY",
+                    "name": "GitHub account"
+                }
+            },
+            "webhookId": "68d4e047-fe92-4b99-8527-e077c9366a15"
         }
     ],
     "connections": {
@@ -505,6 +533,18 @@
                 [
                     {
                         "node": "GitHub \u2014 Publish",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub \u2014 Publish": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "GitHub \u2014 Publish (new file)",
                         "type": "main",
                         "index": 0
                     }
@@ -838,7 +878,8 @@
                         "id": "DA7vXaQHWtnFdSFY",
                         "name": "GitHub account"
                     }
-                }
+                },
+                "onError": "continueErrorOutput"
             },
             {
                 "parameters": {
@@ -940,6 +981,33 @@
                     }
                 },
                 "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "create",
+                    "owner": "nexphaseadvisory",
+                    "repository": "Reports",
+                    "filePath": "={{ 'interconnect/' + $json.filename }}",
+                    "fileContent": "={{ $json.html }}",
+                    "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}",
+                    "additionalParameters": {}
+                },
+                "id": "e150aad0-32e0-452a-aee7-58aae6f9445b",
+                "name": "GitHub \u2014 Publish (new file)",
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1,
+                "position": [
+                    2240,
+                    620
+                ],
+                "credentials": {
+                    "githubApi": {
+                        "id": "DA7vXaQHWtnFdSFY",
+                        "name": "GitHub account"
+                    }
+                },
+                "webhookId": "68d4e047-fe92-4b99-8527-e077c9366a15"
             }
         ],
         "connections": {
@@ -1069,6 +1137,18 @@
                     [
                         {
                             "node": "GitHub \u2014 Publish",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "GitHub \u2014 Publish": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "GitHub \u2014 Publish (new file)",
                             "type": "main",
                             "index": 0
                         }
