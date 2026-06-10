@@ -376,7 +376,8 @@
                     "name": "GitHub account"
                 }
             },
-            "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe"
+            "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe",
+            "onError": "continueErrorOutput"
         },
         {
             "parameters": {
@@ -404,6 +405,33 @@
                 }
             },
             "webhookId": "68d4e047-fe92-4b99-8527-e077c9366a15"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "create",
+                "owner": "nexphaseadvisory",
+                "repository": "Reports",
+                "filePath": "={{ 'interconnect/drafts/draft-vol' + $json.vol + '-no' + $json.no + '.html' }}",
+                "fileContent": "={{ $json.html }}",
+                "commitMessage": "={{ 'Draft: The Interconnect Vol ' + $json.vol + ' No ' + $json.no + ' (review)' }}",
+                "additionalParameters": {}
+            },
+            "id": "53c834d7-0fc2-46f8-97e1-2f93c1010e9c",
+            "name": "GitHub \u2014 Draft (new file)",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                2240,
+                280
+            ],
+            "credentials": {
+                "githubApi": {
+                    "id": "DA7vXaQHWtnFdSFY",
+                    "name": "GitHub account"
+                }
+            },
+            "webhookId": "80a6e250-afe9-46e4-a560-a81781cbd0e7"
         }
     ],
     "connections": {
@@ -545,6 +573,18 @@
                 [
                     {
                         "node": "GitHub \u2014 Publish (new file)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub \u2014 Draft": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "GitHub \u2014 Draft (new file)",
                         "type": "main",
                         "index": 0
                     }
@@ -980,7 +1020,8 @@
                         "name": "GitHub account"
                     }
                 },
-                "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe"
+                "webhookId": "949d92ab-24e6-4c95-a276-bf934567ecfe",
+                "onError": "continueErrorOutput"
             },
             {
                 "parameters": {
@@ -1008,6 +1049,33 @@
                     }
                 },
                 "webhookId": "68d4e047-fe92-4b99-8527-e077c9366a15"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "create",
+                    "owner": "nexphaseadvisory",
+                    "repository": "Reports",
+                    "filePath": "={{ 'interconnect/drafts/draft-vol' + $json.vol + '-no' + $json.no + '.html' }}",
+                    "fileContent": "={{ $json.html }}",
+                    "commitMessage": "={{ 'Draft: The Interconnect Vol ' + $json.vol + ' No ' + $json.no + ' (review)' }}",
+                    "additionalParameters": {}
+                },
+                "id": "53c834d7-0fc2-46f8-97e1-2f93c1010e9c",
+                "name": "GitHub \u2014 Draft (new file)",
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1,
+                "position": [
+                    2240,
+                    280
+                ],
+                "credentials": {
+                    "githubApi": {
+                        "id": "DA7vXaQHWtnFdSFY",
+                        "name": "GitHub account"
+                    }
+                },
+                "webhookId": "80a6e250-afe9-46e4-a560-a81781cbd0e7"
             }
         ],
         "connections": {
@@ -1149,6 +1217,18 @@
                     [
                         {
                             "node": "GitHub \u2014 Publish (new file)",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "GitHub \u2014 Draft": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "GitHub \u2014 Draft (new file)",
                             "type": "main",
                             "index": 0
                         }
