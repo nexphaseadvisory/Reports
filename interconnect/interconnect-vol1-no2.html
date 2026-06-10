@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Interconnect&#8482; — Week of June 9, 2026</title>
+<title>The Interconnect&#8482; — Week of June 10, 2026</title>
 <style>
 :root {
   --ink:    #16191d;
@@ -172,6 +172,8 @@ body {
 .badge-miso { background: #f0eaf8;       color: #4a2080; }
 .badge-ercot{ background: #fef0e0;       color: #8a4400; }
 .badge-caiso{ background: #fde8e8;       color: var(--flag); }
+.badge-frcc { background: #e8f5e0;       color: #2d5a1b; }
+.badge-serc { background: #ede8f5;       color: #3a1a6b; }
 .signal-card h3 {
   font-size: 16px;
   font-weight: 700;
@@ -288,13 +290,13 @@ body {
   <!-- MASTHEAD -->
   <div class="masthead">
     <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
-    <h1>The <em>Inter</em>connect<sup>&#8482;</sup></h1>
+    <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
     <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
   </div>
 
   <!-- DATELINE BAR -->
   <div class="dateline-bar">
-    <div class="vol">Week of June 9, 2026 <span>· Vol. 1, No. 2</span></div>
+    <div class="vol">Week of June 10, 2026 <span>· Vol. 1, No. 2</span></div>
     <div class="site">NexPhaseAdvisory.net</div>
   </div>
 
@@ -302,20 +304,22 @@ body {
   <div class="body-wrap">
 
     <!-- LEDE -->
-    <p class="lede">Capital formation and site control dominated the week's deal flow, with Stark Power's $140M acquisition of Sagebrush's 5.6GW development portfolio and Hut 8's $4.25B note offering for a pre-leased 352MW Texas campus signaling that the financing structures underwriting hyperscale demand are maturing fast. The site selection map is expanding beyond Tier 1 power markets — Nueces County, Christian County (Illinois), Albany, Mississippi, and outer Adelaide all surfaced as active fronts — while Cipher Mining's move to a retired coal site near Waco underscores how developers are arbitraging stranded grid infrastructure to compress interconnection timelines. Evergy's apparent willingness to sponsor data center development directly in Topeka is a notable utility posture shift worth watching, and Jane Street self-developing its own facility is a reminder that end-user vertical integration is no longer confined to hyperscalers. For developers and IPPs, the week reinforces a single operational reality: the constraint is no longer capital or demand, it's permitted land with viable grid access and a clear path to power delivery.</p>
+    <p class="lede">This week's deal flow makes one thing structurally clear: capital is no longer waiting on grid certainty before committing to load. Stark Power's acquisition of Sagebrush's 5.6GW development portfolio—funded by a $140M raise—and Hut 8's $4.25B note offering to finance a pre-leased 352MW Texas campus signal that sophisticated buyers are pricing interconnection risk into the stack and moving anyway. Cipher Mining's pivot to a retired coal site near Waco underscores the brownfield grid infrastructure play gaining traction on ERCOT, while Compass Datacenters advancing its Mississippi project without a state regulatory ruling suggests developers are increasingly willing to absorb jurisdictional ambiguity rather than pause. Taken together, the weight of announcements—spanning Texas, Illinois, Spain, Australia, and upstate New York—reflects a market in which development timelines are stretching toward 2029–2030 while financing structures and site strategies are hardening now.</p>
 
     <!-- SIGNALS SECTION -->
     <div class="section-label">This Week's Signals</div>
+
+    <!-- SIGNAL CARD — repeat block per signal, swap badge class per ISO -->
     <div class="signal-card gold">
       <div class="signal-meta">
         <span class="badge badge-ercot">ERCOT</span>
         Nueces County, TX · Demand Signal
       </div>
       <h3>Beacon Point AI Eyes Massive Data Center in Nueces County</h3>
-      <p>Beacon Point AI is planning a large-scale data center development in Nueces County, Texas. The project signals continued hyperscale-adjacent demand concentration along the Texas Gulf Coast. No MW figure has been publicly disclosed yet.</p>
+      <p>Beacon Point AI is planning a large-scale data center development in Nueces County, Texas. The project adds to the accelerating pipeline of AI-driven load growth in ERCOT's coastal zone. Specific MW figures have not yet been disclosed.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        Nueces County sits in ERCOT's South load zone with coastal transmission constraints — developers here should model congestion risk carefully and engage early with AEP Texas on interconnection capacity.
+        Nueces County sits near existing transmission infrastructure and coastal load pockets. Developers and IPPs should watch interconnection queue dynamics in the ERCOT South region as this adds competitive pressure for capacity.
       </div>
     </div>
 <div class="signal-card gold">
@@ -323,11 +327,11 @@ body {
         <span class="badge badge-ercot">ERCOT</span>
         Texas (statewide) · M&amp;A
       </div>
-      <h3>Stark Power Acquires 5.6GW Sagebrush Data Center Portfolio</h3>
-      <p>Stark Power has acquired Sagebrush's 5.6GW data center development portfolio, raising approximately $140M to fund the transaction. This is one of the largest portfolio acquisitions in the data center development space in recent memory. The deal consolidates a significant pipeline of ERCOT-focused load-side interconnection rights.</p>
+      <h3>Stark Power Acquires Sagebrush 5.6GW DC Portfolio for ~$140M</h3>
+      <p>Stark Power has acquired Sagebrush's 5.6GW data center development portfolio, raising approximately $140 million to fund the transaction. The deal represents one of the largest single portfolio acquisitions in the data center development space. The portfolio's geographic concentration has not been fully disclosed but is presumed ERCOT-heavy given Sagebrush's prior activity.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        5.6GW of queued load in a single transaction reshapes the competitive landscape for power origination in ERCOT — offtakers and generators should reassess their pipeline assumptions and watch how Stark Power stages these projects.
+        A 5.6GW portfolio changing hands signals institutional conviction in Texas load growth at scale. Counterparties — from generators to transmission developers — should engage Stark Power early to position on offtake and infrastructure deals.
       </div>
     </div>
 <div class="signal-card flag">
@@ -335,11 +339,11 @@ body {
         <span class="badge badge-miso">MISO</span>
         Mississippi · Regulatory
       </div>
-      <h3>Compass Datacenters Pushes Forward Despite Mississippi Regulatory Setback</h3>
-      <p>Compass Datacenters is advancing its Mississippi data center development despite the state declining to issue a regulatory ruling on the project. This creates an unusual situation where development is proceeding without formal state regulatory clarity. The move suggests the developer believes the project can progress under existing frameworks.</p>
+      <h3>Compass Datacenters Advances Mississippi Campus Despite Regulatory Uncertainty</h3>
+      <p>Compass Datacenters is pushing forward with its Mississippi data center plans even after the state declined to issue a regulatory ruling on the project. The move suggests the developer is willing to absorb regulatory ambiguity to secure a foothold in an emerging market. Mississippi falls within MISO South, a region with growing interest from large load customers.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        Operating without a regulatory ruling introduces permitting and utility coordination risk — due diligence on power delivery agreements and interconnection status is critical before any capital commitment here.
+        Regulatory silence in Mississippi creates real permitting and utility cost-recovery risk. Developers and lenders considering similar projects in MISO South should pressure-test interconnection and rate treatment assumptions before committing capital.
       </div>
     </div>
 <div class="signal-card">
@@ -347,23 +351,23 @@ body {
         <span class="badge badge-miso">MISO</span>
         Christian County, IL · Demand Signal
       </div>
-      <h3>Eagle Rock Proposes 1GW Illinois Data Center, Construction Deferred to 2029</h3>
-      <p>Eagle Rock has proposed a 1GW data center in Christian County, Illinois, with construction not expected to begin until 2029–2030. The long lead time suggests this is an early-stage land and queue positioning play. Christian County is in central Illinois within MISO's footprint.</p>
+      <h3>Eagle Rock Proposes 1GW Illinois Data Center, Construction Starts 2029</h3>
+      <p>Eagle Rock has proposed a 1GW data center in Christian County, Illinois, with construction not expected to begin until 2029–2030. The long lead time suggests the project is still in early development and site control phases. Illinois sits within MISO Midwest, where large load interconnection queues are already congested.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        A 2029 construction start means interconnection queue positioning and site control matter now — developers and landowners in central Illinois MISO territory should evaluate whether this signals a broader cluster forming in the region.
+        A 2029 construction timeline means this project will compete in MISO's evolving LGIA queue under future tariff rules. Developers and co-located generation players have a narrow window to get ahead of this load in the interconnection queue.
       </div>
     </div>
-<div class="signal-card">
+<div class="signal-card gold">
       <div class="signal-meta">
         <span class="badge badge-pjm">SPP</span>
         Topeka, KS · Demand Signal
       </div>
-      <h3>Evergy Explores Utility-Led Data Center Development in Topeka</h3>
-      <p>Evergy is exploring siting a data center in Topeka, Kansas, representing a notable instance of utility-led data center development activity. Utilities self-developing or attracting anchor data center tenants is an emerging trend that blurs traditional load-serving roles. Topeka sits within Evergy's regulated SPP service territory.</p>
+      <h3>Evergy Explores Utility-Led Data Center Siting in Topeka</h3>
+      <p>Evergy is actively exploring siting a data center in Topeka, Kansas, marking an unusual move into utility-led development activity. The initiative signals that Evergy sees load attraction as a core growth strategy within its SPP territory. Kansas has historically been an underrepresented market for hyperscale and AI data center investment.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        Utility-sponsored data center development can accelerate grid integration and reduce interconnection friction — but it also raises questions about rate base treatment and competitive neutrality that regulators and independent developers should monitor closely.
+        Utility-sponsored site selection can accelerate permitting and grid integration timelines significantly. Developers and power marketers should engage Evergy directly — utility-backed projects often come with favorable rate structures and de-risked interconnection paths.
       </div>
     </div>
 <div class="signal-card gold">
@@ -371,49 +375,51 @@ body {
         <span class="badge badge-ercot">ERCOT</span>
         Waco, TX · Demand Signal
       </div>
-      <h3>Cipher Mining Targets 500MW Campus at Retired Coal Site Near Waco</h3>
-      <p>Cipher Mining plans a 500MW data center campus near a retired coal plant outside Waco, Texas, leveraging existing grid infrastructure at the brownfield site. Reuse of retired generation sites is an increasingly common strategy to access transmission capacity without new queue entry. The Waco area sits in ERCOT's North load zone.</p>
+      <h3>Cipher Mining Targets 500MW Campus Near Retired Coal Plant</h3>
+      <p>Cipher Mining plans a 500MW data center campus near a retired coal plant outside Waco, Texas, leveraging existing substation and transmission infrastructure. The brownfield approach is designed to compress interconnection timelines and reduce infrastructure capital costs. The site's legacy grid assets could support faster energization versus greenfield alternatives.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        Brownfield coal sites offer real transmission infrastructure advantages, but developers must validate substation condition, remaining asset life, and ERCOT's view on load interconnection at these points before underwriting the cost savings.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-pjm">NYISO</span>
-        Albany, NY · Demand Signal
-      </div>
-      <h3>Prime Companies Unveils $2.8B Tech Campus and Data Center Near Albany</h3>
-      <p>Developer Prime Companies has unveiled a $2.8 billion Kenwood tech campus and data center plan in the Albany area of New York. The project represents one of the larger announced data center investments in Upstate New York in recent years. Albany sits within NYISO Zone F, which has historically seen less data center saturation than the New York City metro.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Zone F offers relatively lower congestion costs and proximity to hydropower-heavy generation mix — a compelling clean-energy narrative for offtakers, though NYISO's interconnection process and local permitting in Albany County will be key gating factors.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Texas (West) · M&amp;A
-      </div>
-      <h3>Hut 8 Raises $4.25B to Fund 352MW Pre-Leased Texas Data Center</h3>
-      <p>Hut 8 has priced a $4.25 billion note offering to finance a 352MW Texas data center that is already pre-leased to an undisclosed hyperscaler. The transaction demonstrates strong capital market appetite for contracted data center cash flows in ERCOT. The hyperscaler identity has not been disclosed, adding some counterparty opacity.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        A pre-leased hyperscaler deal at this scale with note financing closed signals that institutional debt markets are fully open for contracted Texas data center projects — comparable assets with signed offtake should be actively exploring similar capital structures.
+        Brownfield coal retirements remain one of the most viable fast-path interconnection strategies in ERCOT. Developers and co-located generation providers should actively map retired plant sites — this playbook is repeatable and queue-advantaged.
       </div>
     </div>
 <div class="signal-card">
       <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Childress, TX · Demand Signal
+        <span class="badge badge-pjm">NYISO</span>
+        Albany, NY · Demand Signal
       </div>
-      <h3>IREN Expands Childress Data Center, Highlights Low Water Footprint</h3>
-      <p>IREN is expanding its data center operation in Childress, Texas, creating local jobs and emphasizing the project's limited water consumption. Childress is located in the Texas Panhandle, a region with historically constrained water resources, making the low-water angle strategically important. The expansion signals continued scaling of IREN's Texas infrastructure footprint.</p>
+      <h3>Prime Companies Unveils $2.8B Kenwood Tech Campus Near Albany</h3>
+      <p>Prime Companies has unveiled a $2.8 billion Kenwood tech campus and data center plan in the Albany, New York area. The project would represent a significant new load addition in NYISO Zone F, which has seen limited large-scale data center development to date. Albany's proximity to fiber corridors and state economic development incentives may underpin the site selection.</p>
       <div class="angle">
         <strong>The Angle</strong>
-        Water availability is becoming a real site selection constraint in West Texas — IREN's low-water positioning could differentiate their sites in regulatory and community approval processes as scrutiny on data center resource use intensifies.
+        NYISO Zone F has constrained transmission capacity and complex interconnection rules — developers entering this market should conduct rigorous deliverability studies early. The $2.8B price tag suggests serious capital backing, making this a credible demand signal for local generators and utilities.
       </div>
     </div>
+<div class="signal-card gold">
+      <div class="signal-meta">
+        <span class="badge badge-ercot">ERCOT</span>
+        Texas · M&amp;A
+      </div>
+      <h3>Hut 8 Prices $4.25B Note to Fund 352MW Pre-Leased Texas Campus</h3>
+      <p>Hut 8 has priced a $4.25 billion note offering to fund a 352MW Texas data center pre-leased to an undisclosed hyperscaler. The deal demonstrates deep capital market appetite for contracted AI infrastructure in ERCOT. The pre-lease structure significantly de-risks revenue, supporting the large debt raise.</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        Pre-leased hyperscaler deals at this scale validate ERCOT as the dominant market for next-generation AI load. Power suppliers and infrastructure investors should treat this as a benchmark transaction — expect similar structures to drive queue activity through 2026.
+      </div>
+    </div>
+    <!-- Example signal card structure:
+    <div class="signal-card [flag|gold]">
+      <div class="signal-meta">
+        <span class="badge badge-pjm">PJM</span>
+        LOCATION · CATEGORY
+      </div>
+      <h3>HEADLINE</h3>
+      <p>DETAIL</p>
+      <div class="angle">
+        <strong>The Angle</strong>
+        PRACTITIONER COMMENTARY
+      </div>
+    </div>
+    -->
 
     <hr class="section-divider">
 
@@ -423,23 +429,35 @@ body {
       <div class="connector-cell demand">
         <div class="cell-label">Demand Signal</div>
         <h4>Texas</h4>
-        <p>Cipher Mining plans a 500MW data center campus near a retired coal plant outside Waco, Texas, deliberately leveraging existing grid infrastructure to accelerate interconnection. Multiple other Texas-focused developers—including Beacon Point AI, Hut 8 (352MW pre-leased), and IREN Childress—are simultaneously advancing projects, signaling intense near-term power demand across ERCOT.</p>
+        <p>Cipher Mining plans a 500MW data center campus near a retired coal plant outside Waco, Texas, intentionally leveraging existing grid infrastructure. This brownfield approach significantly de-risks interconnection and accelerates the development timeline.</p>
       </div>
       <div class="connector-cell">
         <div class="cell-label">Supply Context</div>
-        <h4>Fort Lupton 115 kV Substation (West, Gas, 200 MW)</h4>
-        <p>200 MW of active gas-fired capacity at Fort Lupton 115 kV Substation offers firm, dispatchable generation well-suited to the always-on power profile data centers require; the 115 kV voltage level and active status reduce interconnection lead time compared to greenfield alternatives, though the Colorado West region does not directly overlap ERCOT and would require a buyer willing to co-locate or replicate the model in Texas.</p>
+        <h4>Illinois (MISO)</h4>
+        <p>100 MW active battery storage project at POI 19CVTRY in MISO · key advantage is dispatchable storage capacity suited to support high-density compute loads; constraint is that MISO queue capacity is modest relative to Cipher's 500MW target, requiring aggregation or supplemental supply.</p>
       </div>
 <div class="connector-cell demand">
         <div class="cell-label">Demand Signal</div>
-        <h4>Illinois / PJM Midwest</h4>
-        <p>Eagle Rock has proposed a 1 GW data center in Christian County, Illinois with construction targeted for 2029–2030, representing one of the largest single-site power demands in the PJM queue pipeline. The long lead time creates an opening to pair the project with large, actively queued PJM generation now to secure capacity before the queue tightens further.</p>
+        <h4>Illinois</h4>
+        <p>Eagle Rock proposes a 1GW data center in Christian County, Illinois with construction not starting until 2029–2030, providing a long lead time to secure supply. The scale and MISO footprint make it one of the largest announced Midwest data center projects this week.</p>
       </div>
       <div class="connector-cell">
         <div class="cell-label">Supply Context</div>
-        <h4>Pleasant Grove Solar – SILVER LAKE–CHERRY VALLEY 345 KV (PJM, Solar, 300 MW)</h4>
-        <p>300 MW of active PJM solar interconnecting at the high-capacity 345 kV SILVER LAKE–CHERRY VALLEY corridor provides substantial clean energy directly within PJM footprint; the active status and 345 kV POI align with the scale and sustainability requirements typical of hyperscale data center offtake agreements, though storage pairing would be needed to meet 24/7 load demands.</p>
+        <h4>Kincaid-Pana 345kV (PJM/Illinois)</h4>
+        <p>84.1 MW active solar project interconnecting at Kincaid-Pana 345kV in the PJM region of Illinois · high-voltage 345kV POI is a strong fit for large load interconnection; constraint is that 84 MW is a fraction of the 1GW target, signaling need for portfolio aggregation across multiple queue positions.</p>
       </div>
+      <!-- Example:
+      <div class="connector-cell demand">
+        <div class="cell-label">Demand Signal</div>
+        <h4>MARKET NAME</h4>
+        <p>DEMAND CONTEXT</p>
+      </div>
+      <div class="connector-cell">
+        <div class="cell-label">Supply Context</div>
+        <h4>QUEUE / CORRIDOR</h4>
+        <p>MW AVAILABLE · KEY CONSTRAINT</p>
+      </div>
+      -->
     </div>
 
     <hr class="section-divider">
@@ -522,6 +540,16 @@ body {
           <td>active</td>
           <td>SILVER LAKE- CHERRY VALLEY 345 KV</td>
         </tr>
+        <!-- Example row:
+        <tr>
+          <td>PROJECT NAME</td>
+          <td>PJM</td>
+          <td>Solar + BESS</td>
+          <td class="mw">300</td>
+          <td>Active</td>
+          <td>SUBSTATION 345kV</td>
+        </tr>
+        -->
       </tbody>
     </table>
 
