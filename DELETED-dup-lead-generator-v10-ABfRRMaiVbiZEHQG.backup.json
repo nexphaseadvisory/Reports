@@ -1,0 +1,371 @@
+{
+  "updatedAt": "2026-06-06T04:35:32.000Z",
+  "createdAt": "2026-06-06T02:24:03.288Z",
+  "id": "ABfRRMaiVbiZEHQG",
+  "name": "Lead Generator v10 — Services Outreach",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 1-5"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -32
+      ],
+      "id": "f9a10701-76e1-4894-9e68-e0d64cfc8d9c"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "list",
+          "cachedResultName": "Market Research"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblLLpsGrLBpgezYx",
+          "mode": "list",
+          "cachedResultName": "Market Signals"
+        },
+        "filterByFormula": "AND({Signal Score}='High', IS_AFTER({Date Detected}, DATEADD(TODAY(), -7, 'days')))",
+        "options": {
+          "fields": [
+            "fldqfELHApfCFn5r4",
+            "fld91UDYde7HjVdBx",
+            "fldmvBUgh2us3yjCM",
+            "flds4vVxo0dWf6FG6",
+            "fldTGLZgZIQ3vDoOU",
+            "fldDvA6keV0I9S6Vb",
+            "fld5OSZcQq7f84p8Y",
+            "fldDi8DkxFQYAsZFM",
+            "fldwNoliy07oYIQWf"
+          ]
+        }
+      },
+      "name": "List Recent High Signals",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        -32
+      ],
+      "alwaysOutputData": true,
+      "id": "5256b909-91df-4cb5-91ff-9e298a2a357b",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "list",
+          "cachedResultName": "Market Research"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl32octmRaDZXULy",
+          "mode": "list",
+          "cachedResultName": "Outreach Pipeline",
+          "cachedResultUrl": "https://airtable.com/appoTkXUnQ9aulmkE/tbl32octmRaDZXULy"
+        },
+        "filterByFormula": "{Contact Name} != ''",
+        "options": {
+          "fields": [
+            "fldLL2FMn3Y3KSG1z"
+          ]
+        }
+      },
+      "name": "List Existing Pipeline Companies",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        192,
+        -32
+      ],
+      "alwaysOutputData": true,
+      "id": "d5084d3c-b4b5-4d39-ac33-9c1ae67f4e2c",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Signals came through List Existing Pipeline Companies -> here via $input\n// List Recent High Signals output is upstream - access via $('List Recent High Signals')\nconst existingSet = new Set(\n  $input.all()\n    .map(i => {\n      const f = i.json.fields || i.json;\n      return ((f['fldLL2FMn3Y3KSG1z'] || f['Company'] || '') + '').toLowerCase().trim();\n    })\n    .filter(Boolean)\n);\n\nconst signals = $('List Recent High Signals').all();\nconst seen = new Set();\nconst out = [];\n\nfor (const item of signals) {\n  const f = item.json.fields || item.json;\n  const company = ((f['Company'] || '') + '').trim();\n  const key = company.toLowerCase();\n  if (!company || key === 'unknown' || key === 'multiple developers') continue;\n  if (existingSet.has(key) || seen.has(key)) continue;\n  seen.add(key);\n  out.push({\n    json: {\n      signal_id: item.json.id,\n      signal_company: company,\n      signal_type: (f['Signal Type']?.name || f['Signal Type'] || ''),\n      signal_detail: (f['Signal Detail'] || ''),\n      signal_location: (f['Location'] || ''),\n      signal_outreach_angle: (f['Outreach Angle'] || ''),\n      signal_score: (f['Score'] || ''),\n      signal_mw: (f['MW Size'] || ''),\n      actionability: (f['Actionability'] || ''),\n      actionability_rationale: (f['Actionability Rationale'] || '')\n    }\n  });\n}\n\nreturn out;"
+      },
+      "name": "Filter Net-New Companies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -32
+      ],
+      "id": "f0c9d1fd-78fe-4587-b098-885ccd0eac5a"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "anthropic-beta",
+              "value": "web-search-2025-03-05"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-6\",\n  \"max_tokens\": 1000,\n  \"tools\": [{\"type\": \"web_search_20250305\", \"name\": \"web_search\", \"max_uses\": 2}],\n  \"system\": \"You are a research assistant helping Chris Santiago identify advisory opportunities. Chris is an independent power origination and development advisor (NexPhase Advisory) with 20+ years in utility-scale energy. His services: (1) interconnection queue strategy and FERC process navigation — he has won two FERC Order 1000 competitive transmission bids as a non-incumbent, (2) power origination — has closed 2+ GW in PPAs with investment-grade counterparties, (3) site selection and substation siting for data centers and generation projects, (4) development management — has taken 5+ GW from origination to NTP across PJM, MISO, CAISO, WECC, and Southeast markets, (5) market intelligence on DC power availability, transmission constraints, and interconnection queue dynamics.\\n\\nFor a given company + signal, your job is to: (A) identify what that company most needs to move their project forward based on the signal and company type, (B) match that need to Chris's most relevant service, and (C) draft a 280-character max LinkedIn DM that opens with the specific project need — not Chris's credentials — and positions him as someone who can solve that exact problem. The DM must read peer-to-peer, not like a pitch. No 'I noticed' openers. No explicit job-seeking.\",\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Company: {{ $json.signal_company }}\\nSignal type: {{ $json.signal_type }}\\nSignal detail: {{ $json.signal_detail }}\\nLocation/market: {{ $json.signal_location }}\\nMW size: {{ $json.signal_mw }}\\nOutreach angle: {{ $json.signal_outreach_angle }}\\nActionability score: {{ $json.actionability }}/5\\nActionability rationale: {{ $json.actionability_rationale }}\\n\\nUsing web search if needed to understand the company's current project stage, do the following and return ONLY valid JSON (no markdown, no preamble):\\n{\\n  \\\"project_need\\\": \\\"one sentence — what does this company need right now to advance their project (be specific: interconnection study, substation siting, PPA procurement, queue strategy, permitting, etc.)\\\",\\n  \\\"service_match\\\": \\\"which of Chris's services is most relevant and why (one sentence)\\\",\\n  \\\"target_title\\\": \\\"best title to reach at this company for this need\\\",\\n  \\\"signal_hook\\\": \\\"2-3 sentence context paragraph for the Signal Hook field — what is happening at this company and why it creates an advisory opportunity\\\",\\n  \\\"draft_message\\\": \\\"280-char max LinkedIn DM — open with the project need or company situation, not Chris's background. Peer voice, insider terminology, no 'I noticed', no explicit job ask.\\\",\\n  \\\"research_notes\\\": \\\"any key facts found via web search about the project stage, queue position, or deal status\\\",\\n  \\\"enrichment_status\\\": \\\"Needs Clay\\\",\\n  \\\"data_source\\\": \\\"Web Search\\\"\\n}\"\n  }]\n}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 30000
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "name": "Claude — Identify Need + Draft DM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        -144
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "id": "aa16cfb9-9631-41be-94a6-15c550933d52",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FJA7PZjCaMHaj0Ir",
+          "name": "Header Auth Claude API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "name": "Combine Signal + Claude Response",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        -32
+      ],
+      "id": "b0e3d12f-3a57-48fd-bb54-574127c94036"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "list",
+          "cachedResultName": "Market Research"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl32octmRaDZXULy",
+          "mode": "list",
+          "cachedResultName": "Outreach Pipeline"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "name": "Create Pipeline Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1296,
+        -32
+      ],
+      "id": "fb0a05a0-af47-4d3a-8936-dc7c87c9028f",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Field IDs (Outreach Pipeline) — write by ID to avoid name drift.\nconst F = {\n  contact: 'fldAYJfmDu3g1yuDX', title: 'fldumu5th7aPdxgoF', company: 'fldLL2FMn3Y3KSG1z',\n  linkedin: 'fldaq7M5Jz1LUp0lv', email: 'fldnBwIqMSYS577Ki', hook: 'fldJK3FAM4mPvhnDw',\n  draft: 'fldn6imsWP0eiq29R', channel: 'fldDHjKyHP1XEseyg', status: 'fldTaGWpuRTmnG8yG',\n  notes: 'fldI0EvZPGm9XrwWz', source: 'fldjSrdlhrORN6xyP', enrStatus: 'fldCXm7kgxLUKzgNL',\n  dataSrc: 'fld4ayILRKw9aYWux', enrDate: 'fldB5qbGXxGWIEL2T'\n};\nconst today = new Date().toISOString().slice(0, 10);\nconst items = [];\nfor (const it of $input.all()) {\n  const d = it.json;\n  const v = x => (x == null ? '' : ('' + x)).trim();\n  const contact = v(d.contact_name);\n  const verifiedTitle = v(d.actual_title);\n  const title = verifiedTitle || v(d.target_title);\n  const linkedin = v(d.linkedin_url);\n  const email = v(d.email);\n  const company = v(d.signal_company);\n\n  const missing = [];\n  if (!email) missing.push('Email');\n  if (!verifiedTitle) missing.push('Title');\n  if (!linkedin) missing.push('LinkedIn URL');\n\n  const hasContactPath = !!(linkedin || email);\n  let enrStatus, dataSource;\n  if (!hasContactPath) { enrStatus = 'Needs Clay'; dataSource = 'Web Search'; }\n  else if (email) { enrStatus = 'Web Enriched'; dataSource = 'Web Search'; }\n  else { enrStatus = 'Needs Clay'; dataSource = 'Web Search'; }\n\n  const rec = {};\n  rec[F.contact]   = contact;\n  rec[F.title]     = title;\n  rec[F.company]   = company;\n  rec[F.linkedin]  = linkedin;\n  rec[F.email]     = email;\n  rec[F.hook]      = v(d.signal_hook) || v(d.signal_outreach_angle) || v(d.signal_detail);\n  rec[F.draft]     = v(d.draft_message);\n  rec[F.channel]   = 'LinkedIn DM';\n  rec[F.notes]     = [\n    v(d.project_need) ? 'NEED: ' + v(d.project_need) : '',\n    v(d.service_match) ? 'SERVICE MATCH: ' + v(d.service_match) : '',\n    v(d.research_notes) ? 'RESEARCH: ' + v(d.research_notes) : '',\n    missing.length ? 'Missing: ' + missing.join(', ') : ''\n  ].filter(Boolean).join('\\n\\n');\n  rec[F.enrStatus] = enrStatus;\n  rec[F.dataSrc]   = dataSource;\n  rec[F.enrDate]   = today;\n  rec[F.status]    = 'New Lead';\n  if (v(d.signal_id)) rec[F.source] = [v(d.signal_id)];\n  items.push({ json: rec });\n}\nreturn items;"
+      },
+      "id": "9f9c5a00-d337-41fc-868c-ee4be53e9a1c",
+      "name": "Gap Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        -128
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Recent High Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Recent High Signals": {
+      "main": [
+        [
+          {
+            "node": "List Existing Pipeline Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Existing Pipeline Companies": {
+      "main": [
+        [
+          {
+            "node": "Filter Net-New Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Net-New Companies": {
+      "main": [
+        [
+          {
+            "node": "Claude — Identify Need + Draft DM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combine Signal + Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude — Identify Need + Draft DM": {
+      "main": [
+        [
+          {
+            "node": "Combine Signal + Claude Response",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combine Signal + Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Gap Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gap Check": {
+      "main": [
+        [
+          {
+            "node": "Create Pipeline Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "6cc7944c-1ed1-4ecc-98dd-b10217c95189",
+  "activeVersionId": null,
+  "versionCounter": 45,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-06-06T02:24:03.290Z",
+      "createdAt": "2026-06-06T02:24:03.290Z",
+      "role": "workflow:owner",
+      "workflowId": "ABfRRMaiVbiZEHQG",
+      "projectId": "yyu8mrsL1yrdUgiZ",
+      "project": {
+        "updatedAt": "2026-05-07T03:46:52.701Z",
+        "createdAt": "2026-05-07T03:46:45.027Z",
+        "id": "yyu8mrsL1yrdUgiZ",
+        "name": "Chris   <santiago4801@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
