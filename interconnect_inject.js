@@ -199,6 +199,7 @@ body {
 .badge-ercot{ background: #fef0e0;       color: #8a4400; }
 .badge-caiso{ background: #fde8e8;       color: var(--flag); }
 .badge-frcc { background: #e8f5e0;       color: #2d5a1b; }
+.badge-serc { background: #ede8f5;       color: #3a1a6b; }
 .signal-card h3 {
   font-size: 16px;
   font-weight: 700;
@@ -394,7 +395,7 @@ function esc(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
-const ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', FRCC: 'badge-frcc', NYISO: 'badge-pjm', SPP: 'badge-pjm' };
+const ISO_BADGE = { PJM: 'badge-pjm', WECC: 'badge-wecc', MISO: 'badge-miso', ERCOT: 'badge-ercot', CAISO: 'badge-caiso', FRCC: 'badge-frcc', SERC: 'badge-serc', NYISO: 'badge-pjm', SPP: 'badge-pjm' };
 function badgeClass(iso) { return ISO_BADGE[String(iso || '').toUpperCase()] || 'badge-pjm'; }
 // Queue "ISO" derived from the Utility field (queue table has no true ISO field).
 function isoFromUtility(u) {
