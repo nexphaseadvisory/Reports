@@ -1,0 +1,508 @@
+{
+  "updatedAt": "2026-06-10T16:38:15.282Z",
+  "createdAt": "2026-06-06T04:39:15.443Z",
+  "id": "9vkaquYqunN0BUSS",
+  "name": "Outreach Drafts — Services First",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "f7674368-032b-419b-abe4-a4c333af7473",
+      "name": "Daily 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        6096,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "list",
+          "cachedResultName": "Market Research"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl32octmRaDZXULy",
+          "mode": "list",
+          "cachedResultName": "Outreach Pipeline"
+        },
+        "filterByFormula": "AND(\n  OR({Enrichment Status} = 'Web Enriched', {Enrichment Status} = BLANK()),\n  {LinkedIn URL} != ''\n)",
+        "options": {}
+      },
+      "id": "ecf70e46-713f-4058-af91-37e4f617b9ad",
+      "name": "List Contacts Needing Drafts",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        6320,
+        -448
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().slice(0, 10);\nconst out = [];\n\nfor (const item of items) {\n  const f = item.json.fields || item.json;\n\n  const company     = String(f['Company']          || '').trim();\n  const contactName = String(f['Contact Name']     || '').trim();\n  const title       = String(f['Title']            || '').trim();\n  const linkedin    = String(f['LinkedIn URL']     || '').trim();\n  const signalHook  = String(f['Signal Hook']      || '').trim();\n  const notes       = String(f['Notes']            || '').trim();\n  const markets     = String(f['Markets']          || '').trim();\n  const isAlum      = !!(f['NexEra/Origis Alum']);\n\n  // Only skip if we have nothing at all to work with\n  if (!company && !contactName) continue;\n\n  const needMatch    = notes.match(/NEED:\\s*(.+?)(?:\\n|$)/);\n  const serviceMatch = notes.match(/SERVICE MATCH:\\s*(.+?)(?:\\n|$)/);\n\n  out.push({\n    json: {\n      record_id:      item.json.id,\n      contact_name:   contactName,\n      title:          title,\n      company:        company,\n      linkedin_url:   linkedin,\n      signal_hook:    signalHook,\n      project_need:   needMatch    ? needMatch[1].trim()    : '',\n      service_match:  serviceMatch ? serviceMatch[1].trim() : '',\n      markets:        markets,\n      is_alum:        isAlum,\n      needs_research: !signalHook  // flag for Claude to know it needs to web search\n    }\n  });\n}\n\nreturn out;"
+      },
+      "id": "c3326a98-c6a6-4b37-ba71-05078900d7c4",
+      "name": "Prep Contact Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6544,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'claude-sonnet-4-6',\n  max_tokens: 800,\n  tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],\n  system: 'You are drafting LinkedIn DMs for Chris Santiago, who runs NexPhase Advisory — power origination and interconnection consulting. Chris has 20+ years in the industry, two FERC Order 1000 competitive transmission wins as non-incumbent, 2+ GW in PPAs closed, 5+ GW to NTP across PJM/MISO/CAISO/WECC/Southeast. He spent significant time at NextEra Energy before Origis Energy.\\n\\nTone: warm, specific, peer-to-peer. The best DMs sound like they come from someone who genuinely follows the space and noticed something about this person\\'s work. No corporate language, no buzzwords. The person\\'s work should be the subject — not Chris. No explicit consulting ask in the first message. Close with a light, genuine invitation to connect.\\n\\nIf no signal hook is provided, use web_search to find what this person and their company are working on right now — recent projects, announcements, market moves, hiring activity. Use that as the anchor for the DM.',\n  messages: [{\n    role: 'user',\n    content: 'Contact: ' + ($json.contact_name || '[Name]') + '\\nTitle: ' + $json.title + '\\nCompany: ' + $json.company + '\\nLinkedIn: ' + $json.linkedin_url + '\\nSignal Hook: ' + ($json.signal_hook || 'MISSING — please web search for recent activity') + '\\nProject need: ' + $json.project_need + '\\nService match: ' + $json.service_match + '\\nMarkets: ' + $json.markets + '\\nNextEra/Origis alum: ' + ($json.is_alum ? 'YES — open on shared background' : 'NO') + '\\n\\n' + ($json.needs_research ? 'Signal Hook is empty. Use web_search to find what ' + $json.company + ' and ' + ($json.contact_name || 'this person') + ' are working on right now before drafting. Search for recent projects, announcements, or market activity.\\n\\n' : '') + 'Return ONLY valid JSON:\\n{\\n  \"draft_message\": \"280-char max LinkedIn DM. ' + ($json.is_alum ? 'Open on shared NextEra/Origis background.' : 'Open on something specific and real about their work.') + ' Warm, peer voice. Use first name if known. Close with a soft invitation like \\'happy to compare notes\\' or \\'would enjoy connecting\\'. No consulting pitch. No credential mentions.\",\\n  \"dm_angle\": \"one sentence — what this message is anchored on\",\\n  \"signal_found\": \"if you web searched, what did you find? One sentence. Otherwise empty string.\"\\n}'\n  }]\n}) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 25000
+            }
+          },
+          "timeout": 60000
+        }
+      },
+      "id": "07c16e65-f309-4d47-a250-fe4761e4e4a3",
+      "name": "Claude — Draft DM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6768,
+        -448
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FJA7PZjCaMHaj0Ir",
+          "name": "Header Auth Claude API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = [];\nconst claudeItems = $input.all();\nconst prepItems = $('Prep Contact Data').all();\n\nfor (let i = 0; i < claudeItems.length; i++) {\n  const claudeItem = claudeItems[i];\n  const prepItem = prepItems[i];\n\n  if (!prepItem) continue;\n\n  const raw = claudeItem.json.content?.find(b => b.type === 'text')?.text\n    || claudeItem.json.content?.[claudeItem.json.content.length - 1]?.text || '';\n\n  let parsed;\n  try {\n    parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());\n  } catch(e) {\n    const m = raw.match(/\\{[\\s\\S]*\\}/);\n    try { parsed = m ? JSON.parse(m[0]) : null; } catch { parsed = null; }\n  }\n\n  if (!parsed || !parsed.draft_message) {\n    console.log('Item ' + i + ': no draft_message found in parsed output');\n    continue;\n  }\n\n  const recordId    = prepItem.json?.record_id    || '';\n  const projectNeed = prepItem.json?.project_need  || '';\n  const svcMatch    = prepItem.json?.service_match || '';\n  const signalFound = parsed.signal_found          || '';\n\n  if (!recordId) {\n    console.log('Item ' + i + ': no record_id found');\n    continue;\n  }\n\n  items.push({\n    json: {\n      record_id:     recordId,\n      draft_message: parsed.draft_message,\n      notes_update:  [\n        projectNeed  ? 'NEED: '          + projectNeed  : '',\n        svcMatch     ? 'SERVICE MATCH: ' + svcMatch     : '',\n        parsed.dm_angle  ? 'DM ANGLE: ' + parsed.dm_angle  : '',\n        signalFound  ? 'RESEARCH: '     + signalFound  : ''\n      ].filter(Boolean).join('\\n\\n')\n    }\n  });\n}\n\nreturn items;"
+      },
+      "id": "eb8656eb-cbf8-4efb-8df7-2167e93b46ed",
+      "name": "Parse Draft",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6992,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://api.airtable.com/v0/appoTkXUnQ9aulmkE/tbl32octmRaDZXULy/' + $json.record_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ fields: { fldn6imsWP0eiq29R: $json.draft_message, fldI0EvZPGm9XrwWz: $json.notes_update } }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 500
+            }
+          }
+        }
+      },
+      "id": "bfbce529-f199-4102-a9f6-1cf721a4a5b4",
+      "name": "Update Pipeline Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        7216,
+        -448
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 9am": {
+      "main": [
+        [
+          {
+            "node": "List Contacts Needing Drafts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Contacts Needing Drafts": {
+      "main": [
+        [
+          {
+            "node": "Prep Contact Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep Contact Data": {
+      "main": [
+        [
+          {
+            "node": "Claude — Draft DM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude — Draft DM": {
+      "main": [
+        [
+          {
+            "node": "Parse Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Draft": {
+      "main": [
+        [
+          {
+            "node": "Update Pipeline Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": {
+    "node:Daily 9am": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": {},
+  "versionId": "9403e8d1-8b07-4113-b27f-96c1250ee9a8",
+  "activeVersionId": "14c3bcaa-f9be-4ad7-88a0-a3f4e15b191c",
+  "versionCounter": 19,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-06-06T04:39:15.445Z",
+      "createdAt": "2026-06-06T04:39:15.445Z",
+      "role": "workflow:owner",
+      "workflowId": "9vkaquYqunN0BUSS",
+      "projectId": "yyu8mrsL1yrdUgiZ",
+      "project": {
+        "updatedAt": "2026-05-07T03:46:52.701Z",
+        "createdAt": "2026-05-07T03:46:45.027Z",
+        "id": "yyu8mrsL1yrdUgiZ",
+        "name": "Chris   <santiago4801@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2026-06-08T23:17:56.619Z",
+    "createdAt": "2026-06-08T23:17:56.619Z",
+    "versionId": "14c3bcaa-f9be-4ad7-88a0-a3f4e15b191c",
+    "workflowId": "9vkaquYqunN0BUSS",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "0 9 * * 1-5"
+              }
+            ]
+          }
+        },
+        "id": "f7674368-032b-419b-abe4-a4c333af7473",
+        "name": "Daily 9am",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          6096,
+          -448
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "appoTkXUnQ9aulmkE",
+            "mode": "list",
+            "cachedResultName": "Market Research"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tbl32octmRaDZXULy",
+            "mode": "list",
+            "cachedResultName": "Outreach Pipeline"
+          },
+          "filterByFormula": "AND({LinkedIn URL}!='', {Draft Message}='')",
+          "options": {}
+        },
+        "id": "ecf70e46-713f-4058-af91-37e4f617b9ad",
+        "name": "List Contacts Needing Drafts",
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
+        "position": [
+          6320,
+          -448
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "RoOhi6fE6lI3cI1c",
+            "name": "Airtable Personal Access Token account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = $input.all().slice(0, 10);\nconst out = [];\n\nfor (const item of items) {\n  const f = item.json.fields || item.json;\n\n  const company     = String(f['Company']          || '').trim();\n  const contactName = String(f['Contact Name']     || '').trim();\n  const title       = String(f['Title']            || '').trim();\n  const linkedin    = String(f['LinkedIn URL']     || '').trim();\n  const signalHook  = String(f['Signal Hook']      || '').trim();\n  const notes       = String(f['Notes']            || '').trim();\n  const markets     = String(f['Markets']          || '').trim();\n  const isAlum      = !!(f['NexEra/Origis Alum']);\n\n  // Only skip if we have nothing at all to work with\n  if (!company && !contactName) continue;\n\n  const needMatch    = notes.match(/NEED:\\s*(.+?)(?:\\n|$)/);\n  const serviceMatch = notes.match(/SERVICE MATCH:\\s*(.+?)(?:\\n|$)/);\n\n  out.push({\n    json: {\n      record_id:      item.json.id,\n      contact_name:   contactName,\n      title:          title,\n      company:        company,\n      linkedin_url:   linkedin,\n      signal_hook:    signalHook,\n      project_need:   needMatch    ? needMatch[1].trim()    : '',\n      service_match:  serviceMatch ? serviceMatch[1].trim() : '',\n      markets:        markets,\n      is_alum:        isAlum,\n      needs_research: !signalHook  // flag for Claude to know it needs to web search\n    }\n  });\n}\n\nreturn out;"
+        },
+        "id": "c3326a98-c6a6-4b37-ba71-05078900d7c4",
+        "name": "Prep Contact Data",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6544,
+          -448
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.anthropic.com/v1/messages",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "anthropic-version",
+                "value": "2023-06-01"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({\n  model: 'claude-sonnet-4-6',\n  max_tokens: 800,\n  tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: 3 }],\n  system: 'You are drafting LinkedIn DMs for Chris Santiago, who runs NexPhase Advisory — power origination and interconnection consulting. Chris has 20+ years in the industry, two FERC Order 1000 competitive transmission wins as non-incumbent, 2+ GW in PPAs closed, 5+ GW to NTP across PJM/MISO/CAISO/WECC/Southeast. He spent significant time at NextEra Energy before Origis Energy.\\n\\nTone: warm, specific, peer-to-peer. The best DMs sound like they come from someone who genuinely follows the space and noticed something about this person\\'s work. No corporate language, no buzzwords. The person\\'s work should be the subject — not Chris. No explicit consulting ask in the first message. Close with a light, genuine invitation to connect.\\n\\nIf no signal hook is provided, use web_search to find what this person and their company are working on right now — recent projects, announcements, market moves, hiring activity. Use that as the anchor for the DM.',\n  messages: [{\n    role: 'user',\n    content: 'Contact: ' + ($json.contact_name || '[Name]') + '\\nTitle: ' + $json.title + '\\nCompany: ' + $json.company + '\\nLinkedIn: ' + $json.linkedin_url + '\\nSignal Hook: ' + ($json.signal_hook || 'MISSING — please web search for recent activity') + '\\nProject need: ' + $json.project_need + '\\nService match: ' + $json.service_match + '\\nMarkets: ' + $json.markets + '\\nNextEra/Origis alum: ' + ($json.is_alum ? 'YES — open on shared background' : 'NO') + '\\n\\n' + ($json.needs_research ? 'Signal Hook is empty. Use web_search to find what ' + $json.company + ' and ' + ($json.contact_name || 'this person') + ' are working on right now before drafting. Search for recent projects, announcements, or market activity.\\n\\n' : '') + 'Return ONLY valid JSON:\\n{\\n  \"draft_message\": \"280-char max LinkedIn DM. ' + ($json.is_alum ? 'Open on shared NextEra/Origis background.' : 'Open on something specific and real about their work.') + ' Warm, peer voice. Use first name if known. Close with a soft invitation like \\'happy to compare notes\\' or \\'would enjoy connecting\\'. No consulting pitch. No credential mentions.\",\\n  \"dm_angle\": \"one sentence — what this message is anchored on\",\\n  \"signal_found\": \"if you web searched, what did you find? One sentence. Otherwise empty string.\"\\n}'\n  }]\n}) }}",
+          "options": {
+            "batching": {
+              "batch": {
+                "batchSize": 1,
+                "batchInterval": 25000
+              }
+            },
+            "timeout": 60000
+          }
+        },
+        "id": "07c16e65-f309-4d47-a250-fe4761e4e4a3",
+        "name": "Claude — Draft DM",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          6768,
+          -448
+        ],
+        "retryOnFail": true,
+        "maxTries": 3,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "FJA7PZjCaMHaj0Ir",
+            "name": "Header Auth Claude API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const items = [];\nconst claudeItems = $input.all();\nconst prepItems = $('Prep Contact Data').all();\n\nfor (let i = 0; i < claudeItems.length; i++) {\n  const claudeItem = claudeItems[i];\n  const prepItem = prepItems[i];\n\n  if (!prepItem) continue;\n\n  const raw = claudeItem.json.content?.find(b => b.type === 'text')?.text\n    || claudeItem.json.content?.[claudeItem.json.content.length - 1]?.text || '';\n\n  let parsed;\n  try {\n    parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());\n  } catch(e) {\n    const m = raw.match(/\\{[\\s\\S]*\\}/);\n    try { parsed = m ? JSON.parse(m[0]) : null; } catch { parsed = null; }\n  }\n\n  if (!parsed || !parsed.draft_message) {\n    console.log('Item ' + i + ': no draft_message found in parsed output');\n    continue;\n  }\n\n  const recordId    = prepItem.json?.record_id    || '';\n  const projectNeed = prepItem.json?.project_need  || '';\n  const svcMatch    = prepItem.json?.service_match || '';\n  const signalFound = parsed.signal_found          || '';\n\n  if (!recordId) {\n    console.log('Item ' + i + ': no record_id found');\n    continue;\n  }\n\n  items.push({\n    json: {\n      record_id:     recordId,\n      draft_message: parsed.draft_message,\n      notes_update:  [\n        projectNeed  ? 'NEED: '          + projectNeed  : '',\n        svcMatch     ? 'SERVICE MATCH: ' + svcMatch     : '',\n        parsed.dm_angle  ? 'DM ANGLE: ' + parsed.dm_angle  : '',\n        signalFound  ? 'RESEARCH: '     + signalFound  : ''\n      ].filter(Boolean).join('\\n\\n')\n    }\n  });\n}\n\nreturn items;"
+        },
+        "id": "eb8656eb-cbf8-4efb-8df7-2167e93b46ed",
+        "name": "Parse Draft",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          6992,
+          -448
+        ]
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "={{ 'https://api.airtable.com/v0/appoTkXUnQ9aulmkE/tbl32octmRaDZXULy/' + $json.record_id }}",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "airtableTokenApi",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify({ fields: { fldn6imsWP0eiq29R: $json.draft_message, fldI0EvZPGm9XrwWz: $json.notes_update } }) }}",
+          "options": {
+            "batching": {
+              "batch": {
+                "batchSize": 1,
+                "batchInterval": 500
+              }
+            }
+          }
+        },
+        "id": "bfbce529-f199-4102-a9f6-1cf721a4a5b4",
+        "name": "Update Pipeline Record",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          7216,
+          -448
+        ],
+        "credentials": {
+          "airtableTokenApi": {
+            "id": "RoOhi6fE6lI3cI1c",
+            "name": "Airtable Personal Access Token account 2"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Daily 9am": {
+        "main": [
+          [
+            {
+              "node": "List Contacts Needing Drafts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "List Contacts Needing Drafts": {
+        "main": [
+          [
+            {
+              "node": "Prep Contact Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prep Contact Data": {
+        "main": [
+          [
+            {
+              "node": "Claude — Draft DM",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude — Draft DM": {
+        "main": [
+          [
+            {
+              "node": "Parse Draft",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Draft": {
+        "main": [
+          [
+            {
+              "node": "Update Pipeline Record",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Chris  ",
+    "name": null,
+    "description": null,
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-08T23:21:06.860Z",
+        "id": 1,
+        "workflowId": "9vkaquYqunN0BUSS",
+        "versionId": "14c3bcaa-f9be-4ad7-88a0-a3f4e15b191c",
+        "event": "activated",
+        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+      }
+    ]
+  }
+}
