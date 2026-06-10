@@ -432,6 +432,31 @@
                 }
             },
             "webhookId": "80a6e250-afe9-46e4-a560-a81781cbd0e7"
+        },
+        {
+            "parameters": {
+                "fromEmail": "NexPhase Advisory <info@nexphaseadvisory.net>",
+                "toEmail": "santiago4801@gmail.com",
+                "subject": "=The Interconnect - draft ready for review (Vol {{ $('Store Draft').first().json.vol }}, No {{ $('Store Draft').first().json.no }})",
+                "emailFormat": "text",
+                "text": "=A new issue of The Interconnect has been drafted and is ready for review.\n\n  Vol {{ $('Store Draft').first().json.vol }}, No {{ $('Store Draft').first().json.no }}  -  {{ $('Store Draft').first().json.dateline }}\n\nReview the rendered draft:\n  https://intel.nexphaseadvisory.net/interconnect/drafts/draft-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\nSource on GitHub:\n  https://github.com/nexphaseadvisory/Reports/blob/main/interconnect/drafts/draft-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\nThis is the approval gate - nothing publishes automatically. If it looks good,\npromote it by firing the publish webhook:\n  POST https://intel-search.app.n8n.cloud/webhook/interconnect-publish\n  Header: X-Webhook-Token: <your publish token>\n  Body:   {}\n\nPublishing promotes the draft to the live issue:\n  https://intel.nexphaseadvisory.net/interconnect/interconnect-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\n- The Interconnect Publisher (n8n)\n",
+                "options": {}
+            },
+            "id": "2ee13b24-08b0-43e4-9334-4e85b6718c48",
+            "name": "Notify \u2014 Draft Ready",
+            "type": "n8n-nodes-base.emailSend",
+            "typeVersion": 2.1,
+            "position": [
+                2480,
+                160
+            ],
+            "credentials": {
+                "smtp": {
+                    "id": "lZS1lrkShDRNKKJm",
+                    "name": "SMTP Info@nexphaseadvisory.net"
+                }
+            },
+            "webhookId": "b232325f-73e1-482d-ab51-8cafcb8cb006"
         }
     ],
     "connections": {
@@ -581,10 +606,27 @@
         },
         "GitHub \u2014 Draft": {
             "main": [
-                [],
+                [
+                    {
+                        "node": "Notify \u2014 Draft Ready",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
                 [
                     {
                         "node": "GitHub \u2014 Draft (new file)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub \u2014 Draft (new file)": {
+            "main": [
+                [
+                    {
+                        "node": "Notify \u2014 Draft Ready",
                         "type": "main",
                         "index": 0
                     }
@@ -1076,6 +1118,31 @@
                     }
                 },
                 "webhookId": "80a6e250-afe9-46e4-a560-a81781cbd0e7"
+            },
+            {
+                "parameters": {
+                    "fromEmail": "NexPhase Advisory <info@nexphaseadvisory.net>",
+                    "toEmail": "santiago4801@gmail.com",
+                    "subject": "=The Interconnect - draft ready for review (Vol {{ $('Store Draft').first().json.vol }}, No {{ $('Store Draft').first().json.no }})",
+                    "emailFormat": "text",
+                    "text": "=A new issue of The Interconnect has been drafted and is ready for review.\n\n  Vol {{ $('Store Draft').first().json.vol }}, No {{ $('Store Draft').first().json.no }}  -  {{ $('Store Draft').first().json.dateline }}\n\nReview the rendered draft:\n  https://intel.nexphaseadvisory.net/interconnect/drafts/draft-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\nSource on GitHub:\n  https://github.com/nexphaseadvisory/Reports/blob/main/interconnect/drafts/draft-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\nThis is the approval gate - nothing publishes automatically. If it looks good,\npromote it by firing the publish webhook:\n  POST https://intel-search.app.n8n.cloud/webhook/interconnect-publish\n  Header: X-Webhook-Token: <your publish token>\n  Body:   {}\n\nPublishing promotes the draft to the live issue:\n  https://intel.nexphaseadvisory.net/interconnect/interconnect-vol{{ $('Store Draft').first().json.vol }}-no{{ $('Store Draft').first().json.no }}.html\n\n- The Interconnect Publisher (n8n)\n",
+                    "options": {}
+                },
+                "id": "2ee13b24-08b0-43e4-9334-4e85b6718c48",
+                "name": "Notify \u2014 Draft Ready",
+                "type": "n8n-nodes-base.emailSend",
+                "typeVersion": 2.1,
+                "position": [
+                    2480,
+                    160
+                ],
+                "credentials": {
+                    "smtp": {
+                        "id": "lZS1lrkShDRNKKJm",
+                        "name": "SMTP Info@nexphaseadvisory.net"
+                    }
+                },
+                "webhookId": "b232325f-73e1-482d-ab51-8cafcb8cb006"
             }
         ],
         "connections": {
@@ -1225,10 +1292,27 @@
             },
             "GitHub \u2014 Draft": {
                 "main": [
-                    [],
+                    [
+                        {
+                            "node": "Notify \u2014 Draft Ready",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
                     [
                         {
                             "node": "GitHub \u2014 Draft (new file)",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "GitHub \u2014 Draft (new file)": {
+                "main": [
+                    [
+                        {
+                            "node": "Notify \u2014 Draft Ready",
                             "type": "main",
                             "index": 0
                         }
