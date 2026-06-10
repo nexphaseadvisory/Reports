@@ -257,7 +257,8 @@
                 "repository": "Reports",
                 "filePath": "={{ 'interconnect/' + $json.filename }}",
                 "fileContent": "={{ $json.html }}",
-                "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}"
+                "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}",
+                "operation": "edit"
             },
             "id": "f4ae0f31-f28e-4e49-9176-4bff020d80d6",
             "name": "GitHub \u2014 Publish",
@@ -352,7 +353,7 @@
         {
             "parameters": {
                 "resource": "file",
-                "operation": "create",
+                "operation": "edit",
                 "owner": "nexphaseadvisory",
                 "repository": "Reports",
                 "filePath": "={{ 'interconnect/drafts/draft-vol' + $json.vol + '-no' + $json.no + '.html' }}",
@@ -820,7 +821,8 @@
                     "repository": "Reports",
                     "filePath": "={{ 'interconnect/' + $json.filename }}",
                     "fileContent": "={{ $json.html }}",
-                    "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}"
+                    "commitMessage": "={{ 'Publish The Interconnect \u2014 ' + $json.dateline }}",
+                    "operation": "edit"
                 },
                 "id": "f4ae0f31-f28e-4e49-9176-4bff020d80d6",
                 "name": "GitHub \u2014 Publish",
@@ -915,7 +917,7 @@
             {
                 "parameters": {
                     "resource": "file",
-                    "operation": "create",
+                    "operation": "edit",
                     "owner": "nexphaseadvisory",
                     "repository": "Reports",
                     "filePath": "={{ 'interconnect/drafts/draft-vol' + $json.vol + '-no' + $json.no + '.html' }}",
