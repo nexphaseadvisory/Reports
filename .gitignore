@@ -3,3 +3,5 @@
 
 # Loose report source files (publish via interconnect/index.html only)
 the_interconnect_*.html
+# ...but the locked design template IS tracked
+!interconnect/template/the_interconnect_TEMPLATE.html
