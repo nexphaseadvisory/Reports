@@ -457,6 +457,31 @@
                 }
             },
             "webhookId": "b232325f-73e1-482d-ab51-8cafcb8cb006"
+        },
+        {
+            "parameters": {
+                "fromEmail": "NexPhase Advisory <info@nexphaseadvisory.net>",
+                "toEmail": "santiago4801@gmail.com",
+                "subject": "=The Interconnect - published (Vol {{ $('Read Draft').first().json.vol }}, No {{ $('Read Draft').first().json.no }})",
+                "emailFormat": "text",
+                "text": "=The Interconnect has been published.\n\n  Vol {{ $('Read Draft').first().json.vol }}, No {{ $('Read Draft').first().json.no }}  -  {{ $('Read Draft').first().json.dateline }}\n\nLive issue:\n  https://intel.nexphaseadvisory.net/interconnect/interconnect-vol{{ $('Read Draft').first().json.vol }}-no{{ $('Read Draft').first().json.no }}.html\n\nSource on GitHub:\n  https://github.com/nexphaseadvisory/Reports/blob/main/interconnect/interconnect-vol{{ $('Read Draft').first().json.vol }}-no{{ $('Read Draft').first().json.no }}.html\n\n- The Interconnect Publisher (n8n)\n",
+                "options": {}
+            },
+            "id": "688cce6a-a05b-4afa-bc30-9a00f4253c31",
+            "name": "Notify \u2014 Published",
+            "type": "n8n-nodes-base.emailSend",
+            "typeVersion": 2.1,
+            "position": [
+                2480,
+                500
+            ],
+            "credentials": {
+                "smtp": {
+                    "id": "lZS1lrkShDRNKKJm",
+                    "name": "SMTP Info@nexphaseadvisory.net"
+                }
+            },
+            "webhookId": "c0be3b8a-b66e-4230-8b61-7c3ceda08d41"
         }
     ],
     "connections": {
@@ -594,7 +619,13 @@
         },
         "GitHub \u2014 Publish": {
             "main": [
-                [],
+                [
+                    {
+                        "node": "Notify \u2014 Published",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
                 [
                     {
                         "node": "GitHub \u2014 Publish (new file)",
@@ -627,6 +658,17 @@
                 [
                     {
                         "node": "Notify \u2014 Draft Ready",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub \u2014 Publish (new file)": {
+            "main": [
+                [
+                    {
+                        "node": "Notify \u2014 Published",
                         "type": "main",
                         "index": 0
                     }
@@ -1143,6 +1185,31 @@
                     }
                 },
                 "webhookId": "b232325f-73e1-482d-ab51-8cafcb8cb006"
+            },
+            {
+                "parameters": {
+                    "fromEmail": "NexPhase Advisory <info@nexphaseadvisory.net>",
+                    "toEmail": "santiago4801@gmail.com",
+                    "subject": "=The Interconnect - published (Vol {{ $('Read Draft').first().json.vol }}, No {{ $('Read Draft').first().json.no }})",
+                    "emailFormat": "text",
+                    "text": "=The Interconnect has been published.\n\n  Vol {{ $('Read Draft').first().json.vol }}, No {{ $('Read Draft').first().json.no }}  -  {{ $('Read Draft').first().json.dateline }}\n\nLive issue:\n  https://intel.nexphaseadvisory.net/interconnect/interconnect-vol{{ $('Read Draft').first().json.vol }}-no{{ $('Read Draft').first().json.no }}.html\n\nSource on GitHub:\n  https://github.com/nexphaseadvisory/Reports/blob/main/interconnect/interconnect-vol{{ $('Read Draft').first().json.vol }}-no{{ $('Read Draft').first().json.no }}.html\n\n- The Interconnect Publisher (n8n)\n",
+                    "options": {}
+                },
+                "id": "688cce6a-a05b-4afa-bc30-9a00f4253c31",
+                "name": "Notify \u2014 Published",
+                "type": "n8n-nodes-base.emailSend",
+                "typeVersion": 2.1,
+                "position": [
+                    2480,
+                    500
+                ],
+                "credentials": {
+                    "smtp": {
+                        "id": "lZS1lrkShDRNKKJm",
+                        "name": "SMTP Info@nexphaseadvisory.net"
+                    }
+                },
+                "webhookId": "c0be3b8a-b66e-4230-8b61-7c3ceda08d41"
             }
         ],
         "connections": {
@@ -1280,7 +1347,13 @@
             },
             "GitHub \u2014 Publish": {
                 "main": [
-                    [],
+                    [
+                        {
+                            "node": "Notify \u2014 Published",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
                     [
                         {
                             "node": "GitHub \u2014 Publish (new file)",
@@ -1313,6 +1386,17 @@
                     [
                         {
                             "node": "Notify \u2014 Draft Ready",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "GitHub \u2014 Publish (new file)": {
+                "main": [
+                    [
+                        {
+                            "node": "Notify \u2014 Published",
                             "type": "main",
                             "index": 0
                         }
