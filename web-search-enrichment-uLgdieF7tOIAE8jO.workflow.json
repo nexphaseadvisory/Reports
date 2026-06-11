@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-06-11T22:23:06.975Z",
+    "updatedAt": "2026-06-11T22:47:09.037Z",
     "createdAt": "2026-06-11T21:59:50.776Z",
     "id": "uLgdieF7tOIAE8jO",
     "name": "Web Search Enrichment \u2014 Needs Clay",
@@ -240,86 +240,135 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $('Parse Result').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
-                    "matchingColumns": [],
+                    "value": {
+                        "id": "={{ $json.record_id }}",
+                        "fldAYJfmDu3g1yuDX": "={{ $json.contact_name }}",
+                        "fldaq7M5Jz1LUp0lv": "={{ $json.linkedin_url }}",
+                        "fldumu5th7aPdxgoF": "={{ $json.title }}",
+                        "fldCXm7kgxLUKzgNL": "Web Enriched",
+                        "fld4ayILRKw9aYWux": "Web Search",
+                        "fldB5qbGXxGWIEL2T": "={{ $now.toFormat('yyyy-LL-dd') }}"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
                     "schema": [
                         {
-                            "id": "Contact Name",
+                            "id": "id",
+                            "displayName": "id",
+                            "required": true,
+                            "defaultMatch": true,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "fldAYJfmDu3g1yuDX",
                             "displayName": "Contact Name",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         },
                         {
-                            "id": "LinkedIn URL",
+                            "id": "fldaq7M5Jz1LUp0lv",
                             "displayName": "LinkedIn URL",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         },
                         {
-                            "id": "Title",
+                            "id": "fldumu5th7aPdxgoF",
                             "displayName": "Title",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         },
                         {
-                            "id": "Enrichment Status",
+                            "id": "fldCXm7kgxLUKzgNL",
                             "displayName": "Enrichment Status",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "options",
                             "readOnly": false,
-                            "removed": false
+                            "removed": false,
+                            "options": [
+                                {
+                                    "name": "Pending",
+                                    "value": "Pending"
+                                },
+                                {
+                                    "name": "Web Enriched",
+                                    "value": "Web Enriched"
+                                },
+                                {
+                                    "name": "Needs Clay",
+                                    "value": "Needs Clay"
+                                },
+                                {
+                                    "name": "Clay Enriched",
+                                    "value": "Clay Enriched"
+                                },
+                                {
+                                    "name": "Failed",
+                                    "value": "Failed"
+                                }
+                            ]
                         },
                         {
-                            "id": "Data Source",
+                            "id": "fld4ayILRKw9aYWux",
                             "displayName": "Data Source",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "options",
                             "readOnly": false,
-                            "removed": false
+                            "removed": false,
+                            "options": [
+                                {
+                                    "name": "Web Search",
+                                    "value": "Web Search"
+                                },
+                                {
+                                    "name": "Clay",
+                                    "value": "Clay"
+                                },
+                                {
+                                    "name": "Manual",
+                                    "value": "Manual"
+                                }
+                            ]
                         },
                         {
-                            "id": "Enriched Date",
+                            "id": "fldB5qbGXxGWIEL2T",
                             "displayName": "Enriched Date",
-                            "type": "string",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         }
-                    ],
-                    "value": {
-                        "Contact Name": "={{ $json.contact_name }}",
-                        "LinkedIn URL": "={{ $json.linkedin_url }}",
-                        "Title": "={{ $json.title }}",
-                        "Enrichment Status": "Web Enriched",
-                        "Data Source": "Web Search",
-                        "Enriched Date": "={{ $now.toFormat('yyyy-LL-dd') }}"
-                    }
+                    ]
                 },
                 "options": {}
             },
@@ -352,38 +401,73 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $('Parse Result').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
-                    "matchingColumns": [],
+                    "value": {
+                        "id": "={{ $json.record_id }}",
+                        "fldCXm7kgxLUKzgNL": "Failed",
+                        "fldB5qbGXxGWIEL2T": "={{ $now.toFormat('yyyy-LL-dd') }}"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
                     "schema": [
                         {
-                            "id": "Enrichment Status",
-                            "displayName": "Enrichment Status",
-                            "type": "string",
-                            "required": false,
-                            "defaultMatch": false,
+                            "id": "id",
+                            "displayName": "id",
+                            "required": true,
+                            "defaultMatch": true,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         },
                         {
-                            "id": "Enriched Date",
-                            "displayName": "Enriched Date",
-                            "type": "string",
+                            "id": "fldCXm7kgxLUKzgNL",
+                            "displayName": "Enrichment Status",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "options",
+                            "readOnly": false,
+                            "removed": false,
+                            "options": [
+                                {
+                                    "name": "Pending",
+                                    "value": "Pending"
+                                },
+                                {
+                                    "name": "Web Enriched",
+                                    "value": "Web Enriched"
+                                },
+                                {
+                                    "name": "Needs Clay",
+                                    "value": "Needs Clay"
+                                },
+                                {
+                                    "name": "Clay Enriched",
+                                    "value": "Clay Enriched"
+                                },
+                                {
+                                    "name": "Failed",
+                                    "value": "Failed"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "fldB5qbGXxGWIEL2T",
+                            "displayName": "Enriched Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         }
-                    ],
-                    "value": {
-                        "Enrichment Status": "Failed",
-                        "Enriched Date": "={{ $now.toFormat('yyyy-LL-dd') }}"
-                    }
+                    ]
                 },
                 "options": {}
             },
@@ -416,38 +500,73 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $('Build Search Input').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
-                    "matchingColumns": [],
+                    "value": {
+                        "id": "={{ $json.record_id }}",
+                        "fldCXm7kgxLUKzgNL": "Web Enriched",
+                        "fldB5qbGXxGWIEL2T": "={{ $now.toFormat('yyyy-LL-dd') }}"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
                     "schema": [
                         {
-                            "id": "Enrichment Status",
-                            "displayName": "Enrichment Status",
-                            "type": "string",
-                            "required": false,
-                            "defaultMatch": false,
+                            "id": "id",
+                            "displayName": "id",
+                            "required": true,
+                            "defaultMatch": true,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         },
                         {
-                            "id": "Enriched Date",
-                            "displayName": "Enriched Date",
-                            "type": "string",
+                            "id": "fldCXm7kgxLUKzgNL",
+                            "displayName": "Enrichment Status",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
                             "display": true,
+                            "type": "options",
+                            "readOnly": false,
+                            "removed": false,
+                            "options": [
+                                {
+                                    "name": "Pending",
+                                    "value": "Pending"
+                                },
+                                {
+                                    "name": "Web Enriched",
+                                    "value": "Web Enriched"
+                                },
+                                {
+                                    "name": "Needs Clay",
+                                    "value": "Needs Clay"
+                                },
+                                {
+                                    "name": "Clay Enriched",
+                                    "value": "Clay Enriched"
+                                },
+                                {
+                                    "name": "Failed",
+                                    "value": "Failed"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "fldB5qbGXxGWIEL2T",
+                            "displayName": "Enriched Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
                             "readOnly": false,
                             "removed": false
                         }
-                    ],
-                    "value": {
-                        "Enrichment Status": "Web Enriched",
-                        "Enriched Date": "={{ $now.toFormat('yyyy-LL-dd') }}"
-                    }
+                    ]
                 },
                 "options": {}
             },
@@ -579,9 +698,9 @@
     "meta": null,
     "nodeGroups": [],
     "pinData": null,
-    "versionId": "f94be389-061f-423e-aebd-e0f76c45962b",
+    "versionId": "3d54baa9-d9ea-4746-b06a-2d33a0b7c8c1",
     "activeVersionId": null,
-    "versionCounter": 2,
+    "versionCounter": 3,
     "triggerCount": 0,
     "sourceWorkflowId": null,
     "shared": [
