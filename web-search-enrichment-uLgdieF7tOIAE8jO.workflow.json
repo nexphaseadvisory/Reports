@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-06-11T21:59:50.776Z",
+    "updatedAt": "2026-06-11T22:23:06.975Z",
     "createdAt": "2026-06-11T21:59:50.776Z",
     "id": "uLgdieF7tOIAE8jO",
     "name": "Web Search Enrichment \u2014 Needs Clay",
@@ -83,7 +83,7 @@
         },
         {
             "parameters": {
-                "jsCode": "\nconst out = [];\nfor (const item of $input.all()) {\n  const j = item.json;\n  const company = String(j['Company'] || '').trim();\n  const titleHint = String(j['Title'] || '').trim();\n  const existingUrl = String(j['LinkedIn URL'] || '').trim();\n  const existingName = String(j['Contact Name'] || '').trim();\n  const hasLinkedin = /linkedin\\.com/i.test(existingUrl);\n  const keywords = titleHint || 'VP OR Director power OR energy OR interconnection OR origination';\n  out.push({ json: {\n    record_id: j.id,\n    company: company,\n    title_hint: titleHint,\n    existing_url: existingUrl,\n    existing_name: existingName,\n    has_linkedin: hasLinkedin,\n    query: company + ' ' + keywords + ' site:linkedin.com'\n  }});\n}\nreturn out;\n"
+                "jsCode": "\nconst out = [];\nconst items = $input.all();\nfor (let i = 0; i < items.length; i++) {\n  const j = items[i].json;\n  const company = String(j['Company'] || '').trim();\n  const titleHint = String(j['Title'] || '').trim();\n  const existingUrl = String(j['LinkedIn URL'] || '').trim();\n  const existingName = String(j['Contact Name'] || '').trim();\n  const hasLinkedin = /linkedin\\.com/i.test(existingUrl);\n  const keywords = titleHint || 'VP OR Director power OR energy OR interconnection OR origination';\n  out.push({ json: {\n    record_id: j.id,\n    company: company,\n    title_hint: titleHint,\n    existing_url: existingUrl,\n    existing_name: existingName,\n    has_linkedin: hasLinkedin,\n    query: company + ' ' + keywords + ' site:linkedin.com'\n  }, pairedItem: { item: i } });\n}\nreturn out;\n"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -240,7 +240,7 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $json.record_id }}",
+                "id": "={{ $('Parse Result').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
                     "matchingColumns": [],
@@ -352,7 +352,7 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $json.record_id }}",
+                "id": "={{ $('Parse Result').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
                     "matchingColumns": [],
@@ -416,7 +416,7 @@
                     "value": "tbl32octmRaDZXULy",
                     "mode": "id"
                 },
-                "id": "={{ $json.record_id }}",
+                "id": "={{ $('Build Search Input').item.json.record_id }}",
                 "columns": {
                     "mappingMode": "defineBelow",
                     "matchingColumns": [],
@@ -579,9 +579,9 @@
     "meta": null,
     "nodeGroups": [],
     "pinData": null,
-    "versionId": "e1e6f671-6e00-4230-a701-b7ebe0d70f04",
+    "versionId": "f94be389-061f-423e-aebd-e0f76c45962b",
     "activeVersionId": null,
-    "versionCounter": 1,
+    "versionCounter": 2,
     "triggerCount": 0,
     "sourceWorkflowId": null,
     "shared": [
