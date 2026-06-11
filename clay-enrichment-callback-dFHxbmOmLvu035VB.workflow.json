@@ -1,0 +1,254 @@
+{
+  "updatedAt": "2026-06-11T16:50:54.386Z",
+  "createdAt": "2026-06-11T14:44:46.302Z",
+  "id": "dFHxbmOmLvu035VB",
+  "name": "Clay Enrichment Callback",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "0532bbb5-4951-454e-89d4-0ea3e51d74a2",
+      "name": "Clay Callback",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "e1699c9d-e9f8-4665-b1a5-0f4a7ace72f0",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "clay-enrichment-callback",
+        "responseMode": "onReceived",
+        "options": {}
+      }
+    },
+    {
+      "id": "a41dc42e-204d-43bc-a079-b1494c1f21e4",
+      "name": "Normalize Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Clay posts enriched results here. Defensive mapping — adjust keys to match your\n// actual Clay output columns once you see a real callback payload.\nconst b = ($input.first().json.body) || $input.first().json || {};\nconst pick = (...ks) => { for (const k of ks){ const v=b[k]; if(v!=null && String(v).trim()!=='') return v; } return ''; };\nreturn [{ json: {\n  clay_record_id: pick('clay_record_id','clayRecordId','record_id','recordId','id'),\n  contact_name:   pick('contact_name','full_name','name','contactName'),\n  linkedin_url:   pick('linkedin_url','linkedin','linkedinUrl'),\n  email:          pick('email','work_email','email_address'),\n  title:          pick('title','job_title','jobTitle')\n}}];"
+      }
+    },
+    {
+      "id": "d5ceba7d-bc26-4a84-9b60-3601fb5aa531",
+      "name": "Find Lead by Clay Record ID",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl32octmRaDZXULy",
+          "mode": "id"
+        },
+        "filterByFormula": "={Clay Record ID} = \"{{ $json.clay_record_id }}\"",
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "id": "44361ece-18ae-4e0b-a44c-661f56a13f8c",
+      "name": "Update Lead",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "resource": "record",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl32octmRaDZXULy",
+          "mode": "id"
+        },
+        "id": "={{ $json.id }}",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Contact Name",
+              "displayName": "Contact Name",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LinkedIn URL",
+              "displayName": "LinkedIn URL",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "type": "string",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Enriched Date",
+              "displayName": "Enriched Date",
+              "type": "dateTime",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Enrichment Status",
+              "displayName": "Enrichment Status",
+              "type": "options",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "value": {
+            "Contact Name": "={{ $('Normalize Payload').first().json.contact_name }}",
+            "LinkedIn URL": "={{ $('Normalize Payload').first().json.linkedin_url }}",
+            "Email": "={{ $('Normalize Payload').first().json.email }}",
+            "Title": "={{ $('Normalize Payload').first().json.title }}",
+            "Enriched Date": "={{ $now.toFormat('yyyy-MM-dd') }}",
+            "Enrichment Status": "Clay Enriched"
+          }
+        },
+        "options": {}
+      },
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "RoOhi6fE6lI3cI1c",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Clay Callback": {
+      "main": [
+        [
+          {
+            "node": "Normalize Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Payload": {
+      "main": [
+        [
+          {
+            "node": "Find Lead by Clay Record ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Lead by Clay Record ID": {
+      "main": [
+        [
+          {
+            "node": "Update Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "4211f18c-06e2-4904-8f78-65f358b55c5b",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T14:44:46.307Z",
+      "createdAt": "2026-06-11T14:44:46.307Z",
+      "role": "workflow:owner",
+      "workflowId": "dFHxbmOmLvu035VB",
+      "projectId": "yyu8mrsL1yrdUgiZ",
+      "project": {
+        "updatedAt": "2026-05-07T03:46:52.701Z",
+        "createdAt": "2026-05-07T03:46:45.027Z",
+        "id": "yyu8mrsL1yrdUgiZ",
+        "name": "Chris   <santiago4801@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
