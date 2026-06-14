@@ -6,574 +6,617 @@
 <title>The Interconnect&#8482; — Week of June 14, 2026</title>
 <style>
 :root {
-  --ink:    #16191d;
-  --muted:  #54606e;
-  --faint:  #8a93a1;
-  --line:   #d8dce4;
-  --accent: #0b5d4e;
-  --a-soft: #e7f2ef;
-  --gold:   #a06d18;
-  --g-soft: #f9f1de;
-  --flag:   #8b2020;
-  --paper:  #fdfcfa;
-  --data:   #1a3a6b;
-  --d-soft: #eaf0f8;
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: Georgia, "Times New Roman", serif;
   color: var(--ink);
-  background: #d6d2cb;
-  line-height: 1.6;
-  padding: 32px 12px 56px;
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
   -webkit-font-smoothing: antialiased;
 }
 
 .sheet {
-  max-width: 840px;
+  max-width: 820px;
   margin: 0 auto;
   background: var(--paper);
-  box-shadow: 0 6px 40px rgba(20,24,31,.22);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
 }
 
 /* ── MASTHEAD ── */
 .masthead {
-  padding: 32px 44px 20px;
+  padding: 28px 42px 0;
   border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
 }
 .kicker {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 9px;
-  letter-spacing: 4px;
+  letter-spacing: 3.5px;
   text-transform: uppercase;
   color: var(--accent);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .masthead h1 {
-  font-size: 58px;
-  letter-spacing: -2px;
-  line-height: .93;
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .masthead h1 em {
   font-style: normal;
   color: var(--accent);
 }
-.masthead h1 sup {
-  font-size: 22px;
-  vertical-align: super;
-  letter-spacing: 0;
-  color: var(--accent);
-}
 .tagline {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 11.5px;
   color: var(--muted);
-  line-height: 1.45;
+  letter-spacing: .2px;
+  margin-bottom: 14px;
   max-width: 560px;
-  margin-bottom: 18px;
+  line-height: 1.5;
 }
-
-/* ── DATELINE BAR ── */
-.dateline-bar {
+.meta-bar {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding: 10px 44px;
-  border-top: 1px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
-  background: var(--paper);
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10.5px;
-  letter-spacing: .5px;
-}
-.dateline-bar .vol {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-.dateline-bar .vol span {
-  font-weight: 400;
-  color: var(--muted);
-  margin-left: 8px;
-}
-.dateline-bar .site {
-  color: var(--muted);
   font-size: 9.5px;
-  letter-spacing: 2px;
+  color: var(--faint);
+  letter-spacing: .8px;
   text-transform: uppercase;
 }
+.meta-bar strong { color: var(--ink); }
 
 /* ── BODY ── */
-.body-wrap {
-  padding: 36px 44px;
-}
+.body { padding: 0 42px 32px; }
 
 /* ── LEDE ── */
 .lede {
-  font-size: 16.5px;
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
   line-height: 1.65;
   color: var(--ink);
-  margin-bottom: 28px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--line);
 }
-
-/* ── SECTION LABELS ── */
-.section-label {
+.lede p + p { margin-top: 10px; }
+.lede .author {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 3.5px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 14px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid var(--accent);
-  display: inline-block;
-}
-
-/* ── SIGNAL CARDS ── */
-.signal-card {
-  border-left: 3px solid var(--accent);
-  padding: 16px 18px;
-  margin-bottom: 18px;
-  background: #fafaf8;
-}
-.signal-card.flag {
-  border-left-color: var(--flag);
-}
-.signal-card.gold {
-  border-left-color: var(--gold);
-  background: var(--g-soft);
-}
-.signal-card .signal-meta {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 10px;
   color: var(--faint);
-  margin-bottom: 6px;
-}
-.signal-card .signal-meta .badge {
-  display: inline-block;
-  padding: 1px 7px;
-  border-radius: 2px;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  margin-right: 6px;
-}
-.badge-pjm  { background: var(--d-soft); color: var(--data); }
-.badge-wecc { background: var(--a-soft); color: var(--accent); }
-.badge-miso { background: #f0eaf8;       color: #4a2080; }
-.badge-ercot{ background: #fef0e0;       color: #8a4400; }
-.badge-caiso{ background: #fde8e8;       color: var(--flag); }
-.badge-frcc { background: #e8f5e0;       color: #2d5a1b; }
-.badge-serc { background: #ede8f5;       color: #3a1a6b; }
-.signal-card h3 {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 8px;
-  color: var(--ink);
-}
-.signal-card p {
-  font-size: 13.5px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-.signal-card .angle {
-  font-size: 13px;
-  color: var(--ink);
-  font-style: italic;
-  border-top: 1px solid var(--line);
-  padding-top: 8px;
-  margin-top: 4px;
-}
-.signal-card .angle strong {
-  font-style: normal;
-  color: var(--accent);
-  font-size: 9px;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  display: block;
-  margin-bottom: 3px;
+  margin-top: 14px;
 }
 
-/* ── CONNECTOR MARKETS ── */
-.connector-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
 }
-.connector-cell {
-  padding: 14px 16px;
-  background: var(--a-soft);
-  border: 1px solid #c2ddd8;
-}
-.connector-cell.demand { background: var(--g-soft); border-color: #d8c48a; }
-.connector-cell .cell-label {
+.sec-label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 8px;
+  font-size: 8.5px;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
   margin-bottom: 6px;
 }
-.connector-cell.demand .cell-label { color: var(--gold); }
-.connector-cell h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.connector-cell p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
 
-/* ── QUEUE SPOTLIGHT ── */
-.queue-table {
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
   width: 100%;
   border-collapse: collapse;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 11.5px;
-  margin-bottom: 8px;
 }
-.queue-table th {
+.connector-table th {
   background: var(--ink);
   color: #fff;
   padding: 7px 10px;
   text-align: left;
   font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 6px;
 }
-.queue-table td {
-  padding: 7px 10px;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
-  vertical-align: top;
+.flag-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e8dfc8;
 }
-.queue-table tr:nth-child(even) td { background: #f5f4f1; }
-.queue-table .mw { font-weight: 700; color: var(--data); }
-
-/* ── DIVIDER ── */
-.section-divider {
-  border: none;
-  border-top: 1px solid var(--line);
-  margin: 32px 0;
-}
+.flag-item:last-child { border-bottom: none; }
+.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
+.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
 
 /* ── FOOTER ── */
 .footer {
   background: var(--ink);
-  color: #8a93a1;
-  padding: 24px 44px;
+  color: #b0b8c4;
+  padding: 20px 42px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 10.5px;
+  font-size: 10px;
   line-height: 1.7;
 }
-.footer a { color: #b0bcc8; text-decoration: none; }
-.footer strong { color: #d0d8e0; }
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
 
-@media (max-width: 600px) {
-  .masthead, .dateline-bar, .body-wrap, .footer { padding-left: 20px; padding-right: 20px; }
-  .masthead h1 { font-size: 38px; }
-  .connector-grid { grid-template-columns: 1fr; }
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
 }
 </style>
 </head>
 <body>
 <div class="sheet">
 
-  <!-- MASTHEAD -->
+  <!-- ══ MASTHEAD ══ -->
   <div class="masthead">
     <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
     <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
     <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of June 14, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 2</span>
+      <span>nexphaseadvisory.net</span>
+    </div>
   </div>
 
-  <!-- DATELINE BAR -->
-  <div class="dateline-bar">
-    <div class="vol">Week of June 14, 2026 <span>· Vol. 1, No. 2</span></div>
-    <div class="site">NexPhaseAdvisory.net</div>
-  </div>
-
-  <!-- BODY -->
-  <div class="body-wrap">
+  <!-- ══ BODY ══ -->
+  <div class="body">
 
     <!-- LEDE -->
-    <p class="lede">The data center development pipeline shows no signs of discipline—this week alone, Stark Power acquired 5.6GW of development assets for ~$140M, Hut 8 priced a $4.25B note offering to fund a pre-leased 352MW Texas campus, and new projects surfaced from Virginia to Illinois to Spain, collectively representing tens of gigawatts of demand still searching for interconnection queue position and dispatchable capacity. The geographic spread matters: developers are pressing into constrained markets like PJM-adjacent Virginia and ERCOT coastal Texas, while others are betting on greenfield positions in Illinois and Mississippi where regulatory clarity remains unresolved. Cipher Mining's move to site 500MW near a retired coal plant outside Waco is the clearest signal yet that stranded grid infrastructure is now a competitive siting advantage, not a consolation prize. For power developers and IPPs, the capital formation side—Hut 8's debt raise, Stark's equity round, Magnora's Oslo listing—confirms that offtake-backed data center load is being treated as investable infrastructure, compressing the window to lock in power supply agreements before these projects harden their stack.</p>
-
-    <!-- SIGNALS SECTION -->
-    <div class="section-label">This Week's Signals</div>
-
-    <!-- SIGNAL CARD — repeat block per signal, swap badge class per ISO -->
-    <div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Nueces County, TX · Demand Signal
-      </div>
-      <h3>Beacon Point AI Eyes Massive Data Center Build in Nueces County</h3>
-      <p>Beacon Point AI is planning a large-scale data center development in Nueces County, Texas. The project signals continued hyperscale-adjacent demand pressure on ERCOT's coastal South zone. Nueces County sits near Corpus Christi, an area with existing industrial load and transmission infrastructure.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Nueces County is an emerging ERCOT demand node — developers should watch for transmission constraint signals in the South zone and engage early with AEP Texas on interconnection capacity before the queue fills.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Texas (Statewide) · M&amp;A
-      </div>
-      <h3>Stark Power Acquires Sagebrush's 5.6GW DC Portfolio for ~$140M</h3>
-      <p>Stark Power has acquired Sagebrush's 5.6GW data center development portfolio, raising approximately $140 million to fund the transaction. The deal represents one of the largest portfolio acquisitions of pre-development data center capacity in recent memory. The scale suggests Stark is positioning for long-term hyperscaler offtake across multiple Texas sites.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        A 5.6GW pipeline acquisition signals that institutional capital is consolidating development rights ahead of demand — power sellers and co-located generation developers should engage Stark Power sites as priority interconnection and PPA targets.
-      </div>
-    </div>
-<div class="signal-card flag">
-      <div class="signal-meta">
-        <span class="badge badge-pjm">PJM</span>
-        Goochland County, VA · Demand Signal
-      </div>
-      <h3>Tract Proposes Large Data Center Campus Near West Creek Corridor</h3>
-      <p>Tract is proposing a large data center campus in Goochland County, Virginia, adjacent to the established West Creek technology corridor. The West Creek area is one of the most data center-dense corridors in the world and already faces significant transmission congestion. This addition would further stress Dominion Energy Virginia's local transmission network.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Goochland County is immediately west of the saturated Ashburn/West Creek corridor — developers must conduct rigorous network upgrade studies upfront as interconnection costs and timelines in this PJM zone have escalated sharply.
-      </div>
-    </div>
-<div class="signal-card flag">
-      <div class="signal-meta">
-        <span class="badge badge-miso">MISO</span>
-        Mississippi · Regulatory
-      </div>
-      <h3>Compass Datacenters Advances Mississippi Plans Despite Regulatory Setback</h3>
-      <p>Compass Datacenters is pressing forward with its Mississippi data center development despite the state declining to issue a regulatory ruling on the project. The regulatory ambiguity introduces permitting and utility cost-recovery uncertainty. Mississippi remains a relatively untested data center market with limited precedent for large load interconnections.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        The absence of a regulatory ruling could complicate utility cost-recovery for grid upgrades — developers entering Mississippi should negotiate explicit interconnection and rate treatment terms directly with the serving utility before breaking ground.
-      </div>
-    </div>
-<div class="signal-card">
-      <div class="signal-meta">
-        <span class="badge badge-miso">MISO</span>
-        Christian County, IL · Demand Signal
-      </div>
-      <h3>Eagle Rock Plans 1GW Illinois Data Center, Construction from 2029</h3>
-      <p>Eagle Rock has proposed a 1GW data center in Christian County, Illinois, with construction not expected to begin until 2029–2030. The long lead time suggests the project is in early-stage site control and interconnection positioning. MISO Illinois is a competitive interconnection zone with a heavily backlogged generator queue.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        The 2029–2030 start date gives developers a window to monitor queue progression, but the 1GW scale means transmission upgrade costs could be substantial — early MISO cluster study engagement is essential to avoid being stranded behind larger generation projects.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-pjm">SPP</span>
-        Topeka, KS · Regulatory
-      </div>
-      <h3>Evergy Explores Utility-Led Data Center Siting in Topeka</h3>
-      <p>Evergy is actively exploring siting a data center in Topeka, Kansas, marking a notable shift toward utility-led demand development in the SPP footprint. Utilities self-developing or courting data center load directly signals a tightening competitive environment for independent developers. Kansas has historically been underrepresented in data center investment relative to its grid capacity.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Utility-driven siting typically means preferential interconnection treatment and favorable rate structures — third-party developers should monitor whether Evergy's involvement creates a first-mover regulatory advantage that crowds out independent projects in the Topeka area.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Waco, TX · Demand Signal
-      </div>
-      <h3>Cipher Mining Plans 500MW Data Center at Retired Coal Plant Site</h3>
-      <p>Cipher Mining is developing a 500MW data center campus near a retired coal plant outside Waco, Texas, leveraging existing substation and transmission infrastructure. Brownfield coal-to-data-center conversions are gaining traction in ERCOT as a strategy to bypass lengthy new interconnection queues. The Waco area sits in ERCOT's Central zone with reasonable grid access.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Retired plant infrastructure reuse is one of the fastest paths to large-scale interconnection in ERCOT right now — developers and investors should prioritize brownfield site identification as greenfield interconnection timelines continue to stretch.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-pjm">NYISO</span>
-        Albany, NY · Demand Signal
-      </div>
-      <h3>Prime Companies Unveils $2.8B Kenwood Tech Campus in Albany Area</h3>
-      <p>Prime Companies has announced a $2.8 billion Kenwood technology campus and data center plan in the Albany, New York metropolitan area. The Capital Region has seen growing interest from data center developers attracted by competitive power costs and proximity to financial and government markets. NYISO Zone F transmission capacity will be a key constraint to monitor.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        Albany's data center market is early-stage with real upside, but NYISO interconnection in Zone F requires careful load flow analysis — developers should engage National Grid early and assess whether local generation co-location can reduce interconnection upgrade exposure.
-      </div>
-    </div>
-<div class="signal-card gold">
-      <div class="signal-meta">
-        <span class="badge badge-ercot">ERCOT</span>
-        Texas · M&amp;A
-      </div>
-      <h3>Hut 8 Prices $4.25B Note to Fund 352MW Hyperscaler-Leased Texas Campus</h3>
-      <p>Hut 8 has priced a $4.25 billion note offering to finance a 352MW Texas data center that is pre-leased to an undisclosed hyperscaler. The financing structure demonstrates growing capital market confidence in contracted data center cash flows as collateral. Pre-leased assets at this scale are attracting investment-grade-style debt pricing.</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        The $4.25B raise against 352MW of contracted hyperscaler capacity sets a new benchmark for data center debt financing in ERCOT — power and infrastructure investors should note that pre-lease structures are now unlocking non-dilutive capital at scale, reshaping how projects are capitalized.
-      </div>
-    </div>
-    <!-- Example signal card structure:
-    <div class="signal-card [flag|gold]">
-      <div class="signal-meta">
-        <span class="badge badge-pjm">PJM</span>
-        LOCATION · CATEGORY
-      </div>
-      <h3>HEADLINE</h3>
-      <p>DETAIL</p>
-      <div class="angle">
-        <strong>The Angle</strong>
-        PRACTITIONER COMMENTARY
-      </div>
-    </div>
-    -->
-
-    <hr class="section-divider">
-
-    <!-- CONNECTOR MARKETS -->
-    <div class="section-label">Connector Markets</div>
-    <div class="connector-grid">
-      <div class="connector-cell demand">
-        <div class="cell-label">Demand Signal</div>
-        <h4>Texas (ERCOT)</h4>
-        <p>Multiple high-actionability Texas data center projects emerged this week, including Beacon Point AI in Nueces County, Cipher Mining's 500MW campus near Waco leveraging retired coal plant infrastructure, and Hut 8's $4.25B-backed 352MW hyperscaler-leased facility. Combined announced Texas demand exceeds 850MW with immediate development momentum.</p>
-      </div>
-      <div class="connector-cell">
-        <div class="cell-label">Supply Context</div>
-        <h4>ERCOT – Hillje 345kV / Bernoulli 345kV corridors</h4>
-        <p>602.8MW Danish Fields Solar (Completed, Hillje 345kV) and 600MW Proteus London-Leigh Solar (Active, Bernoulli 345kV) represent over 1.2GW of large-scale ERCOT generation capacity at high-voltage 345kV POIs; the completed Danish Fields project offers immediately available interconnection precedent, while the active Proteus project signals near-term deliverability on the same backbone serving south and coastal Texas load zones proximate to Nueces and McLennan County demand sites.</p>
-      </div>
-<div class="connector-cell demand">
-        <div class="cell-label">Demand Signal</div>
-        <h4>Virginia (PJM)</h4>
-        <p>Tract's proposed large data center campus in Goochland County near the West Creek corridor targets one of the most active and supply-constrained data center markets in the US, signaling continued hyperscale expansion pressure in Northern Virginia's extension corridor where land and power are increasingly scarce.</p>
-      </div>
-      <div class="connector-cell">
-        <div class="cell-label">Supply Context</div>
-        <h4>PJM – Victoria DP-Martin DP 115kV corridor</h4>
-        <p>90MW Active solar project at the Victoria DP-Martin DP 115kV POI provides a modest but strategically located interconnection point within PJM; key constraint is the 115kV voltage level limiting scalability for large campus loads, though the active status and existing substation infrastructure offer a faster-to-energize near-term supply option for smaller initial phases of the Goochland development.</p>
-      </div>
-      <!-- Example:
-      <div class="connector-cell demand">
-        <div class="cell-label">Demand Signal</div>
-        <h4>MARKET NAME</h4>
-        <p>DEMAND CONTEXT</p>
-      </div>
-      <div class="connector-cell">
-        <div class="cell-label">Supply Context</div>
-        <h4>QUEUE / CORRIDOR</h4>
-        <p>MW AVAILABLE · KEY CONSTRAINT</p>
-      </div>
-      -->
+    <div class="lede">
+      <p>Data center development activity this week spans at least nine states and four grid regions, underscoring that siting pressure has moved well past the Northern Virginia core—with Tract and an undisclosed developer each proposing large campuses in Goochland County alone, while Fundamental Data advances a Mason County, West Virginia campus and Moonshot Infrastructure files site plans in Muncy, Pennsylvania. Capital markets remain open for well-structured deals, evidenced by Corscale and Affinius securing $975M from Blue Owl against a fully leased Northern Virginia asset, and Cipher Mining pursuing $810M in senior secured notes for its Stingray site in West Texas on the back of Amazon and Fluidstack pre-leases. Community resistance, however, is emerging as a genuine project risk: DC BLOX's Nashville proposal faces a 386,000-signature petition and a potential moratorium, Wonder Valley is pushing forward in Beaver County despite a local commissioner moratorium, and Panattoni is now seeking to recover cash from Turtle, Wisconsin on a stalled 430-acre project. For developers and operators, the week's read is straightforward—financing and hyperscaler demand are not the binding constraints, but local permitting and community opposition are increasingly capable of stalling or killing projects that looked viable on paper.</p>
+      <p>Power market intelligence from a practitioner with two decades in origination and interconnection — 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
     </div>
 
-    <hr class="section-divider">
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>Connector Markets — Load &amp; Supply in the Same Geography</h2>
+    </div>
 
-    <!-- QUEUE SPOTLIGHT -->
-    <div class="section-label">Queue Spotlight</div>
-    <table class="queue-table">
-      <thead>
+    <div class="connector-section">
+      <p class="connector-intro">A "connector market" exists where a known data center load announcement overlaps with viable generation in the same ISO/state footprint. These are the highest-value origination windows — one conversation can structure both sides of a deal.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Load Signal</th>
+            <th>MW</th>
+            <th>Viable Supply in Queue</th>
+            <th>Strategic Note</th>
+          </tr>
+        </thead>
+        <tbody>
         <tr>
-          <th>Project</th>
-          <th>ISO</th>
-          <th>Type</th>
-          <th>MW</th>
-          <th>Status</th>
-          <th>POI / Substation</th>
+          <td><span class="market-tag">TX · ERCOT</span></td>
+          <td><span class="load-name">Cipher Mining</span><div class="queue-note">Stingray data center site in West Texas; Amazon and Fluidstack pre-leases in place; $810M senior secured notes financing sought</div></td>
+          <td><span class="mw-val">n/a</span></td>
+          <td><span class="supply-count">Multiple active utility-scale solar and wind projects present in ERCOT queue</span><div class="queue-note">Desert Hill Solar (250MW, Solar - Photovoltaic Solar, Active, Tap 345kV 10180 El Capitan - 10073 Drill Hole); Proteus London-Leigh Solar SLF (600MW, Solar - Photovoltaic Solar, Active, 345kV Bernoulli bus # 59907); Prairie Power Wind (302.9MW, Wind - Wind Turbine, Active, Tap 345 kV Longshore Switch to Cattleman Switch CKT 4); Cherry Sage Solar 1 SLF (142.51MW, Solar - Photovoltaic Solar, Active, TREADWELL 138kV)</div></td>
+          <td style="font-size:11px;color:#374151">Cipher Mining's Stingray site already carries Amazon and Fluidstack pre-leases, indicating load is substantially contracted; any renewable origination opportunity is secondary to existing offtake structure and should focus on supplemental or additive green power agreements rather than primary PPA origination.</td>
         </tr>
-      </thead>
-      <tbody>
         <tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
+          <td><span class="market-tag">TX · ERCOT</span></td>
+          <td><span class="load-name">Applied Digital</span><div class="queue-note">210MW AI campus signed to hyperscaler; fifth campus under development with three already leased to same tenant; located in North Dakota but signal tagged to Unknown region — ERCOT queue included given explicit MW and hyperscaler context</div></td>
+          <td><span class="mw-val">210MW</span></td>
+          <td><span class="supply-count">Multiple active utility-scale solar and wind projects present in ERCOT queue</span><div class="queue-note">Proteus London-Leigh Solar SLF (600MW, Solar - Photovoltaic Solar, Active, 345kV Bernoulli bus # 59907); Prairie Power Wind (302.9MW, Wind - Wind Turbine, Active, Tap 345 kV Longshore Switch to Cattleman Switch CKT 4); Desert Hill Solar (250MW, Solar - Photovoltaic Solar, Active, Tap 345kV 10180 El Capitan - 10073 Drill Hole)</div></td>
+          <td style="font-size:11px;color:#374151">Applied Digital has a 210MW campus already signed to a hyperscaler tenant, with additional campuses under active leasing; power supply for the signed campus is likely contracted or in advanced negotiation, but the fifth campus under development represents a potential open origination window for a new renewable PPA at that scale.</td>
         </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-<tr>
-          <td>Danish Fields Solar</td>
-          <td></td>
-          <td>Solar - Photovoltaic Solar</td>
-          <td class="mw">602.8</td>
-          <td>Completed</td>
-          <td>44200 Hillje 345kV</td>
-        </tr>
-        <!-- Example row:
         <tr>
-          <td>PROJECT NAME</td>
-          <td>PJM</td>
-          <td>Solar + BESS</td>
-          <td class="mw">300</td>
-          <td>Active</td>
-          <td>SUBSTATION 345kV</td>
+          <td><span class="market-tag">VA · PJM</span></td>
+          <td><span class="load-name">Corscale</span><div class="queue-note">Northern Virginia data center fully leased; $975M financing secured from Blue Owl with Affinius</div></td>
+          <td><span class="mw-val">n/a</span></td>
+          <td><span class="supply-count">Limited active renewable supply visible in PJM queue from provided data; one withdrawn solar project noted for PJM footprint</span><div class="queue-note">Victoria DP-Martin DP 115 kV (90MW, Solar, Withdrawn) is the only PJM-tagged queue entry; no active PJM renewable projects appear verbatim in the queue data</div></td>
+          <td style="font-size:11px;color:#374151">Corscale's Northern Virginia campus is fully leased and has secured institutional financing, indicating power and offtake are already arranged; this is not an open renewable PPA origination target, and any engagement should focus on future phases or expansion campuses rather than the currently financed asset.</td>
         </tr>
-        -->
-      </tbody>
-    </table>
+        </tbody>
+      </table>
 
-  </div><!-- /body-wrap -->
+      <div class="queue-spotlight">
+        <div class="qs-label">Queue Spotlight — Highest-Capacity Acquisition Targets This Week</div>
+        <div class="qs-row">
+        <div class="qs-item">
+            <div class="qs-id">Proteus London-Leigh Solar SLF</div>
+            <div class="qs-desc">600 MW Solar - Photovoltaic Solar · ERCOT<br>Active · 345kV Bernoulli (bus # 59907)</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Wind</div>
+            <div class="qs-desc">376.2 MW WND · ISONE<br>Withdrawn · MEPCO 396 line</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Prairie Power Wind</div>
+            <div class="qs-desc">302.9 MW Wind - Wind Turbine · ERCOT<br>Active · Tap 345 kV Longshore Switch (Bus# 1058) to Cattleman Switch (Bus# 10053) CKT 4</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Desert Hill Solar</div>
+            <div class="qs-desc">250 MW Solar - Photovoltaic Solar · ERCOT<br>Active · Tap 345kV 10180 El Capitan - 10073 Drill Hole</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <!-- FOOTER -->
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Interconnection</div>
+      <h2>Data Center Site Selection Bypasses Queues as Capacity Crunch Deepens</h2>
+    </div>
+
+    <div class="lead-story">
+      <p class="dek">A wave of developer moves this week reveals that the interconnection queue is now a secondary constraint—capital structure, behind-the-meter generation, and local permitting have become the primary battlegrounds for large-load siting.</p>
+      <p class="body-text">The most consequential pattern visible in this week's signals is not any single project announcement but the collective strategy emerging across developers to route around the interconnection queue entirely. The clearest example is the Stark Power acquisition of Sagebrush sites, where Stark raised up to $140M to fund the acquisition, with terms undisclosed, specifically to control co-located natural-gas-fired power plants capable of serving load through behind-the-meter gas generation bypassing interconnection queues. That approach—own the generation, skip the queue—is becoming a template rather than an exception, and it has direct implications for how IPPs and power developers should think about asset value in the current cycle.</p>
+      <p class="body-text" style="margin-top:8px">On the hyperscale lease side, the financing activity this week underscores how rapidly capital is moving to lock in capacity ahead of queue resolution. Corscale and Affinius secured $975M in financing from Blue Owl for a fully leased Northern Virginia data center, a transaction that reflects lender comfort with contracted load even in a region where PJM interconnection timelines remain extended. Separately, Applied Digital disclosed a 210MW campus lease to a hyperscaler—its fifth AI campus—with three campuses now leased to the same unnamed tenant, signaling that hyperscalers are concentrating capacity commitments with proven operators rather than spreading risk across the market. Cipher Mining, meanwhile, is seeking $810M in senior secured notes to finance its Stingray site in West Texas after securing Amazon and Fluidstack pre-leases, reinforcing that pre-contracted load is now the prerequisite for accessing institutional debt at scale.</p>
+      <p class="body-text" style="margin-top:8px">The geographic diversification story is real but complicated by local politics. Projects are spreading into West Virginia, Indiana, Pennsylvania, Utah, and rural Tennessee, yet the signal from DC BLOX's Nashville proposal—where a petition exceeding 386,000 signatures is threatening a moratorium on a 24-acre site—illustrates that community opposition can stall even modestly sized campuses. The Wonder Valley project in Utah's Beaver County is advancing despite a local commissioner moratorium, suggesting developers are willing to litigate or outlast local resistance when the power and land economics are compelling enough. For data-center operators and developers, the practical read is that site control and community relations now carry interconnection-equivalent risk weight in project timelines.</p>
+      <p class="body-text" style="margin-top:8px">Hut 8's Nueces County campus—the Hut 8 Beacon Point campus in Texas—anchors the ERCOT end of the spectrum, where the combination of a 352MW hyperscaler lease and a $4.25B note offering signals the scale at which the market is operating. ERCOT's lack of a traditional interconnection queue for generation, combined with Texas's permitting environment, continues to attract the largest tranches of capital. The cumulative picture across this week's signals is one where interconnection queue position has been partially displaced as the scarcest resource by a new triad: behind-the-meter or on-site generation capacity, contracted anchor tenants, and local political clearance. Developers and IPP executives underwriting new sites should be stress-testing all three variables in parallel rather than treating grid access as the single critical path item.</p>
+      <div class="data-box">
+        <div class="data-label">Selected Transactions &amp; Project Metrics, Week of June 8–13 2026</div>
+        <div class="data-grid">
+          <div class="data-item"><div class="num">$975M</div><div class="lbl">Blue Owl financing for Corscale/Affinius Northern Virginia data center</div></div>
+          <div class="data-item"><div class="num">210 MW</div><div class="lbl">Applied Digital hyperscaler campus lease, North Dakota</div></div>
+          <div class="data-item"><div class="num">$810M</div><div class="lbl">Cipher Mining senior secured notes sought for Stingray West Texas site</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Campus Announcements — Scale &amp; Power Implications</h2>
+    </div>
+
+    <div class="story-grid">
+    <div class="story">
+        <div class="hed">Hut 8 Locks 352MW Nueces County Hyperscaler Lease</div>
+        <div class="dek">Hut 8's Beacon Point campus in Nueces County, Texas secures a 352MW hyperscaler lease backed by a $4.25B note offering.</div>
+        <p class="body-text">Hut 8's Nueces County campus, internally branded Beacon Point, is emerging as one of the largest single-site load commitments in ERCOT this cycle. The 352MW hyperscaler lease signals a fully contracted anchor tenant at a scale that will demand serious transmission study work from ERCOT staff, given the coastal Texas grid's existing congestion profile and the sheer size of the incremental load block.</p>
+      <p class="body-text" style="margin-top:8px">The $4.25B note offering tied to the same campus underscores how capital markets are now willing to underwrite large-scale AI infrastructure at the project level rather than the corporate balance sheet. For interconnection practitioners, the combination of a named hyperscaler offtake and a discrete debt instrument sets a structuring precedent that other merchant campus developers in ERCOT will likely attempt to replicate.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Goochland County, Virginia Draws Two Separate Campus Proposals</div>
+        <div class="dek">Tract and the undisclosed Tuckahoe Tech Park developer both propose large data center campuses in Goochland County, Virginia near the West Creek corridor.</div>
+        <p class="body-text">PJM's Northern Virginia constrained zone is already well-documented, but the West Creek corridor in Goochland County is attracting a second wave of large proposals as developers seek land with transmission adjacency outside the most congested Loudoun County pockets. Tract's proposal and the separately filed 900-acre Tuckahoe Tech Park—whose developer remains undisclosed—represent meaningful incremental queue pressure on Dominion Energy Virginia's transmission system in the same geographic pocket.</p>
+      <p class="body-text" style="margin-top:8px">Two large proposals in the same county filing window will force local planners and Dominion interconnection staff to think carefully about cumulative substation loading and whether existing 500kV and 230kV infrastructure can absorb both projects on overlapping timelines. Goochland's relative greenfield status compared to Ashburn makes it attractive, but the Tuckahoe Tech Park's 900-acre footprint alone suggests a multi-gigawatt build-out ambition that will require its own network upgrade study.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Applied Digital Signs Fifth Campus With Repeat Hyperscaler at 210MW</div>
+        <div class="dek">Applied Digital's new 210MW North Dakota campus is leased to the same hyperscaler already occupying three of its existing AI campuses.</div>
+        <p class="body-text">Applied Digital's announcement that a single hyperscaler tenant has now absorbed capacity across four of its campuses—including the newly signed 210MW North Dakota site—points to a deepening bilateral relationship that goes well beyond a spot lease. For load-serving entities and regional transmission organizations watching North Dakota load growth, the cumulative MW commitment from this one tenant relationship deserves close attention as a driver of regional generation and transmission need.</p>
+      <p class="body-text" style="margin-top:8px">The repeat-tenant structure also carries project finance implications: a demonstrated pattern of lease renewals and expansions from the same creditworthy offtaker substantially de-risks the debt stack on new campuses before a single rack is energized. Developers competing in the hyperscaler supply chain will note that Applied Digital's model—purpose-built AI campuses anchored by a single large tenant—is now five campuses deep and still expanding.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Cipher Mining Seeks $810M for West Texas Stingray Site</div>
+        <div class="dek">Cipher Mining is pursuing $810M in senior secured notes to finance its Stingray data center site in West Texas, which already holds Amazon and Fluidstack pre-leases.</div>
+        <p class="body-text">Cipher Mining's $810M senior secured note offering for the Stingray site represents one of the larger project-level debt raises for a West Texas AI data center, and the presence of both Amazon and Fluidstack as pre-lease counterparties gives the capital stack a multi-tenant foundation that should support underwriting. For ERCOT observers, West Texas continues to attract large data center load that will interact directly with the region's substantial wind and solar generation surplus—and its well-documented transmission bottlenecks on the 345kV system moving power eastward.</p>
+      <p class="body-text" style="margin-top:8px">The Stingray site's pre-lease structure, combined with Hut 8's concurrent 352MW Nueces County transaction, signals that ERCOT's data center pipeline is moving from speculative development into bankable, contracted assets at a pace that will accelerate the need for ERCOT and transmission owners to model cumulative load additions in West and South Texas more aggressively in near-term planning cycles.</p>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory &amp; Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+        <span class="flag-co">DC BLOX · Nashville, TN</span>
+        <span class="flag-note">A 386K+ signature petition and potential municipal moratorium threaten to block DC BLOX's 24-acre Nashville campus; developers should monitor whether Tennessee or other SERC-region municipalities adopt formal moratorium ordinances, as this could signal a broader community-opposition playbook that delays power procurement timelines and interconnection queue positions.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Wonder Valley · Beaver County, UT</span>
+        <span class="flag-note">A Kevin O'Leary-backed project is advancing despite an active county commissioner moratorium, creating a test case for how state-level approvals can override local opposition; the outcome will matter to developers eyeing Western markets outside established ISO territories where regulatory backstops are less defined.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Panattoni · Turtle, WI (MISO)</span>
+        <span class="flag-note">Panattoni's attempt to recover costs from a stalled 430-acre Wisconsin project highlights the financial and legal exposure when local approvals collapse after capital is committed; developers in MISO should watch this dispute as a precedent for municipal liability and the risks of advancing procurement agreements before land-use certainty is secured.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Goochland County · Virginia (PJM)</span>
+        <span class="flag-note">At least two large campus proposals—Tract and the 900-acre Tuckahoe Tech Park—are converging on the same Northern Virginia exurban corridor, intensifying competition for PJM interconnection queue slots and local grid capacity; procurement teams should monitor whether Dominion Energy Virginia signals transmission constraints or accelerated upgrade requirements for this area.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co">Cipher Mining · West Texas (ERCOT)</span>
+        <span class="flag-note">Cipher's $810M debt raise tied to pre-leases from Amazon and Fluidstack at its Stingray site, alongside Hut 8's Beacon Point campus Nueces County plans, signals accelerating large-load pressure on ERCOT West and South zones; developers should track ERCOT's large-load interconnection study queue and any nodal congestion or curtailment risk disclosures for these regions.</span>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA &amp; Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+    <p class="body-text">The high-yield debt market is clearly open for West Texas AI infrastructure plays right now, and the pricing signals are instructive. Cipher Mining is seeking $810M in senior secured notes to finance its Stingray site in West Texas, backstopped by Amazon and Fluidstack pre-leases — a structure that mirrors how developers are using anchor hyperscaler offtake to unlock investment-grade-adjacent debt terms on what would otherwise be speculative merchant builds. Hut 8's Nueces County campus (the 352MW hyperscaler lease tied to its Beacon Point campus) is pursuing a $4.25B note offering on the same basic logic: contracted load de-risks the capital structure enough to support nine-figure-plus debt tranches at acceptable spreads. On the equity and mezz side, Corscale and Affinius just closed a $975M Blue Owl financing for a fully leased Northern Virginia asset, confirming that 'fully leased at signing' remains the threshold at which institutional private credit will write very large checks without requiring construction completion risk to clear first. The common thread across all three: hyperscaler or named-tenant lease coverage is now the underwriting prerequisite, not a nice-to-have.</p>
+      <p class="body-text" style="margin-top:8px">PPA economics in ERCOT and PJM are being shaped by the sheer volume of load announcements hitting both grids simultaneously — Nueces County, the Tract and Tuckahoe Tech Park proposals clustering around Goochland/West Creek in PJM, Fundamental Data in Mason County WV, and Moonshot in Muncy PA all competing for the same constrained interconnection queue positions and the same pool of uncontracted renewable capacity. That congestion dynamic is pushing developers toward structures that sidestep the queue entirely: Stark Power's acquisition of Sagebrush assets, funded by up to $140M raised with terms undisclosed, is the clearest current example of behind-the-meter gas generation bypassing interconnection queues to deliver dispatchable power directly to co-located load. For PPA analysts, this matters because it sets an implicit price ceiling on utility-scale renewable PPAs in constrained markets — if a developer can source behind-the-meter gas at an all-in cost below the queue-delivered renewable alternative, that becomes the competitive benchmark. Applied Digital's model, now with a 210MW hyperscaler lease on its fifth AI campus and three campuses leased to the same tenant, also signals that repeat-tenant concentration is becoming a financing feature rather than a credit risk, as lenders treat the repeat relationship as implicit offtake optionality on future phases.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About This Brief</div>
+      <h2>NexPhase Advisory</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is produced by NexPhase Advisory — a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Questions, feedback, or to discuss a specific market or project: <a href="mailto:info@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">info@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
   <div class="footer">
-    <strong>NexPhase Advisory</strong> &nbsp;·&nbsp; Power Market Intelligence<br>
-    Questions or comments: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a><br><br>
-    This publication is provided for informational purposes only. Nothing herein constitutes legal, financial, or investment advice.
-    All queue data derived from public ISO sources. &copy; 2026 NexPhase Advisory. All rights reserved.<br><br>
-    To unsubscribe, reply with "unsubscribe" in the subject line.
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of June 14, 2026 &nbsp;·&nbsp; Vol. 1, No. 2</div>
+      </div>
+    </div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of June 14, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+    </div>
   </div>
 
 </div><!-- /sheet -->
