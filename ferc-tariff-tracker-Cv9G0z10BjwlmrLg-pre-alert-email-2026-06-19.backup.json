@@ -1,0 +1,327 @@
+{
+    "updatedAt": "2026-06-19T02:07:46.219Z",
+    "createdAt": "2026-06-19T02:07:27.504Z",
+    "id": "Cv9G0z10BjwlmrLg",
+    "name": "Interconnect - FERC Tariff Tracker",
+    "description": null,
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 6 * * *"
+                        }
+                    ]
+                }
+            },
+            "id": "fd1e7fb5-c677-47d1-9664-2d29a34f9994",
+            "name": "Daily 6AM ET",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -736,
+                272
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Build rolling 2-day filed-date window (yesterday 00:00 -> today 23:59 UTC).\n// FERC posts on a ~1 business day lag; 2-day window absorbs weekend/holiday catch-up.\nconst now = new Date();\nconst end = new Date(now);\nend.setUTCHours(23, 59, 59, 0);\nconst start = new Date(now);\nstart.setUTCDate(start.getUTCDate() - 1);\nstart.setUTCHours(0, 0, 0, 0);\n\nconst body = {\n  docketSearches: [{ docketNumber: null, subDocketNumbers: [] }],\n  searchText: 'interconnection OR \"large load\" OR co-location OR colocation OR \"data center\" OR \"queue reform\" OR \"cost allocation\" OR \"generator interconnection\" OR \"surplus interconnection service\" OR \"network upgrade\" OR \"affected system\" OR \"energy storage\"',\n  searchFullText: true,\n  searchDescription: true,\n  allDates: false,\n  dateSearches: [\n    { dateType: 'filed_date', startDate: start.toISOString(), endDate: end.toISOString() }\n  ],\n  classTypes: [],\n  affiliations: [],\n  availability: ['p'],\n  categories: ['Submittal', 'Issuance'],\n  libraries: ['Electric'],\n  eFiling: false,\n  sortBy: '',\n  groupBy: 'NONE',\n  resultsPerPage: 100,\n  curPage: 1,\n  idolResultID: '',\n  accessionNumber: null\n};\n\nreturn [{ json: { body, windowStart: start.toISOString(), windowEnd: end.toISOString() } }];"
+            },
+            "id": "db7c83a9-9a8b-471e-a9ae-7158caa2468c",
+            "name": "Build Search Body",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -512,
+                272
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://elibrary.ferc.gov/eLibrarywebapi/api/Search/AdvancedSearch",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "content-type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify($json.body) }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "neverError": true,
+                            "responseFormat": "json"
+                        }
+                    },
+                    "timeout": 30000
+                }
+            },
+            "id": "837688be-79c5-45d3-a0a0-06d4500d1d09",
+            "name": "FERC eLibrary Search",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -304,
+                272
+            ],
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": false,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "combinator": "and",
+                    "conditions": [
+                        {
+                            "leftValue": "={{ $json.success }}",
+                            "rightValue": true,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "true",
+                                "singleValue": true
+                            }
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "26b8d477-3f4f-4011-bc75-cbe0d91a5e7f",
+            "name": "Search OK?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                -80,
+                272
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Keyword pre-filter: cheap regex gate before spending Claude tokens.\nconst KEYWORDS = [\n  'interconnection', 'large load', 'co-location', 'colocation', 'data center',\n  'queue reform', 'cost allocation', 'generator interconnection',\n  'surplus interconnection service', 'gia', 'lgia', 'affected system',\n  'network upgrade', 'point of interconnection', 'energy storage'\n];\nconst rx = new RegExp(KEYWORDS.map(k => k.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')).join('|'), 'i');\n\nconst resp = $input.first().json;\nconst hits = Array.isArray(resp.searchHits) ? resp.searchHits : [];\nconst out = [];\nfor (const h of hits) {\n  const hay = `${h.description || ''} ${(h.docketNumbers || []).join(' ')}`;\n  if (!rx.test(hay)) continue;\n  const acc = h.acesssionNumber || h.accessionNumber || ''; // source misspells this key\n  out.push({\n    json: {\n      docketNumbers: h.docketNumbers || [],\n      docketNo: (h.docketNumbers || [])[0] || '',\n      accessionNumber: acc,\n      description: h.description || '',\n      category: h.category || '',\n      filedDate: h.filedDate || '',\n      issuedDate: h.issuedDate || '',\n      affiliations: h.affiliations || [],\n      eLibraryUrl: acc ? `https://elibrary.ferc.gov/eLibrary/filelist?accession_number=${acc}` : ''\n    }\n  });\n}\nreturn out;"
+            },
+            "id": "6c23d713-d009-4e82-a9f1-de5601d3fd3c",
+            "name": "Keyword Pre-Filter",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                144,
+                160
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Score each filing with Claude, merge result back onto the filing, drop score <= 2.\n// Done in one Code node so the filing's own fields (docket, URL, accession) never\n// get clobbered by the API response. Requires ANTHROPIC_API_KEY in n8n env vars.\nconst API_KEY = $env.ANTHROPIC_API_KEY;\nconst SYS = 'You score FERC electric tariff filings for relevance to The Interconnect, a weekly publication read by renewable/storage developers, IPPs, and data-center power buyers. Score 1-5 for how much this filing matters to that audience. 5 = major queue reform, large-load/co-location policy, or cost-allocation shift with broad market impact. 1 = routine single-party rate tweak. Respond with ONLY a JSON object, no preamble, no markdown: {\"score\":1-5,\"iso\":\"PJM|MISO|SPP|CAISO|NYISO|ISO-NE|multi|n/a\",\"theme\":\"queue reform|large load|cost allocation|colocation|other\",\"one_line\":\"<=20 words plain English\"}';\n\nconst out = [];\nfor (const it of $input.all()) {\n  const f = it.json;\n  const userMsg = `Docket: ${f.docketNo}\\nCategory: ${f.category}\\nFiled: ${f.filedDate}\\nDescription: ${f.description}`;\n  let parsed = null;\n  try {\n    const r = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.anthropic.com/v1/messages',\n      headers: { 'content-type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': API_KEY },\n      body: { model: 'claude-sonnet-4-6', max_tokens: 300, system: SYS, messages: [{ role: 'user', content: userMsg }] },\n      json: true,\n      timeout: 30000\n    });\n    let txt = (r.content || []).filter(b => b.type === 'text').map(b => b.text).join('').replace(/```json|```/g, '').trim();\n    parsed = JSON.parse(txt);\n  } catch (e) { continue; } // API error or unparseable -> skip this filing\n  if (!parsed || typeof parsed.score !== 'number' || parsed.score <= 2) continue;\n  out.push({ json: {\n    docketNo: f.docketNo,\n    accessionNumber: f.accessionNumber,\n    description: f.description,\n    category: f.category,\n    filedDate: f.filedDate,\n    issuedDate: f.issuedDate,\n    eLibraryUrl: f.eLibraryUrl,\n    filer: (f.affiliations.find(a => a.afType === 'author') || {}).affiliation || '',\n    score: parsed.score,\n    iso: parsed.iso,\n    theme: parsed.theme,\n    one_line: parsed.one_line\n  } });\n}\nreturn out;"
+            },
+            "id": "c497c6a2-4ff3-40a9-b88f-38b484a70464",
+            "name": "Claude Score + Merge",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                368,
+                160
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "upsert",
+                "base": {
+                    "__rl": true,
+                    "value": "",
+                    "mode": "id",
+                    "cachedResultName": "",
+                    "cachedResultUrl": ""
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "",
+                    "mode": "id",
+                    "cachedResultName": "",
+                    "cachedResultUrl": ""
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "matchingColumns": [
+                        "fld7RqzCNA0XqS2Yi"
+                    ],
+                    "value": {
+                        "fldz45OoqOViHqpmA": "={{ $json.docketNo }}",
+                        "fld7RqzCNA0XqS2Yi": "={{ $json.accessionNumber }}",
+                        "fld7f4mtVZupfrCHb": "={{ $json.description }}",
+                        "fldsaQjpHxzYaYhIv": "={{ $json.category }}",
+                        "fldgZB1QIVj0q379c": "={{ $json.filedDate }}",
+                        "flds1wDSbQqqFovH2": "={{ $json.filer }}",
+                        "fld3zZoYBq50CP4Mi": "={{ $json.iso }}",
+                        "fldg33XhryMhBTKRC": "={{ $json.theme }}",
+                        "fldaDKAJVGbQSuRqd": "={{ $json.score }}",
+                        "fldJGgrch0SqFnHgi": "={{ $json.one_line }}",
+                        "fldlvVKEnU2P3MYBG": "={{ $json.eLibraryUrl }}",
+                        "fldt6eo6cs6TDWvYb": "New"
+                    }
+                },
+                "options": {
+                    "typecast": true
+                }
+            },
+            "id": "c80c9521-c58f-43ae-98f1-1ace9b170f3a",
+            "name": "Airtable: FERC Tariff Tracker",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                816,
+                160
+            ],
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "RoOhi6fE6lI3cI1c",
+                    "name": "Airtable Personal Access Token account 2"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Failure branch: FERC ingest failed. Emit a Daily Brief alert payload.\nconst err = $input.first().json;\nreturn [{ json: {\n  alert: 'FERC_INGEST_FAILED',\n  message: 'FERC eLibrary tariff ingest failed - check manually. The eLibrary backend is unofficial and may have changed shape or rate-limited.',\n  httpCode: err.statusCode || err.code || 'unknown',\n  ts: new Date().toISOString()\n} }];"
+            },
+            "id": "bd72891e-1571-4979-a4d3-cae65ebd0ef9",
+            "name": "Ingest Failed Alert",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                144,
+                400
+            ]
+        }
+    ],
+    "connections": {
+        "Daily 6AM ET": {
+            "main": [
+                [
+                    {
+                        "node": "Build Search Body",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Build Search Body": {
+            "main": [
+                [
+                    {
+                        "node": "FERC eLibrary Search",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "FERC eLibrary Search": {
+            "main": [
+                [
+                    {
+                        "node": "Search OK?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Ingest Failed Alert",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Search OK?": {
+            "main": [
+                [
+                    {
+                        "node": "Keyword Pre-Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Ingest Failed Alert",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Keyword Pre-Filter": {
+            "main": [
+                [
+                    {
+                        "node": "Claude Score + Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Claude Score + Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Airtable: FERC Tariff Tracker",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "nodeGroups": [],
+    "pinData": {},
+    "versionId": "df1e4873-9c98-4ed5-ae9c-13e197a659c6",
+    "activeVersionId": null,
+    "versionCounter": 3,
+    "triggerCount": 0,
+    "sourceWorkflowId": null,
+    "shared": [
+        {
+            "updatedAt": "2026-06-19T02:07:27.507Z",
+            "createdAt": "2026-06-19T02:07:27.507Z",
+            "role": "workflow:owner",
+            "workflowId": "Cv9G0z10BjwlmrLg",
+            "projectId": "yyu8mrsL1yrdUgiZ",
+            "project": {
+                "updatedAt": "2026-05-07T03:46:52.701Z",
+                "createdAt": "2026-05-07T03:46:45.027Z",
+                "id": "yyu8mrsL1yrdUgiZ",
+                "name": "Chris   <santiago4801@gmail.com>",
+                "type": "personal",
+                "icon": null,
+                "description": null,
+                "customTelemetryTags": [],
+                "creatorId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
+            }
+        }
+    ],
+    "tags": [],
+    "activeVersion": null
+}
