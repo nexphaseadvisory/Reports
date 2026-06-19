@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-19T21:22:31.104Z",
+  "updatedAt": "2026-06-14T21:21:15.527Z",
   "createdAt": "2026-06-07T23:56:43.555Z",
   "id": "hAbUSOEUyZRxXEWm",
   "name": "Interconnect Publisher \u2014 Weekly",
@@ -240,7 +240,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// interconnect_inject.js \u2014 v2 (index.html \"correct format\")\n// Fetches the locked template from the repo and substitutes section tokens.\n// TOKENS: {{DATELINE}} {{VOL}} {{NO}} {{QUEUE_DATE}} {{LEDE}} {{CONNECTOR_ROWS}}\n//         {{QUEUE_SPOTLIGHT}} {{LEAD_STORY}} {{CAMPUS_STORIES}} {{POLICY_FLAGS}} {{PRICING_CONTEXT}}\n//\n// UPSTREAM CONTRACT:\n//   Set Metadata        -> { dateline, vol, no }\n//   Generate Lede       -> { lede }\n//   Generate Feature    -> { label, title, dek, paragraphs:[], data_label, data_items:[{num,lbl}] }\n//   Generate Signals    -> [ { hed, dek, paragraphs:[] } ]                (Campus Announcements stories)\n//   Generate Connectors -> [ { market_tag, load_name, load_note, mw, supply_count, supply_note, strategic_note } ]\n//   Generate Flags      -> [ { entity, note } ]\n//   Generate Pricing    -> { paragraphs:[] }\n//   Fetch Queue Records -> Airtable rows (Project Name, Region, Generation Type, MW Capacity, Status, POI Name)\n\nconst TEMPLATE_URL = 'https://api.github.com/repos/nexphaseadvisory/Reports/contents/interconnect/templates/weekly-template.html?ref=main';\nconst resp = await this.helpers.httpRequest({\n  method: 'GET', url: TEMPLATE_URL,\n  headers: { 'Accept': 'application/vnd.github.raw', 'User-Agent': 'n8n-interconnect-publisher' },\n  json: false\n});\nlet TEMPLATE;\nif (typeof resp === 'string') TEMPLATE = resp;\nelse if (resp && resp.content) TEMPLATE = Buffer.from(resp.content, 'base64').toString('utf8');\nelse TEMPLATE = String(resp);\nif (TEMPLATE.indexOf('{{LEDE}}') === -1 || TEMPLATE.indexOf('{{LEAD_STORY}}') === -1) {\n  throw new Error('Template fetch failed or missing v2 tokens \u2014 got ' + TEMPLATE.length + ' chars from ' + TEMPLATE_URL);\n}\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  try {\n    const content = (resp && resp.content) || [];\n    let t = content.filter(b => b && b.type === 'text').map(b => b.text).join('');\n    const m = t.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n    if (m) t = m[1];\n    t = t.trim();\n    const start = t.search(/[\\{\\[]/);\n    if (start > 0) t = t.slice(start);\n    try { return JSON.parse(t); } catch (e) {}\n    const last = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']'));\n    if (last >= 0) { try { return JSON.parse(t.slice(0, last + 1)); } catch (e) {} }\n    return null;\n  } catch (e) { return null; }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nfunction paras(arr, firstStyle) {\n  const a = Array.isArray(arr) ? arr : (arr ? [arr] : []);\n  return a.map((p, i) =>\n    '<p class=\"body-text\"' + (i > 0 ? ' style=\"margin-top:8px\"' : (firstStyle || '')) + '>' + esc(p) + '</p>'\n  ).join('\\n      ');\n}\n\n// ---------- pull upstream ----------\nconst meta      = $('Set Metadata').first().json;\nconst lede      = (claudeJSON($('Generate Lede').first().json) || { lede: '' }).lede || '';\nconst feature   = claudeJSON($('Generate Feature').first().json) || {};\nconst stories   = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors= claudeJSON($('Generate Connectors').first().json) || [];\nconst flags     = claudeJSON($('Generate Flags').first().json) || [];\nconst pricing   = claudeJSON($('Generate Pricing').first().json) || { paragraphs: [] };\nconst queueRaw  = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- CONNECTOR_ROWS ----------\nconst connectorRows = (Array.isArray(connectors) ? connectors : []).map(c =>\n  '<tr>\\n' +\n  '          <td><span class=\"market-tag\">' + esc(c.market_tag) + '</span></td>\\n' +\n  '          <td><span class=\"load-name\">' + esc(c.load_name) + '</span>' +\n       (c.load_note ? '<div class=\"queue-note\">' + esc(c.load_note) + '</div>' : '') + '</td>\\n' +\n  '          <td><span class=\"mw-val\">' + esc(c.mw) + '</span></td>\\n' +\n  '          <td><span class=\"supply-count\">' + esc(c.supply_count) + '</span>' +\n       (c.supply_note ? '<div class=\"queue-note\">' + esc(c.supply_note) + '</div>' : '') + '</td>\\n' +\n  '          <td style=\"font-size:11px;color:#374151\">' + esc(c.strategic_note) + '</td>\\n' +\n  '        </tr>'\n).join('\\n        ');\n\n// ---------- QUEUE_SPOTLIGHT (top UNIQUE queue records by MW) ----------\n// Fetch Queue Records can return duplicate rows (same project double-loaded), so\n// dedupe by project name (fallback record id) AFTER sorting desc \u2014 keeping the\n// highest-MW instance \u2014 BEFORE slicing the top 4. Without this the spotlight\n// repeats the single highest-MW project in all 4 slots.\nconst _seenQ = new Set();\nconst queueSpotlight = queueRaw.map(q => ({\n  id: q['Project Name'] || q['POI Name'] || '',\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  region: q['Region'] || '',\n  status: q['Status'] || '',\n  poi: q['POI Name'] || '',\n  _key: String(q['Project Name'] || q['POI Name'] || q['id'] || '').trim().toLowerCase()\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .filter(q => {\n    if (String(q.status || '').trim().toLowerCase() === 'completed') return false; // exclude Completed \u2014 Active only\n    if (!q._key || _seenQ.has(q._key)) return false;\n    _seenQ.add(q._key);\n    return true;\n  })\n  .slice(0, 4)\n  .map(q => {\n    const desc = [\n      (q.mw !== '' ? q.mw + ' MW ' : '') + esc(q.type) + (q.region ? ' \u00b7 ' + esc(q.region) : ''),\n      [esc(q.status), esc(q.poi)].filter(Boolean).join(' \u00b7 ')\n    ].filter(Boolean).join('<br>');\n    return '<div class=\"qs-item\">\\n' +\n      '            <div class=\"qs-id\">' + esc(q.id) + '</div>\\n' +\n      '            <div class=\"qs-desc\">' + desc + '</div>\\n' +\n      '          </div>';\n  }).join('\\n          ');\n\n// ---------- LEAD_STORY (feature analysis + data-box) ----------\nconst dataItems = (Array.isArray(feature.data_items) ? feature.data_items : []).map(di =>\n  '<div class=\"data-item\"><div class=\"num\">' + esc(di.num) + '</div><div class=\"lbl\">' + esc(di.lbl) + '</div></div>'\n).join('\\n          ');\nconst dataBox = (feature.data_label || dataItems) ?\n  '\\n      <div class=\"data-box\">\\n' +\n  '        <div class=\"data-label\">' + esc(feature.data_label) + '</div>\\n' +\n  '        <div class=\"data-grid\">\\n          ' + dataItems + '\\n        </div>\\n' +\n  '      </div>' : '';\nconst leadStory =\n  '<div class=\"sec\">\\n' +\n  '      <div class=\"sec-label\">' + esc(feature.label || 'Interconnection') + '</div>\\n' +\n  '      <h2>' + esc(feature.title || '') + '</h2>\\n' +\n  '    </div>\\n\\n' +\n  '    <div class=\"lead-story\">\\n' +\n  '      <p class=\"dek\">' + esc(feature.dek || '') + '</p>\\n' +\n  '      ' + paras(feature.paragraphs) + dataBox + '\\n' +\n  '    </div>';\n\n// ---------- CAMPUS_STORIES (2-col story grid) ----------\nconst campusStories = (Array.isArray(stories) ? stories : []).map(s =>\n  '<div class=\"story\">\\n' +\n  '        <div class=\"hed\">' + esc(s.hed || s.headline) + '</div>\\n' +\n  '        <div class=\"dek\">' + esc(s.dek || '') + '</div>\\n' +\n  '        ' + paras(s.paragraphs || s.detail) + '\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- POLICY_FLAGS (ISO tariff updates prepended) ----------\nlet tariffFlags = [];\ntry { const tf = claudeJSON($('Generate Tariff Flags').first().json); if (Array.isArray(tf)) tariffFlags = tf; } catch (e) { tariffFlags = []; }\nconst renderFlag = (co, note) =>\n  '<div class=\"flag-item\">\\n' +\n  '        <span class=\"flag-co\">' + esc(co) + '</span>\\n' +\n  '        <span class=\"flag-note\">' + esc(note) + '</span>\\n' +\n  '      </div>';\nconst tariffItems = (Array.isArray(tariffFlags) ? tariffFlags : []).map(t =>\n  renderFlag('[' + (t.iso || 'ISO') + ' tariff] ' + (t.document || ''), t.significance || ''));\nconst normalItems = (Array.isArray(flags) ? flags : []).map(f => renderFlag(f.entity, f.note));\nconst policyFlags = tariffItems.concat(normalItems).join('\\n      ');\n\n// ---------- PRICING_CONTEXT ----------\nconst pricingHtml = paras(pricing.paragraphs || pricing);\n\n// ---------- QUEUE_DATE ----------\nconst months = ['January','February','March','April','May','June','July','August','September','October','November','December'];\nconst now = new Date();\nconst queueDate = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();\n\n// ---------- inject ----------\nlet html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{QUEUE_DATE}}').join(esc(queueDate))\n  .split('{{LEDE}}').join(esc(lede))\n  .split('{{CONNECTOR_ROWS}}').join(connectorRows)\n  .split('{{QUEUE_SPOTLIGHT}}').join(queueSpotlight)\n  .split('{{LEAD_STORY}}').join(leadStory)\n  .split('{{CAMPUS_STORIES}}').join(campusStories)\n  .split('{{POLICY_FLAGS}}').join(policyFlags)\n  .split('{{PRICING_CONTEXT}}').join(pricingHtml);\n\n// Deterministic entity guarantee: 'Beacon Point AI' must NEVER appear as a standalone\n// entity (it is Hut 8's campus). The Generate prompts enforce this, but to guarantee\n// it even on an LLM slip, normalize any residual standalone mention in the final HTML.\n// (Already-correct 'Hut 8 Beacon Point campus' contains no 'Beacon Point AI' so is untouched.)\nhtml = html.replace(/Beacon Point AI(?:['\u2019]s)?/g, m =>\n  /['\u2019]s$/.test(m) ? \"Hut 8's Beacon Point campus\" : \"Hut 8 Beacon Point campus\");\n\nif (html.indexOf('{{') !== -1) {\n  const leftover = (html.match(/\\{\\{[A-Z_]+\\}\\}/g) || []).join(', ');\n  throw new Error('Unsubstituted tokens remain: ' + leftover);\n}\n\nreturn [{ json: { html, dateline: meta.dateline, vol: meta.vol, no: meta.no } }];\n"
+        "jsCode": "// interconnect_inject.js \u2014 v2 (index.html \"correct format\")\n// Fetches the locked template from the repo and substitutes section tokens.\n// TOKENS: {{DATELINE}} {{VOL}} {{NO}} {{QUEUE_DATE}} {{LEDE}} {{CONNECTOR_ROWS}}\n//         {{QUEUE_SPOTLIGHT}} {{LEAD_STORY}} {{CAMPUS_STORIES}} {{POLICY_FLAGS}} {{PRICING_CONTEXT}}\n//\n// UPSTREAM CONTRACT:\n//   Set Metadata        -> { dateline, vol, no }\n//   Generate Lede       -> { lede }\n//   Generate Feature    -> { label, title, dek, paragraphs:[], data_label, data_items:[{num,lbl}] }\n//   Generate Signals    -> [ { hed, dek, paragraphs:[] } ]                (Campus Announcements stories)\n//   Generate Connectors -> [ { market_tag, load_name, load_note, mw, supply_count, supply_note, strategic_note } ]\n//   Generate Flags      -> [ { entity, note } ]\n//   Generate Pricing    -> { paragraphs:[] }\n//   Fetch Queue Records -> Airtable rows (Project Name, Region, Generation Type, MW Capacity, Status, POI Name)\n\nconst TEMPLATE_URL = 'https://api.github.com/repos/nexphaseadvisory/Reports/contents/interconnect/templates/weekly-template.html?ref=main';\nconst resp = await this.helpers.httpRequest({\n  method: 'GET', url: TEMPLATE_URL,\n  headers: { 'Accept': 'application/vnd.github.raw', 'User-Agent': 'n8n-interconnect-publisher' },\n  json: false\n});\nlet TEMPLATE;\nif (typeof resp === 'string') TEMPLATE = resp;\nelse if (resp && resp.content) TEMPLATE = Buffer.from(resp.content, 'base64').toString('utf8');\nelse TEMPLATE = String(resp);\nif (TEMPLATE.indexOf('{{LEDE}}') === -1 || TEMPLATE.indexOf('{{LEAD_STORY}}') === -1) {\n  throw new Error('Template fetch failed or missing v2 tokens \u2014 got ' + TEMPLATE.length + ' chars from ' + TEMPLATE_URL);\n}\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  try {\n    const content = (resp && resp.content) || [];\n    let t = content.filter(b => b && b.type === 'text').map(b => b.text).join('');\n    const m = t.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n    if (m) t = m[1];\n    t = t.trim();\n    const start = t.search(/[\\{\\[]/);\n    if (start > 0) t = t.slice(start);\n    try { return JSON.parse(t); } catch (e) {}\n    const last = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']'));\n    if (last >= 0) { try { return JSON.parse(t.slice(0, last + 1)); } catch (e) {} }\n    return null;\n  } catch (e) { return null; }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nfunction paras(arr, firstStyle) {\n  const a = Array.isArray(arr) ? arr : (arr ? [arr] : []);\n  return a.map((p, i) =>\n    '<p class=\"body-text\"' + (i > 0 ? ' style=\"margin-top:8px\"' : (firstStyle || '')) + '>' + esc(p) + '</p>'\n  ).join('\\n      ');\n}\n\n// ---------- pull upstream ----------\nconst meta      = $('Set Metadata').first().json;\nconst lede      = (claudeJSON($('Generate Lede').first().json) || { lede: '' }).lede || '';\nconst feature   = claudeJSON($('Generate Feature').first().json) || {};\nconst stories   = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors= claudeJSON($('Generate Connectors').first().json) || [];\nconst flags     = claudeJSON($('Generate Flags').first().json) || [];\nconst pricing   = claudeJSON($('Generate Pricing').first().json) || { paragraphs: [] };\nconst queueRaw  = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- CONNECTOR_ROWS ----------\nconst connectorRows = (Array.isArray(connectors) ? connectors : []).map(c =>\n  '<tr>\\n' +\n  '          <td><span class=\"market-tag\">' + esc(c.market_tag) + '</span></td>\\n' +\n  '          <td><span class=\"load-name\">' + esc(c.load_name) + '</span>' +\n       (c.load_note ? '<div class=\"queue-note\">' + esc(c.load_note) + '</div>' : '') + '</td>\\n' +\n  '          <td><span class=\"mw-val\">' + esc(c.mw) + '</span></td>\\n' +\n  '          <td><span class=\"supply-count\">' + esc(c.supply_count) + '</span>' +\n       (c.supply_note ? '<div class=\"queue-note\">' + esc(c.supply_note) + '</div>' : '') + '</td>\\n' +\n  '          <td style=\"font-size:11px;color:#374151\">' + esc(c.strategic_note) + '</td>\\n' +\n  '        </tr>'\n).join('\\n        ');\n\n// ---------- QUEUE_SPOTLIGHT (top UNIQUE queue records by MW) ----------\n// Fetch Queue Records can return duplicate rows (same project double-loaded), so\n// dedupe by project name (fallback record id) AFTER sorting desc \u2014 keeping the\n// highest-MW instance \u2014 BEFORE slicing the top 4. Without this the spotlight\n// repeats the single highest-MW project in all 4 slots.\nconst _seenQ = new Set();\nconst queueSpotlight = queueRaw.map(q => ({\n  id: q['Project Name'] || q['POI Name'] || '',\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  region: q['Region'] || '',\n  status: q['Status'] || '',\n  poi: q['POI Name'] || '',\n  _key: String(q['Project Name'] || q['POI Name'] || q['id'] || '').trim().toLowerCase()\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .filter(q => {\n    if (String(q.status || '').trim().toLowerCase() === 'completed') return false; // exclude Completed \u2014 Active only\n    if (!q._key || _seenQ.has(q._key)) return false;\n    _seenQ.add(q._key);\n    return true;\n  })\n  .slice(0, 4)\n  .map(q => {\n    const desc = [\n      (q.mw !== '' ? q.mw + ' MW ' : '') + esc(q.type) + (q.region ? ' \u00b7 ' + esc(q.region) : ''),\n      [esc(q.status), esc(q.poi)].filter(Boolean).join(' \u00b7 ')\n    ].filter(Boolean).join('<br>');\n    return '<div class=\"qs-item\">\\n' +\n      '            <div class=\"qs-id\">' + esc(q.id) + '</div>\\n' +\n      '            <div class=\"qs-desc\">' + desc + '</div>\\n' +\n      '          </div>';\n  }).join('\\n          ');\n\n// ---------- LEAD_STORY (feature analysis + data-box) ----------\nconst dataItems = (Array.isArray(feature.data_items) ? feature.data_items : []).map(di =>\n  '<div class=\"data-item\"><div class=\"num\">' + esc(di.num) + '</div><div class=\"lbl\">' + esc(di.lbl) + '</div></div>'\n).join('\\n          ');\nconst dataBox = (feature.data_label || dataItems) ?\n  '\\n      <div class=\"data-box\">\\n' +\n  '        <div class=\"data-label\">' + esc(feature.data_label) + '</div>\\n' +\n  '        <div class=\"data-grid\">\\n          ' + dataItems + '\\n        </div>\\n' +\n  '      </div>' : '';\nconst leadStory =\n  '<div class=\"sec\">\\n' +\n  '      <div class=\"sec-label\">' + esc(feature.label || 'Interconnection') + '</div>\\n' +\n  '      <h2>' + esc(feature.title || '') + '</h2>\\n' +\n  '    </div>\\n\\n' +\n  '    <div class=\"lead-story\">\\n' +\n  '      <p class=\"dek\">' + esc(feature.dek || '') + '</p>\\n' +\n  '      ' + paras(feature.paragraphs) + dataBox + '\\n' +\n  '    </div>';\n\n// ---------- CAMPUS_STORIES (2-col story grid) ----------\nconst campusStories = (Array.isArray(stories) ? stories : []).map(s =>\n  '<div class=\"story\">\\n' +\n  '        <div class=\"hed\">' + esc(s.hed || s.headline) + '</div>\\n' +\n  '        <div class=\"dek\">' + esc(s.dek || '') + '</div>\\n' +\n  '        ' + paras(s.paragraphs || s.detail) + '\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- POLICY_FLAGS ----------\nconst policyFlags = (Array.isArray(flags) ? flags : []).map(f =>\n  '<div class=\"flag-item\">\\n' +\n  '        <span class=\"flag-co\">' + esc(f.entity) + '</span>\\n' +\n  '        <span class=\"flag-note\">' + esc(f.note) + '</span>\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- PRICING_CONTEXT ----------\nconst pricingHtml = paras(pricing.paragraphs || pricing);\n\n// ---------- QUEUE_DATE ----------\nconst months = ['January','February','March','April','May','June','July','August','September','October','November','December'];\nconst now = new Date();\nconst queueDate = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();\n\n// ---------- inject ----------\nlet html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{QUEUE_DATE}}').join(esc(queueDate))\n  .split('{{LEDE}}').join(esc(lede))\n  .split('{{CONNECTOR_ROWS}}').join(connectorRows)\n  .split('{{QUEUE_SPOTLIGHT}}').join(queueSpotlight)\n  .split('{{LEAD_STORY}}').join(leadStory)\n  .split('{{CAMPUS_STORIES}}').join(campusStories)\n  .split('{{POLICY_FLAGS}}').join(policyFlags)\n  .split('{{PRICING_CONTEXT}}').join(pricingHtml);\n\n// Deterministic entity guarantee: 'Beacon Point AI' must NEVER appear as a standalone\n// entity (it is Hut 8's campus). The Generate prompts enforce this, but to guarantee\n// it even on an LLM slip, normalize any residual standalone mention in the final HTML.\n// (Already-correct 'Hut 8 Beacon Point campus' contains no 'Beacon Point AI' so is untouched.)\nhtml = html.replace(/Beacon Point AI(?:['\u2019]s)?/g, m =>\n  /['\u2019]s$/.test(m) ? \"Hut 8's Beacon Point campus\" : \"Hut 8 Beacon Point campus\");\n\nif (html.indexOf('{{') !== -1) {\n  const leftover = (html.match(/\\{\\{[A-Z_]+\\}\\}/g) || []).join(', ');\n  throw new Error('Unsubstituted tokens remain: ' + leftover);\n}\n\nreturn [{ json: { html, dateline: meta.dateline, vol: meta.vol, no: meta.no } }];\n"
       },
       "id": "2e9a5fab-d57a-4ca6-a3a7-758901c2327c",
       "name": "Code \u2014 Inject",
@@ -1048,101 +1048,6 @@
       },
       "id": "83808cd5-7018-4542-b334-b67258ff93e4",
       "webhookId": "131c9570-f615-4204-bd69-6df905f27c98"
-    },
-    {
-      "name": "Fetch Tariff Updates",
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        1900,
-        460
-      ],
-      "alwaysOutputData": true,
-      "onError": "continueRegularOutput",
-      "parameters": {
-        "operation": "search",
-        "base": {
-          "__rl": true,
-          "value": "appoTkXUnQ9aulmkE",
-          "mode": "list",
-          "cachedResultName": "Market Research"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblLLpsGrLBpgezYx",
-          "mode": "list",
-          "cachedResultName": "Market Signals",
-          "cachedResultUrl": "https://airtable.com/appoTkXUnQ9aulmkE/tblLLpsGrLBpgezYx"
-        },
-        "filterByFormula": "AND({Record Type}='Tariff Update', IS_AFTER({Date Detected}, DATEADD(TODAY(),-7,'days')))",
-        "returnAll": true,
-        "options": {}
-      },
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "RoOhi6fE6lI3cI1c",
-          "name": "Airtable Personal Access Token account 2"
-        }
-      },
-      "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6"
-    },
-    {
-      "name": "Prep Tariff Input",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2120,
-        460
-      ],
-      "parameters": {
-        "jsCode": "const raw = $('Fetch Tariff Updates').all().map(i => i.json);\nfunction fld(r, name) { return (r && r.fields && r.fields[name] !== undefined) ? r.fields[name] : (r ? r[name] : undefined); }\nconst recs = raw.filter(r => fld(r, 'Record Type') === 'Tariff Update');\nconst records = recs.map(r => ({\n  iso: fld(r, 'Location') || String(fld(r, 'Company') || '').replace('ISO Tariff Update \u2014 ', '').trim(),\n  detail: fld(r, 'Signal Detail') || '',\n  url: fld(r, 'Source URL') || '',\n}));\nreturn [{ json: { count: records.length, records } }];\n"
-      },
-      "id": "73e85552-5770-44aa-abee-450461643824"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.anthropic.com/v1/messages",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "anthropic-version",
-              "value": "2023-06-01"
-            },
-            {
-              "name": "content-type",
-              "value": "application/json"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, messages: [{ role: 'user', content: 'You are the regulatory analyst for The Interconnect (NexPhase Advisory). The JSON below lists ISO interconnection tariff/manual documents that changed in the last 7 days (each has iso, detail, url). For EACH, return an object { \"iso\": <ISO code>, \"document\": <short document name parsed from the detail>, \"significance\": <one concise sentence on why this change matters to power developers/IPPs> }. Return ONLY a JSON array (empty [] if the input list is empty). No markdown. DOCUMENTS: ' + JSON.stringify($json.records) }] }) }}",
-        "options": {
-          "timeout": 120000
-        }
-      },
-      "name": "Generate Tariff Flags",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        2340,
-        460
-      ],
-      "retryOnFail": true,
-      "maxTries": 2,
-      "waitBetweenTries": 3000,
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "FJA7PZjCaMHaj0Ir",
-          "name": "Header Auth Claude API"
-        }
-      },
-      "onError": "continueRegularOutput",
-      "id": "28b98bb1-5fcd-4cf5-881f-cdced1acf2df"
     }
   ],
   "connections": {
@@ -1486,7 +1391,7 @@
         ],
         [
           {
-            "node": "Fetch Tariff Updates",
+            "node": "Code \u2014 Inject",
             "type": "main",
             "index": 0
           }
@@ -1520,39 +1425,6 @@
         [
           {
             "node": "Notify \u2014 Published",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Fetch Tariff Updates": {
-      "main": [
-        [
-          {
-            "node": "Prep Tariff Input",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prep Tariff Input": {
-      "main": [
-        [
-          {
-            "node": "Generate Tariff Flags",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate Tariff Flags": {
-      "main": [
-        [
-          {
-            "node": "Code \u2014 Inject",
             "type": "main",
             "index": 0
           }
@@ -1784,9 +1656,9 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
-  "activeVersionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
-  "versionCounter": 128,
+  "versionId": "a3f849c5-db09-4ee9-bcf1-fa5a55903808",
+  "activeVersionId": "a3f849c5-db09-4ee9-bcf1-fa5a55903808",
+  "versionCounter": 127,
   "triggerCount": 3,
   "sourceWorkflowId": null,
   "shared": [
@@ -1818,9 +1690,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-19T21:22:31.107Z",
-    "createdAt": "2026-06-19T21:22:31.107Z",
-    "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
+    "updatedAt": "2026-06-14T21:21:15.529Z",
+    "createdAt": "2026-06-14T21:21:15.529Z",
+    "versionId": "a3f849c5-db09-4ee9-bcf1-fa5a55903808",
     "workflowId": "hAbUSOEUyZRxXEWm",
     "nodes": [
       {
@@ -2056,7 +1928,7 @@
       },
       {
         "parameters": {
-          "jsCode": "// interconnect_inject.js \u2014 v2 (index.html \"correct format\")\n// Fetches the locked template from the repo and substitutes section tokens.\n// TOKENS: {{DATELINE}} {{VOL}} {{NO}} {{QUEUE_DATE}} {{LEDE}} {{CONNECTOR_ROWS}}\n//         {{QUEUE_SPOTLIGHT}} {{LEAD_STORY}} {{CAMPUS_STORIES}} {{POLICY_FLAGS}} {{PRICING_CONTEXT}}\n//\n// UPSTREAM CONTRACT:\n//   Set Metadata        -> { dateline, vol, no }\n//   Generate Lede       -> { lede }\n//   Generate Feature    -> { label, title, dek, paragraphs:[], data_label, data_items:[{num,lbl}] }\n//   Generate Signals    -> [ { hed, dek, paragraphs:[] } ]                (Campus Announcements stories)\n//   Generate Connectors -> [ { market_tag, load_name, load_note, mw, supply_count, supply_note, strategic_note } ]\n//   Generate Flags      -> [ { entity, note } ]\n//   Generate Pricing    -> { paragraphs:[] }\n//   Fetch Queue Records -> Airtable rows (Project Name, Region, Generation Type, MW Capacity, Status, POI Name)\n\nconst TEMPLATE_URL = 'https://api.github.com/repos/nexphaseadvisory/Reports/contents/interconnect/templates/weekly-template.html?ref=main';\nconst resp = await this.helpers.httpRequest({\n  method: 'GET', url: TEMPLATE_URL,\n  headers: { 'Accept': 'application/vnd.github.raw', 'User-Agent': 'n8n-interconnect-publisher' },\n  json: false\n});\nlet TEMPLATE;\nif (typeof resp === 'string') TEMPLATE = resp;\nelse if (resp && resp.content) TEMPLATE = Buffer.from(resp.content, 'base64').toString('utf8');\nelse TEMPLATE = String(resp);\nif (TEMPLATE.indexOf('{{LEDE}}') === -1 || TEMPLATE.indexOf('{{LEAD_STORY}}') === -1) {\n  throw new Error('Template fetch failed or missing v2 tokens \u2014 got ' + TEMPLATE.length + ' chars from ' + TEMPLATE_URL);\n}\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  try {\n    const content = (resp && resp.content) || [];\n    let t = content.filter(b => b && b.type === 'text').map(b => b.text).join('');\n    const m = t.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n    if (m) t = m[1];\n    t = t.trim();\n    const start = t.search(/[\\{\\[]/);\n    if (start > 0) t = t.slice(start);\n    try { return JSON.parse(t); } catch (e) {}\n    const last = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']'));\n    if (last >= 0) { try { return JSON.parse(t.slice(0, last + 1)); } catch (e) {} }\n    return null;\n  } catch (e) { return null; }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nfunction paras(arr, firstStyle) {\n  const a = Array.isArray(arr) ? arr : (arr ? [arr] : []);\n  return a.map((p, i) =>\n    '<p class=\"body-text\"' + (i > 0 ? ' style=\"margin-top:8px\"' : (firstStyle || '')) + '>' + esc(p) + '</p>'\n  ).join('\\n      ');\n}\n\n// ---------- pull upstream ----------\nconst meta      = $('Set Metadata').first().json;\nconst lede      = (claudeJSON($('Generate Lede').first().json) || { lede: '' }).lede || '';\nconst feature   = claudeJSON($('Generate Feature').first().json) || {};\nconst stories   = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors= claudeJSON($('Generate Connectors').first().json) || [];\nconst flags     = claudeJSON($('Generate Flags').first().json) || [];\nconst pricing   = claudeJSON($('Generate Pricing').first().json) || { paragraphs: [] };\nconst queueRaw  = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- CONNECTOR_ROWS ----------\nconst connectorRows = (Array.isArray(connectors) ? connectors : []).map(c =>\n  '<tr>\\n' +\n  '          <td><span class=\"market-tag\">' + esc(c.market_tag) + '</span></td>\\n' +\n  '          <td><span class=\"load-name\">' + esc(c.load_name) + '</span>' +\n       (c.load_note ? '<div class=\"queue-note\">' + esc(c.load_note) + '</div>' : '') + '</td>\\n' +\n  '          <td><span class=\"mw-val\">' + esc(c.mw) + '</span></td>\\n' +\n  '          <td><span class=\"supply-count\">' + esc(c.supply_count) + '</span>' +\n       (c.supply_note ? '<div class=\"queue-note\">' + esc(c.supply_note) + '</div>' : '') + '</td>\\n' +\n  '          <td style=\"font-size:11px;color:#374151\">' + esc(c.strategic_note) + '</td>\\n' +\n  '        </tr>'\n).join('\\n        ');\n\n// ---------- QUEUE_SPOTLIGHT (top UNIQUE queue records by MW) ----------\n// Fetch Queue Records can return duplicate rows (same project double-loaded), so\n// dedupe by project name (fallback record id) AFTER sorting desc \u2014 keeping the\n// highest-MW instance \u2014 BEFORE slicing the top 4. Without this the spotlight\n// repeats the single highest-MW project in all 4 slots.\nconst _seenQ = new Set();\nconst queueSpotlight = queueRaw.map(q => ({\n  id: q['Project Name'] || q['POI Name'] || '',\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  region: q['Region'] || '',\n  status: q['Status'] || '',\n  poi: q['POI Name'] || '',\n  _key: String(q['Project Name'] || q['POI Name'] || q['id'] || '').trim().toLowerCase()\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .filter(q => {\n    if (String(q.status || '').trim().toLowerCase() === 'completed') return false; // exclude Completed \u2014 Active only\n    if (!q._key || _seenQ.has(q._key)) return false;\n    _seenQ.add(q._key);\n    return true;\n  })\n  .slice(0, 4)\n  .map(q => {\n    const desc = [\n      (q.mw !== '' ? q.mw + ' MW ' : '') + esc(q.type) + (q.region ? ' \u00b7 ' + esc(q.region) : ''),\n      [esc(q.status), esc(q.poi)].filter(Boolean).join(' \u00b7 ')\n    ].filter(Boolean).join('<br>');\n    return '<div class=\"qs-item\">\\n' +\n      '            <div class=\"qs-id\">' + esc(q.id) + '</div>\\n' +\n      '            <div class=\"qs-desc\">' + desc + '</div>\\n' +\n      '          </div>';\n  }).join('\\n          ');\n\n// ---------- LEAD_STORY (feature analysis + data-box) ----------\nconst dataItems = (Array.isArray(feature.data_items) ? feature.data_items : []).map(di =>\n  '<div class=\"data-item\"><div class=\"num\">' + esc(di.num) + '</div><div class=\"lbl\">' + esc(di.lbl) + '</div></div>'\n).join('\\n          ');\nconst dataBox = (feature.data_label || dataItems) ?\n  '\\n      <div class=\"data-box\">\\n' +\n  '        <div class=\"data-label\">' + esc(feature.data_label) + '</div>\\n' +\n  '        <div class=\"data-grid\">\\n          ' + dataItems + '\\n        </div>\\n' +\n  '      </div>' : '';\nconst leadStory =\n  '<div class=\"sec\">\\n' +\n  '      <div class=\"sec-label\">' + esc(feature.label || 'Interconnection') + '</div>\\n' +\n  '      <h2>' + esc(feature.title || '') + '</h2>\\n' +\n  '    </div>\\n\\n' +\n  '    <div class=\"lead-story\">\\n' +\n  '      <p class=\"dek\">' + esc(feature.dek || '') + '</p>\\n' +\n  '      ' + paras(feature.paragraphs) + dataBox + '\\n' +\n  '    </div>';\n\n// ---------- CAMPUS_STORIES (2-col story grid) ----------\nconst campusStories = (Array.isArray(stories) ? stories : []).map(s =>\n  '<div class=\"story\">\\n' +\n  '        <div class=\"hed\">' + esc(s.hed || s.headline) + '</div>\\n' +\n  '        <div class=\"dek\">' + esc(s.dek || '') + '</div>\\n' +\n  '        ' + paras(s.paragraphs || s.detail) + '\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- POLICY_FLAGS (ISO tariff updates prepended) ----------\nlet tariffFlags = [];\ntry { const tf = claudeJSON($('Generate Tariff Flags').first().json); if (Array.isArray(tf)) tariffFlags = tf; } catch (e) { tariffFlags = []; }\nconst renderFlag = (co, note) =>\n  '<div class=\"flag-item\">\\n' +\n  '        <span class=\"flag-co\">' + esc(co) + '</span>\\n' +\n  '        <span class=\"flag-note\">' + esc(note) + '</span>\\n' +\n  '      </div>';\nconst tariffItems = (Array.isArray(tariffFlags) ? tariffFlags : []).map(t =>\n  renderFlag('[' + (t.iso || 'ISO') + ' tariff] ' + (t.document || ''), t.significance || ''));\nconst normalItems = (Array.isArray(flags) ? flags : []).map(f => renderFlag(f.entity, f.note));\nconst policyFlags = tariffItems.concat(normalItems).join('\\n      ');\n\n// ---------- PRICING_CONTEXT ----------\nconst pricingHtml = paras(pricing.paragraphs || pricing);\n\n// ---------- QUEUE_DATE ----------\nconst months = ['January','February','March','April','May','June','July','August','September','October','November','December'];\nconst now = new Date();\nconst queueDate = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();\n\n// ---------- inject ----------\nlet html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{QUEUE_DATE}}').join(esc(queueDate))\n  .split('{{LEDE}}').join(esc(lede))\n  .split('{{CONNECTOR_ROWS}}').join(connectorRows)\n  .split('{{QUEUE_SPOTLIGHT}}').join(queueSpotlight)\n  .split('{{LEAD_STORY}}').join(leadStory)\n  .split('{{CAMPUS_STORIES}}').join(campusStories)\n  .split('{{POLICY_FLAGS}}').join(policyFlags)\n  .split('{{PRICING_CONTEXT}}').join(pricingHtml);\n\n// Deterministic entity guarantee: 'Beacon Point AI' must NEVER appear as a standalone\n// entity (it is Hut 8's campus). The Generate prompts enforce this, but to guarantee\n// it even on an LLM slip, normalize any residual standalone mention in the final HTML.\n// (Already-correct 'Hut 8 Beacon Point campus' contains no 'Beacon Point AI' so is untouched.)\nhtml = html.replace(/Beacon Point AI(?:['\u2019]s)?/g, m =>\n  /['\u2019]s$/.test(m) ? \"Hut 8's Beacon Point campus\" : \"Hut 8 Beacon Point campus\");\n\nif (html.indexOf('{{') !== -1) {\n  const leftover = (html.match(/\\{\\{[A-Z_]+\\}\\}/g) || []).join(', ');\n  throw new Error('Unsubstituted tokens remain: ' + leftover);\n}\n\nreturn [{ json: { html, dateline: meta.dateline, vol: meta.vol, no: meta.no } }];\n"
+          "jsCode": "// interconnect_inject.js \u2014 v2 (index.html \"correct format\")\n// Fetches the locked template from the repo and substitutes section tokens.\n// TOKENS: {{DATELINE}} {{VOL}} {{NO}} {{QUEUE_DATE}} {{LEDE}} {{CONNECTOR_ROWS}}\n//         {{QUEUE_SPOTLIGHT}} {{LEAD_STORY}} {{CAMPUS_STORIES}} {{POLICY_FLAGS}} {{PRICING_CONTEXT}}\n//\n// UPSTREAM CONTRACT:\n//   Set Metadata        -> { dateline, vol, no }\n//   Generate Lede       -> { lede }\n//   Generate Feature    -> { label, title, dek, paragraphs:[], data_label, data_items:[{num,lbl}] }\n//   Generate Signals    -> [ { hed, dek, paragraphs:[] } ]                (Campus Announcements stories)\n//   Generate Connectors -> [ { market_tag, load_name, load_note, mw, supply_count, supply_note, strategic_note } ]\n//   Generate Flags      -> [ { entity, note } ]\n//   Generate Pricing    -> { paragraphs:[] }\n//   Fetch Queue Records -> Airtable rows (Project Name, Region, Generation Type, MW Capacity, Status, POI Name)\n\nconst TEMPLATE_URL = 'https://api.github.com/repos/nexphaseadvisory/Reports/contents/interconnect/templates/weekly-template.html?ref=main';\nconst resp = await this.helpers.httpRequest({\n  method: 'GET', url: TEMPLATE_URL,\n  headers: { 'Accept': 'application/vnd.github.raw', 'User-Agent': 'n8n-interconnect-publisher' },\n  json: false\n});\nlet TEMPLATE;\nif (typeof resp === 'string') TEMPLATE = resp;\nelse if (resp && resp.content) TEMPLATE = Buffer.from(resp.content, 'base64').toString('utf8');\nelse TEMPLATE = String(resp);\nif (TEMPLATE.indexOf('{{LEDE}}') === -1 || TEMPLATE.indexOf('{{LEAD_STORY}}') === -1) {\n  throw new Error('Template fetch failed or missing v2 tokens \u2014 got ' + TEMPLATE.length + ' chars from ' + TEMPLATE_URL);\n}\n\n// ---------- helpers ----------\nfunction claudeJSON(resp) {\n  try {\n    const content = (resp && resp.content) || [];\n    let t = content.filter(b => b && b.type === 'text').map(b => b.text).join('');\n    const m = t.match(/```(?:json)?\\s*([\\s\\S]*?)```/i);\n    if (m) t = m[1];\n    t = t.trim();\n    const start = t.search(/[\\{\\[]/);\n    if (start > 0) t = t.slice(start);\n    try { return JSON.parse(t); } catch (e) {}\n    const last = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']'));\n    if (last >= 0) { try { return JSON.parse(t.slice(0, last + 1)); } catch (e) {} }\n    return null;\n  } catch (e) { return null; }\n}\nfunction esc(s) {\n  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\n}\nfunction paras(arr, firstStyle) {\n  const a = Array.isArray(arr) ? arr : (arr ? [arr] : []);\n  return a.map((p, i) =>\n    '<p class=\"body-text\"' + (i > 0 ? ' style=\"margin-top:8px\"' : (firstStyle || '')) + '>' + esc(p) + '</p>'\n  ).join('\\n      ');\n}\n\n// ---------- pull upstream ----------\nconst meta      = $('Set Metadata').first().json;\nconst lede      = (claudeJSON($('Generate Lede').first().json) || { lede: '' }).lede || '';\nconst feature   = claudeJSON($('Generate Feature').first().json) || {};\nconst stories   = claudeJSON($('Generate Signals').first().json) || [];\nconst connectors= claudeJSON($('Generate Connectors').first().json) || [];\nconst flags     = claudeJSON($('Generate Flags').first().json) || [];\nconst pricing   = claudeJSON($('Generate Pricing').first().json) || { paragraphs: [] };\nconst queueRaw  = $('Fetch Queue Records').all().map(i => i.json);\n\n// ---------- CONNECTOR_ROWS ----------\nconst connectorRows = (Array.isArray(connectors) ? connectors : []).map(c =>\n  '<tr>\\n' +\n  '          <td><span class=\"market-tag\">' + esc(c.market_tag) + '</span></td>\\n' +\n  '          <td><span class=\"load-name\">' + esc(c.load_name) + '</span>' +\n       (c.load_note ? '<div class=\"queue-note\">' + esc(c.load_note) + '</div>' : '') + '</td>\\n' +\n  '          <td><span class=\"mw-val\">' + esc(c.mw) + '</span></td>\\n' +\n  '          <td><span class=\"supply-count\">' + esc(c.supply_count) + '</span>' +\n       (c.supply_note ? '<div class=\"queue-note\">' + esc(c.supply_note) + '</div>' : '') + '</td>\\n' +\n  '          <td style=\"font-size:11px;color:#374151\">' + esc(c.strategic_note) + '</td>\\n' +\n  '        </tr>'\n).join('\\n        ');\n\n// ---------- QUEUE_SPOTLIGHT (top UNIQUE queue records by MW) ----------\n// Fetch Queue Records can return duplicate rows (same project double-loaded), so\n// dedupe by project name (fallback record id) AFTER sorting desc \u2014 keeping the\n// highest-MW instance \u2014 BEFORE slicing the top 4. Without this the spotlight\n// repeats the single highest-MW project in all 4 slots.\nconst _seenQ = new Set();\nconst queueSpotlight = queueRaw.map(q => ({\n  id: q['Project Name'] || q['POI Name'] || '',\n  type: q['Generation Type'] || q['Project Type'] || '',\n  mw: (q['MW Capacity'] != null ? q['MW Capacity'] : ''),\n  region: q['Region'] || '',\n  status: q['Status'] || '',\n  poi: q['POI Name'] || '',\n  _key: String(q['Project Name'] || q['POI Name'] || q['id'] || '').trim().toLowerCase()\n}))\n  .sort((a, b) => (parseFloat(b.mw) || 0) - (parseFloat(a.mw) || 0))\n  .filter(q => {\n    if (String(q.status || '').trim().toLowerCase() === 'completed') return false; // exclude Completed \u2014 Active only\n    if (!q._key || _seenQ.has(q._key)) return false;\n    _seenQ.add(q._key);\n    return true;\n  })\n  .slice(0, 4)\n  .map(q => {\n    const desc = [\n      (q.mw !== '' ? q.mw + ' MW ' : '') + esc(q.type) + (q.region ? ' \u00b7 ' + esc(q.region) : ''),\n      [esc(q.status), esc(q.poi)].filter(Boolean).join(' \u00b7 ')\n    ].filter(Boolean).join('<br>');\n    return '<div class=\"qs-item\">\\n' +\n      '            <div class=\"qs-id\">' + esc(q.id) + '</div>\\n' +\n      '            <div class=\"qs-desc\">' + desc + '</div>\\n' +\n      '          </div>';\n  }).join('\\n          ');\n\n// ---------- LEAD_STORY (feature analysis + data-box) ----------\nconst dataItems = (Array.isArray(feature.data_items) ? feature.data_items : []).map(di =>\n  '<div class=\"data-item\"><div class=\"num\">' + esc(di.num) + '</div><div class=\"lbl\">' + esc(di.lbl) + '</div></div>'\n).join('\\n          ');\nconst dataBox = (feature.data_label || dataItems) ?\n  '\\n      <div class=\"data-box\">\\n' +\n  '        <div class=\"data-label\">' + esc(feature.data_label) + '</div>\\n' +\n  '        <div class=\"data-grid\">\\n          ' + dataItems + '\\n        </div>\\n' +\n  '      </div>' : '';\nconst leadStory =\n  '<div class=\"sec\">\\n' +\n  '      <div class=\"sec-label\">' + esc(feature.label || 'Interconnection') + '</div>\\n' +\n  '      <h2>' + esc(feature.title || '') + '</h2>\\n' +\n  '    </div>\\n\\n' +\n  '    <div class=\"lead-story\">\\n' +\n  '      <p class=\"dek\">' + esc(feature.dek || '') + '</p>\\n' +\n  '      ' + paras(feature.paragraphs) + dataBox + '\\n' +\n  '    </div>';\n\n// ---------- CAMPUS_STORIES (2-col story grid) ----------\nconst campusStories = (Array.isArray(stories) ? stories : []).map(s =>\n  '<div class=\"story\">\\n' +\n  '        <div class=\"hed\">' + esc(s.hed || s.headline) + '</div>\\n' +\n  '        <div class=\"dek\">' + esc(s.dek || '') + '</div>\\n' +\n  '        ' + paras(s.paragraphs || s.detail) + '\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- POLICY_FLAGS ----------\nconst policyFlags = (Array.isArray(flags) ? flags : []).map(f =>\n  '<div class=\"flag-item\">\\n' +\n  '        <span class=\"flag-co\">' + esc(f.entity) + '</span>\\n' +\n  '        <span class=\"flag-note\">' + esc(f.note) + '</span>\\n' +\n  '      </div>'\n).join('\\n      ');\n\n// ---------- PRICING_CONTEXT ----------\nconst pricingHtml = paras(pricing.paragraphs || pricing);\n\n// ---------- QUEUE_DATE ----------\nconst months = ['January','February','March','April','May','June','July','August','September','October','November','December'];\nconst now = new Date();\nconst queueDate = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();\n\n// ---------- inject ----------\nlet html = TEMPLATE\n  .split('{{DATELINE}}').join(esc(meta.dateline))\n  .split('{{VOL}}').join(esc(meta.vol))\n  .split('{{NO}}').join(esc(meta.no))\n  .split('{{QUEUE_DATE}}').join(esc(queueDate))\n  .split('{{LEDE}}').join(esc(lede))\n  .split('{{CONNECTOR_ROWS}}').join(connectorRows)\n  .split('{{QUEUE_SPOTLIGHT}}').join(queueSpotlight)\n  .split('{{LEAD_STORY}}').join(leadStory)\n  .split('{{CAMPUS_STORIES}}').join(campusStories)\n  .split('{{POLICY_FLAGS}}').join(policyFlags)\n  .split('{{PRICING_CONTEXT}}').join(pricingHtml);\n\n// Deterministic entity guarantee: 'Beacon Point AI' must NEVER appear as a standalone\n// entity (it is Hut 8's campus). The Generate prompts enforce this, but to guarantee\n// it even on an LLM slip, normalize any residual standalone mention in the final HTML.\n// (Already-correct 'Hut 8 Beacon Point campus' contains no 'Beacon Point AI' so is untouched.)\nhtml = html.replace(/Beacon Point AI(?:['\u2019]s)?/g, m =>\n  /['\u2019]s$/.test(m) ? \"Hut 8's Beacon Point campus\" : \"Hut 8 Beacon Point campus\");\n\nif (html.indexOf('{{') !== -1) {\n  const leftover = (html.match(/\\{\\{[A-Z_]+\\}\\}/g) || []).join(', ');\n  throw new Error('Unsubstituted tokens remain: ' + leftover);\n}\n\nreturn [{ json: { html, dateline: meta.dateline, vol: meta.vol, no: meta.no } }];\n"
         },
         "id": "2e9a5fab-d57a-4ca6-a3a7-758901c2327c",
         "name": "Code \u2014 Inject",
@@ -2864,101 +2736,6 @@
         },
         "id": "83808cd5-7018-4542-b334-b67258ff93e4",
         "webhookId": "131c9570-f615-4204-bd69-6df905f27c98"
-      },
-      {
-        "name": "Fetch Tariff Updates",
-        "type": "n8n-nodes-base.airtable",
-        "typeVersion": 2.1,
-        "position": [
-          1900,
-          460
-        ],
-        "alwaysOutputData": true,
-        "onError": "continueRegularOutput",
-        "parameters": {
-          "operation": "search",
-          "base": {
-            "__rl": true,
-            "value": "appoTkXUnQ9aulmkE",
-            "mode": "list",
-            "cachedResultName": "Market Research"
-          },
-          "table": {
-            "__rl": true,
-            "value": "tblLLpsGrLBpgezYx",
-            "mode": "list",
-            "cachedResultName": "Market Signals",
-            "cachedResultUrl": "https://airtable.com/appoTkXUnQ9aulmkE/tblLLpsGrLBpgezYx"
-          },
-          "filterByFormula": "AND({Record Type}='Tariff Update', IS_AFTER({Date Detected}, DATEADD(TODAY(),-7,'days')))",
-          "returnAll": true,
-          "options": {}
-        },
-        "credentials": {
-          "airtableTokenApi": {
-            "id": "RoOhi6fE6lI3cI1c",
-            "name": "Airtable Personal Access Token account 2"
-          }
-        },
-        "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6"
-      },
-      {
-        "name": "Prep Tariff Input",
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          2120,
-          460
-        ],
-        "parameters": {
-          "jsCode": "const raw = $('Fetch Tariff Updates').all().map(i => i.json);\nfunction fld(r, name) { return (r && r.fields && r.fields[name] !== undefined) ? r.fields[name] : (r ? r[name] : undefined); }\nconst recs = raw.filter(r => fld(r, 'Record Type') === 'Tariff Update');\nconst records = recs.map(r => ({\n  iso: fld(r, 'Location') || String(fld(r, 'Company') || '').replace('ISO Tariff Update \u2014 ', '').trim(),\n  detail: fld(r, 'Signal Detail') || '',\n  url: fld(r, 'Source URL') || '',\n}));\nreturn [{ json: { count: records.length, records } }];\n"
-        },
-        "id": "73e85552-5770-44aa-abee-450461643824"
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "https://api.anthropic.com/v1/messages",
-          "authentication": "genericCredentialType",
-          "genericAuthType": "httpHeaderAuth",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "anthropic-version",
-                "value": "2023-06-01"
-              },
-              {
-                "name": "content-type",
-                "value": "application/json"
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 800, messages: [{ role: 'user', content: 'You are the regulatory analyst for The Interconnect (NexPhase Advisory). The JSON below lists ISO interconnection tariff/manual documents that changed in the last 7 days (each has iso, detail, url). For EACH, return an object { \"iso\": <ISO code>, \"document\": <short document name parsed from the detail>, \"significance\": <one concise sentence on why this change matters to power developers/IPPs> }. Return ONLY a JSON array (empty [] if the input list is empty). No markdown. DOCUMENTS: ' + JSON.stringify($json.records) }] }) }}",
-          "options": {
-            "timeout": 120000
-          }
-        },
-        "name": "Generate Tariff Flags",
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
-        "position": [
-          2340,
-          460
-        ],
-        "retryOnFail": true,
-        "maxTries": 2,
-        "waitBetweenTries": 3000,
-        "credentials": {
-          "httpHeaderAuth": {
-            "id": "FJA7PZjCaMHaj0Ir",
-            "name": "Header Auth Claude API"
-          }
-        },
-        "onError": "continueRegularOutput",
-        "id": "28b98bb1-5fcd-4cf5-881f-cdced1acf2df"
       }
     ],
     "connections": {
@@ -3302,7 +3079,7 @@
           ],
           [
             {
-              "node": "Fetch Tariff Updates",
+              "node": "Code \u2014 Inject",
               "type": "main",
               "index": 0
             }
@@ -3341,39 +3118,6 @@
             }
           ]
         ]
-      },
-      "Fetch Tariff Updates": {
-        "main": [
-          [
-            {
-              "node": "Prep Tariff Input",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Prep Tariff Input": {
-        "main": [
-          [
-            {
-              "node": "Generate Tariff Flags",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Generate Tariff Flags": {
-        "main": [
-          [
-            {
-              "node": "Code \u2014 Inject",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
       }
     },
     "nodeGroups": [],
@@ -3383,34 +3127,18 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-19T21:22:31.394Z",
-        "id": 225,
+        "createdAt": "2026-06-14T21:21:15.927Z",
+        "id": 217,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
+        "versionId": "a3f849c5-db09-4ee9-bcf1-fa5a55903808",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-19T21:23:52.536Z",
-        "id": 227,
+        "createdAt": "2026-06-14T21:21:15.830Z",
+        "id": 216,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
-        "event": "activated",
-        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
-      },
-      {
-        "createdAt": "2026-06-19T21:22:31.289Z",
-        "id": 224,
-        "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
-        "event": "deactivated",
-        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
-      },
-      {
-        "createdAt": "2026-06-19T21:23:51.518Z",
-        "id": 226,
-        "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "43576048-5c27-4d4b-b1dd-edfff224a46b",
+        "versionId": "a3f849c5-db09-4ee9-bcf1-fa5a55903808",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       }
