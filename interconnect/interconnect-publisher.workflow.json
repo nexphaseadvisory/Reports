@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T01:50:16.189Z",
+  "updatedAt": "2026-06-20T02:05:37.140Z",
   "createdAt": "2026-06-07T23:56:43.555Z",
   "id": "hAbUSOEUyZRxXEWm",
   "name": "Interconnect Publisher \u2014 Weekly",
@@ -303,7 +303,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Persist the generated draft in workflow static data, keyed by vol/no.\nconst sd = $getWorkflowStaticData('global');\nconst j = $input.first().json;\nconst rec = { html: j.html, filename: j.filename, vol: j.vol, no: j.no, dateline: j.dateline, warns: j.warns || [] };\nsd['draft_' + j.vol + '_' + j.no] = rec;\nsd.latestDraft = rec;\nreturn [{ json: j }];\n"
+        "jsCode": "// Persist the generated draft in workflow static data, keyed by vol/no.\n// Also stash what the PUBLISH path needs for the issue increment + Last-Featured\n// write-backs (which now run on publish, not on draft): used record ids + next issue.\nconst sd = $getWorkflowStaticData('global');\nconst j = $input.first().json;\nconst usedSignalIds = (($('Select Signals').first().json.top14) || []).map(t => t.id).filter(Boolean);\nlet usedQueueIds = [];\ntry { usedQueueIds = ($('Code \u2014 Inject').first().json.usedQueueIds) || []; } catch (e) {}\nconst meta = $('Set Metadata').first().json;\nconst rec = {\n  html: j.html, filename: j.filename, vol: j.vol, no: j.no, dateline: j.dateline, warns: j.warns || [],\n  usedSignalIds, usedQueueIds, nextIssue: meta.nextIssue, settingsRecordId: meta.settingsRecordId\n};\nsd['draft_' + j.vol + '_' + j.no] = rec;\nsd.latestDraft = rec;\nreturn [{ json: j }];\n"
       },
       "id": "8755ea00-7036-4ad5-b961-efb91a9c82c1",
       "name": "Store Draft",
@@ -1201,8 +1201,8 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "id": "={{ $('Set Metadata').first().json.settingsRecordId }}",
-            "fldoWs0KUr7XuEy8j": "={{ $('Set Metadata').first().json.nextIssue }}",
+            "id": "={{ $('Read Draft').first().json.settingsRecordId }}",
+            "fldoWs0KUr7XuEy8j": "={{ $('Read Draft').first().json.nextIssue }}",
             "fldK3VhC8CwD9lLYN": "={{ $now.toFormat('yyyy-LL-dd') }}"
           },
           "matchingColumns": [
@@ -1263,7 +1263,7 @@
         1320
       ],
       "parameters": {
-        "jsCode": "const ids = (($('Select Signals').first().json.top14) || []).map(t => t.id).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
+        "jsCode": "const ids = (($('Read Draft').first().json.usedSignalIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
       },
       "id": "9f3649e1-3001-4796-b7a4-6dc957b19130"
     },
@@ -1276,7 +1276,7 @@
         1460
       ],
       "parameters": {
-        "jsCode": "const ids = (($('Code \\u2014 Inject').first().json.usedQueueIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
+        "jsCode": "const ids = (($('Read Draft').first().json.usedQueueIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
       },
       "id": "873118d7-0c86-428f-84e2-320a9bd3f4c2"
     },
@@ -1529,21 +1529,6 @@
         [
           {
             "node": "GitHub \u2014 Draft",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Update Settings",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Expand MS IDs",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Expand Queue IDs",
             "type": "main",
             "index": 0
           }
@@ -1814,6 +1799,21 @@
         [
           {
             "node": "Notify \u2014 Published",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update Settings",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Expand MS IDs",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Expand Queue IDs",
             "type": "main",
             "index": 0
           }
@@ -2122,9 +2122,9 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
-  "activeVersionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
-  "versionCounter": 129,
+  "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
+  "activeVersionId": "501dc0a7-0b8d-4617-a015-01d388549091",
+  "versionCounter": 130,
   "triggerCount": 3,
   "sourceWorkflowId": null,
   "shared": [
@@ -2156,9 +2156,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-20T01:50:16.192Z",
-    "createdAt": "2026-06-20T01:50:16.192Z",
-    "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
+    "updatedAt": "2026-06-20T02:05:37.144Z",
+    "createdAt": "2026-06-20T02:05:37.144Z",
+    "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
     "workflowId": "hAbUSOEUyZRxXEWm",
     "nodes": [
       {
@@ -2457,7 +2457,7 @@
       },
       {
         "parameters": {
-          "jsCode": "// Persist the generated draft in workflow static data, keyed by vol/no.\nconst sd = $getWorkflowStaticData('global');\nconst j = $input.first().json;\nconst rec = { html: j.html, filename: j.filename, vol: j.vol, no: j.no, dateline: j.dateline, warns: j.warns || [] };\nsd['draft_' + j.vol + '_' + j.no] = rec;\nsd.latestDraft = rec;\nreturn [{ json: j }];\n"
+          "jsCode": "// Persist the generated draft in workflow static data, keyed by vol/no.\n// Also stash what the PUBLISH path needs for the issue increment + Last-Featured\n// write-backs (which now run on publish, not on draft): used record ids + next issue.\nconst sd = $getWorkflowStaticData('global');\nconst j = $input.first().json;\nconst usedSignalIds = (($('Select Signals').first().json.top14) || []).map(t => t.id).filter(Boolean);\nlet usedQueueIds = [];\ntry { usedQueueIds = ($('Code \u2014 Inject').first().json.usedQueueIds) || []; } catch (e) {}\nconst meta = $('Set Metadata').first().json;\nconst rec = {\n  html: j.html, filename: j.filename, vol: j.vol, no: j.no, dateline: j.dateline, warns: j.warns || [],\n  usedSignalIds, usedQueueIds, nextIssue: meta.nextIssue, settingsRecordId: meta.settingsRecordId\n};\nsd['draft_' + j.vol + '_' + j.no] = rec;\nsd.latestDraft = rec;\nreturn [{ json: j }];\n"
         },
         "id": "8755ea00-7036-4ad5-b961-efb91a9c82c1",
         "name": "Store Draft",
@@ -3355,8 +3355,8 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "id": "={{ $('Set Metadata').first().json.settingsRecordId }}",
-              "fldoWs0KUr7XuEy8j": "={{ $('Set Metadata').first().json.nextIssue }}",
+              "id": "={{ $('Read Draft').first().json.settingsRecordId }}",
+              "fldoWs0KUr7XuEy8j": "={{ $('Read Draft').first().json.nextIssue }}",
               "fldK3VhC8CwD9lLYN": "={{ $now.toFormat('yyyy-LL-dd') }}"
             },
             "matchingColumns": [
@@ -3417,7 +3417,7 @@
           1320
         ],
         "parameters": {
-          "jsCode": "const ids = (($('Select Signals').first().json.top14) || []).map(t => t.id).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
+          "jsCode": "const ids = (($('Read Draft').first().json.usedSignalIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
         },
         "id": "9f3649e1-3001-4796-b7a4-6dc957b19130"
       },
@@ -3430,7 +3430,7 @@
           1460
         ],
         "parameters": {
-          "jsCode": "const ids = (($('Code \\u2014 Inject').first().json.usedQueueIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
+          "jsCode": "const ids = (($('Read Draft').first().json.usedQueueIds) || []).filter(Boolean);\nconst today = new Date().toISOString().slice(0, 10);\nreturn ids.map(id => ({ json: { record_id: id, today } }));\n"
         },
         "id": "873118d7-0c86-428f-84e2-320a9bd3f4c2"
       },
@@ -3683,21 +3683,6 @@
           [
             {
               "node": "GitHub \u2014 Draft",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Update Settings",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Expand MS IDs",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Expand Queue IDs",
               "type": "main",
               "index": 0
             }
@@ -3970,6 +3955,21 @@
               "node": "Notify \u2014 Published",
               "type": "main",
               "index": 0
+            },
+            {
+              "node": "Update Settings",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Expand MS IDs",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Expand Queue IDs",
+              "type": "main",
+              "index": 0
             }
           ]
         ]
@@ -4059,34 +4059,34 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-20T01:50:16.550Z",
-        "id": 229,
+        "createdAt": "2026-06-20T02:05:37.468Z",
+        "id": 237,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
+        "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T01:50:18.103Z",
-        "id": 231,
+        "createdAt": "2026-06-20T02:05:38.638Z",
+        "id": 239,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
+        "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T01:50:16.419Z",
-        "id": 228,
+        "createdAt": "2026-06-20T02:05:37.342Z",
+        "id": 236,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
+        "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T01:50:17.108Z",
-        "id": 230,
+        "createdAt": "2026-06-20T02:05:38.093Z",
+        "id": 238,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "6c9392db-9dfc-465f-ad77-7a1aaf709679",
+        "versionId": "501dc0a7-0b8d-4617-a015-01d388549091",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       }
