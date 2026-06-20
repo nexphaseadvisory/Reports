@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T19:37:57.334Z",
+  "updatedAt": "2026-06-20T03:32:59.167Z",
   "createdAt": "2026-06-07T23:56:43.555Z",
   "id": "hAbUSOEUyZRxXEWm",
   "name": "Interconnect Publisher \u2014 Weekly",
@@ -75,19 +75,11 @@
           "mode": "id"
         },
         "returnAll": false,
-        "limit": 100,
+        "limit": 300,
         "options": {
           "fields": []
         },
-        "filterByFormula": "AND(NOT({Status} = 'Completed'), OR({Last Featured} = BLANK(), IS_BEFORE({Last Featured}, DATEADD(TODAY(), -21, 'days'))), NOT(OR({State}='Quebec',{State}='NB',{State}='Ontario',{State}='BC',{State}='AB',{State}='MB',{State}='SK',{State}='NS',{State}='PE',{State}='NL',{State}='YT',{State}='NT',{State}='NU',{State}='AESO')))",
-        "sort": {
-          "property": [
-            {
-              "field": "Created",
-              "direction": "desc"
-            }
-          ]
-        }
+        "filterByFormula": "AND(NOT({Status} = 'Completed'), OR({Last Featured} = BLANK(), IS_BEFORE({Last Featured}, DATEADD(TODAY(), -21, 'days'))), OR({Region}='MISO',{Region}='PJM',{Region}='ERCOT',{Region}='CAISO',{Region}='SPP',{Region}='NYISO',{Region}='ISONE',{Region}='ISO-NE',{Region}='Southeast',{Region}='SERC',{Region}='West',{Region}='WECC',{Region}='FRCC'), NOT(OR({State}='QC',{State}='Quebec',{State}='ON',{State}='Ontario',{State}='AB',{State}='Alberta',{State}='BC',{State}='MB',{State}='Manitoba',{State}='SK',{State}='Saskatchewan',{State}='NS',{State}='NB',{State}='New Brunswick',{State}='NL',{State}='PE',{State}='YT',{State}='NT',{State}='NU')))"
       },
       "id": "42c55d97-d34e-4427-aebd-63216e22df71",
       "name": "Fetch Queue Records",
@@ -2142,9 +2134,9 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
-  "activeVersionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
-  "versionCounter": 135,
+  "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+  "activeVersionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+  "versionCounter": 134,
   "triggerCount": 3,
   "sourceWorkflowId": null,
   "shared": [
@@ -2176,9 +2168,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-20T19:37:57.337Z",
-    "createdAt": "2026-06-20T19:37:57.337Z",
-    "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
+    "updatedAt": "2026-06-20T03:32:59.172Z",
+    "createdAt": "2026-06-20T03:32:59.172Z",
+    "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
     "workflowId": "hAbUSOEUyZRxXEWm",
     "nodes": [
       {
@@ -2249,19 +2241,11 @@
             "mode": "id"
           },
           "returnAll": false,
-          "limit": 100,
+          "limit": 300,
           "options": {
             "fields": []
           },
-          "filterByFormula": "AND(NOT({Status} = 'Completed'), OR({Last Featured} = BLANK(), IS_BEFORE({Last Featured}, DATEADD(TODAY(), -21, 'days'))), NOT(OR({State}='Quebec',{State}='NB',{State}='Ontario',{State}='BC',{State}='AB',{State}='MB',{State}='SK',{State}='NS',{State}='PE',{State}='NL',{State}='YT',{State}='NT',{State}='NU',{State}='AESO')))",
-          "sort": {
-            "property": [
-              {
-                "field": "Created",
-                "direction": "desc"
-              }
-            ]
-          }
+          "filterByFormula": "AND(NOT({Status} = 'Completed'), OR({Last Featured} = BLANK(), IS_BEFORE({Last Featured}, DATEADD(TODAY(), -21, 'days'))), OR({Region}='MISO',{Region}='PJM',{Region}='ERCOT',{Region}='CAISO',{Region}='SPP',{Region}='NYISO',{Region}='ISONE',{Region}='ISO-NE',{Region}='Southeast',{Region}='SERC',{Region}='West',{Region}='WECC',{Region}='FRCC'), NOT(OR({State}='QC',{State}='Quebec',{State}='ON',{State}='Ontario',{State}='AB',{State}='Alberta',{State}='BC',{State}='MB',{State}='Manitoba',{State}='SK',{State}='Saskatchewan',{State}='NS',{State}='NB',{State}='New Brunswick',{State}='NL',{State}='PE',{State}='YT',{State}='NT',{State}='NU')))"
         },
         "id": "42c55d97-d34e-4427-aebd-63216e22df71",
         "name": "Fetch Queue Records",
@@ -4099,34 +4083,34 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-20T19:37:57.614Z",
-        "id": 261,
+        "createdAt": "2026-06-20T03:32:59.617Z",
+        "id": 257,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
+        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T19:37:58.835Z",
-        "id": 263,
+        "createdAt": "2026-06-20T03:33:01.604Z",
+        "id": 259,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
+        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T19:37:57.506Z",
-        "id": 260,
+        "createdAt": "2026-06-20T03:32:59.490Z",
+        "id": 256,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
+        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T19:37:58.208Z",
-        "id": 262,
+        "createdAt": "2026-06-20T03:33:00.561Z",
+        "id": 258,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "681d8f10-8754-4c4d-94e2-b1c246121092",
+        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       }
