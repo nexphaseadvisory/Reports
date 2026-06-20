@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T21:27:49.895Z",
+  "updatedAt": "2026-06-20T20:47:53.139Z",
   "createdAt": "2026-06-07T23:56:43.555Z",
   "id": "hAbUSOEUyZRxXEWm",
   "name": "Interconnect Publisher \u2014 Weekly",
@@ -109,7 +109,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Fetch Settings is an HTTP Request node (Airtable REST) -> json = { records:[{id,fields:{...}}] }.\n// Fail-safe: a missing/failed/timed-out lookup falls back to hardcoded defaults so the workflow\n// NEVER crashes on a Settings read (Volume 1 / Issue 3 / known record id).\nlet rec = {};\ntry {\n  const j = (($('Fetch Settings').first() || {}).json) || {};\n  const r0 = (j && Array.isArray(j.records) && j.records[0]) ? j.records[0] : null;\n  if (r0) rec = Object.assign({ id: r0.id }, r0.fields || {});\n  else if (j && (j['Issue Number'] != null || j['Volume'] != null)) rec = j; // tolerate flattened shape\n} catch (e) {}\nfunction num(v, dflt) { const n = parseInt(v, 10); return isNaN(n) ? dflt : n; }\nconst vol = num(rec['Volume'], 1);\nconst no  = num(rec['Issue Number'], 3);          // THIS issue renders this number\nconst settingsRecordId = rec['id'] || 'recq8dVzApGmqcWe2'; // fallback to the known Settings row id\nreturn [{ json: { dateline, vol, no, nextIssue: no + 1, settingsRecordId } }];\n"
+        "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Pull current Volume + Issue Number from the Settings table (Fetch Settings).\nconst s = (($('Fetch Settings').first() || {}).json) || {};\nfunction num(v, dflt) { const n = parseInt(v, 10); return isNaN(n) ? dflt : n; }\nconst vol = num(s['Volume'], 1);\nconst no  = num(s['Issue Number'], 3);          // THIS issue renders this number\nconst settingsRecordId = s['id'] || '';\nreturn [{ json: { dateline, vol, no, nextIssue: no + 1, settingsRecordId } }];\n"
       },
       "id": "fbdbcda1-49cd-44e7-aba9-1b18b5051744",
       "name": "Set Metadata",
@@ -1163,34 +1163,28 @@
     },
     {
       "name": "Fetch Settings",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
       "position": [
         2960,
         440
       ],
       "alwaysOutputData": true,
       "onError": "continueRegularOutput",
-      "retryOnFail": true,
-      "maxTries": 2,
-      "waitBetweenTries": 2000,
       "parameters": {
-        "method": "GET",
-        "url": "https://api.airtable.com/v0/appoTkXUnQ9aulmkE/tbl9G9eXjry6kpbgj",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "airtableTokenApi",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "maxRecords",
-              "value": "1"
-            }
-          ]
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appoTkXUnQ9aulmkE",
+          "mode": "id"
         },
-        "options": {
-          "timeout": 10000
-        }
+        "table": {
+          "__rl": true,
+          "value": "tbl9G9eXjry6kpbgj",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "options": {}
       },
       "credentials": {
         "airtableTokenApi": {
@@ -1198,7 +1192,10 @@
           "name": "Airtable Personal Access Token account 2"
         }
       },
-      "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76"
+      "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76",
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 3000
     },
     {
       "name": "Update Settings",
@@ -2145,9 +2142,9 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
-  "activeVersionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
-  "versionCounter": 139,
+  "versionId": "8340a46d-e9a6-4402-86cc-cc82f7a03c1e",
+  "activeVersionId": "8340a46d-e9a6-4402-86cc-cc82f7a03c1e",
+  "versionCounter": 138,
   "triggerCount": 3,
   "sourceWorkflowId": null,
   "shared": [
@@ -2179,9 +2176,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-20T21:27:49.899Z",
-    "createdAt": "2026-06-20T21:27:49.899Z",
-    "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
+    "updatedAt": "2026-06-20T20:47:53.143Z",
+    "createdAt": "2026-06-20T20:47:53.143Z",
+    "versionId": "8340a46d-e9a6-4402-86cc-cc82f7a03c1e",
     "workflowId": "hAbUSOEUyZRxXEWm",
     "nodes": [
       {
@@ -2286,7 +2283,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Fetch Settings is an HTTP Request node (Airtable REST) -> json = { records:[{id,fields:{...}}] }.\n// Fail-safe: a missing/failed/timed-out lookup falls back to hardcoded defaults so the workflow\n// NEVER crashes on a Settings read (Volume 1 / Issue 3 / known record id).\nlet rec = {};\ntry {\n  const j = (($('Fetch Settings').first() || {}).json) || {};\n  const r0 = (j && Array.isArray(j.records) && j.records[0]) ? j.records[0] : null;\n  if (r0) rec = Object.assign({ id: r0.id }, r0.fields || {});\n  else if (j && (j['Issue Number'] != null || j['Volume'] != null)) rec = j; // tolerate flattened shape\n} catch (e) {}\nfunction num(v, dflt) { const n = parseInt(v, 10); return isNaN(n) ? dflt : n; }\nconst vol = num(rec['Volume'], 1);\nconst no  = num(rec['Issue Number'], 3);          // THIS issue renders this number\nconst settingsRecordId = rec['id'] || 'recq8dVzApGmqcWe2'; // fallback to the known Settings row id\nreturn [{ json: { dateline, vol, no, nextIssue: no + 1, settingsRecordId } }];\n"
+          "jsCode": "const now = new Date();\nconst dateline = 'Week of ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });\n// Pull current Volume + Issue Number from the Settings table (Fetch Settings).\nconst s = (($('Fetch Settings').first() || {}).json) || {};\nfunction num(v, dflt) { const n = parseInt(v, 10); return isNaN(n) ? dflt : n; }\nconst vol = num(s['Volume'], 1);\nconst no  = num(s['Issue Number'], 3);          // THIS issue renders this number\nconst settingsRecordId = s['id'] || '';\nreturn [{ json: { dateline, vol, no, nextIssue: no + 1, settingsRecordId } }];\n"
         },
         "id": "fbdbcda1-49cd-44e7-aba9-1b18b5051744",
         "name": "Set Metadata",
@@ -3340,34 +3337,28 @@
       },
       {
         "name": "Fetch Settings",
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
+        "type": "n8n-nodes-base.airtable",
+        "typeVersion": 2.1,
         "position": [
           2960,
           440
         ],
         "alwaysOutputData": true,
         "onError": "continueRegularOutput",
-        "retryOnFail": true,
-        "maxTries": 2,
-        "waitBetweenTries": 2000,
         "parameters": {
-          "method": "GET",
-          "url": "https://api.airtable.com/v0/appoTkXUnQ9aulmkE/tbl9G9eXjry6kpbgj",
-          "authentication": "predefinedCredentialType",
-          "nodeCredentialType": "airtableTokenApi",
-          "sendQuery": true,
-          "queryParameters": {
-            "parameters": [
-              {
-                "name": "maxRecords",
-                "value": "1"
-              }
-            ]
+          "operation": "search",
+          "base": {
+            "__rl": true,
+            "value": "appoTkXUnQ9aulmkE",
+            "mode": "id"
           },
-          "options": {
-            "timeout": 10000
-          }
+          "table": {
+            "__rl": true,
+            "value": "tbl9G9eXjry6kpbgj",
+            "mode": "id"
+          },
+          "returnAll": true,
+          "options": {}
         },
         "credentials": {
           "airtableTokenApi": {
@@ -3375,7 +3366,10 @@
             "name": "Airtable Personal Access Token account 2"
           }
         },
-        "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76"
+        "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76",
+        "retryOnFail": true,
+        "maxTries": 4,
+        "waitBetweenTries": 3000
       },
       {
         "name": "Update Settings",
@@ -4105,35 +4099,11 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-20T21:27:50.243Z",
-        "id": 274,
+        "createdAt": "2026-06-20T20:47:55.229Z",
+        "id": 272,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
+        "versionId": "8340a46d-e9a6-4402-86cc-cc82f7a03c1e",
         "event": "activated",
-        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
-      },
-      {
-        "createdAt": "2026-06-20T21:27:52.407Z",
-        "id": 276,
-        "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
-        "event": "activated",
-        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
-      },
-      {
-        "createdAt": "2026-06-20T21:27:50.126Z",
-        "id": 273,
-        "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
-        "event": "deactivated",
-        "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
-      },
-      {
-        "createdAt": "2026-06-20T21:27:51.300Z",
-        "id": 275,
-        "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "0d2352b8-7be6-4164-a72d-fe322e47a3fb",
-        "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       }
     ]
