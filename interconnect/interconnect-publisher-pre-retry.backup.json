@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-20T03:32:59.167Z",
+  "updatedAt": "2026-06-20T02:49:44.315Z",
   "createdAt": "2026-06-07T23:56:43.555Z",
   "id": "hAbUSOEUyZRxXEWm",
   "name": "Interconnect Publisher \u2014 Weekly",
@@ -56,10 +56,7 @@
           "id": "RoOhi6fE6lI3cI1c",
           "name": "Airtable Personal Access Token account 2"
         }
-      },
-      "retryOnFail": true,
-      "maxTries": 4,
-      "waitBetweenTries": 3000
+      }
     },
     {
       "parameters": {
@@ -94,10 +91,7 @@
           "id": "RoOhi6fE6lI3cI1c",
           "name": "Airtable Personal Access Token account 2"
         }
-      },
-      "retryOnFail": true,
-      "maxTries": 4,
-      "waitBetweenTries": 3000
+      }
     },
     {
       "parameters": {
@@ -1090,10 +1084,7 @@
           "name": "Airtable Personal Access Token account 2"
         }
       },
-      "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6",
-      "retryOnFail": true,
-      "maxTries": 4,
-      "waitBetweenTries": 3000
+      "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6"
     },
     {
       "name": "Prep Tariff Input",
@@ -1184,10 +1175,7 @@
           "name": "Airtable Personal Access Token account 2"
         }
       },
-      "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76",
-      "retryOnFail": true,
-      "maxTries": 4,
-      "waitBetweenTries": 3000
+      "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76"
     },
     {
       "name": "Update Settings",
@@ -2134,9 +2122,9 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
-  "activeVersionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
-  "versionCounter": 134,
+  "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
+  "activeVersionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
+  "versionCounter": 133,
   "triggerCount": 3,
   "sourceWorkflowId": null,
   "shared": [
@@ -2168,9 +2156,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-06-20T03:32:59.172Z",
-    "createdAt": "2026-06-20T03:32:59.172Z",
-    "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+    "updatedAt": "2026-06-20T02:49:44.318Z",
+    "createdAt": "2026-06-20T02:49:44.318Z",
+    "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
     "workflowId": "hAbUSOEUyZRxXEWm",
     "nodes": [
       {
@@ -2222,10 +2210,7 @@
             "id": "RoOhi6fE6lI3cI1c",
             "name": "Airtable Personal Access Token account 2"
           }
-        },
-        "retryOnFail": true,
-        "maxTries": 4,
-        "waitBetweenTries": 3000
+        }
       },
       {
         "parameters": {
@@ -2260,10 +2245,7 @@
             "id": "RoOhi6fE6lI3cI1c",
             "name": "Airtable Personal Access Token account 2"
           }
-        },
-        "retryOnFail": true,
-        "maxTries": 4,
-        "waitBetweenTries": 3000
+        }
       },
       {
         "parameters": {
@@ -3256,10 +3238,7 @@
             "name": "Airtable Personal Access Token account 2"
           }
         },
-        "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6",
-        "retryOnFail": true,
-        "maxTries": 4,
-        "waitBetweenTries": 3000
+        "id": "6a98fcce-d883-423d-8d34-cfb36fee0ce6"
       },
       {
         "name": "Prep Tariff Input",
@@ -3350,10 +3329,7 @@
             "name": "Airtable Personal Access Token account 2"
           }
         },
-        "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76",
-        "retryOnFail": true,
-        "maxTries": 4,
-        "waitBetweenTries": 3000
+        "id": "9c7ab08c-5a43-4836-a061-8ae3ddf30b76"
       },
       {
         "name": "Update Settings",
@@ -4083,34 +4059,34 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-20T03:32:59.617Z",
-        "id": 257,
+        "createdAt": "2026-06-20T02:49:44.587Z",
+        "id": 253,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+        "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T03:33:01.604Z",
-        "id": 259,
+        "createdAt": "2026-06-20T02:49:46.632Z",
+        "id": 255,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+        "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
         "event": "activated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T03:32:59.490Z",
-        "id": 256,
+        "createdAt": "2026-06-20T02:49:44.489Z",
+        "id": 252,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+        "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       },
       {
-        "createdAt": "2026-06-20T03:33:00.561Z",
-        "id": 258,
+        "createdAt": "2026-06-20T02:49:45.600Z",
+        "id": 254,
         "workflowId": "hAbUSOEUyZRxXEWm",
-        "versionId": "f276803b-8d60-46bc-9e21-e141a5a705e6",
+        "versionId": "3e228fc5-521e-48a7-9907-473a98f6ab0e",
         "event": "deactivated",
         "userId": "3a045337-aa88-45a9-b4fd-8443c4c6ce3b"
       }
