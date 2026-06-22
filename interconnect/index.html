@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Interconnect&#8482; — Week of June 14, 2026</title>
+<title>The Interconnect&#8482; — Week of June 21, 2026</title>
 <style>
 :root {
   --ink:     #16191d;
@@ -276,6 +276,18 @@ body {
   font-weight: 700;
 }
 .queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sector-badge {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
 
 /* ── QUEUE SPOTLIGHT ── */
 .queue-spotlight {
@@ -403,7 +415,7 @@ body {
     <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
     <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
     <div class="meta-bar">
-      <span><strong>Week of June 14, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 2</span>
+      <span><strong>Week of June 21, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 3</span>
       <span>nexphaseadvisory.net</span>
     </div>
   </div>
@@ -413,7 +425,7 @@ body {
 
     <!-- LEDE -->
     <div class="lede">
-      <p>Data center development activity this week spans at least nine states and four grid regions, underscoring that siting pressure has moved well past the Northern Virginia core—with Tract and an undisclosed developer each proposing large campuses in Goochland County alone, while Fundamental Data advances a Mason County, West Virginia campus and Moonshot Infrastructure files site plans in Muncy, Pennsylvania. Capital markets remain open for well-structured deals, evidenced by Corscale and Affinius securing $975M from Blue Owl against a fully leased Northern Virginia asset, and Cipher Mining pursuing $810M in senior secured notes for its Stingray site in West Texas on the back of Amazon and Fluidstack pre-leases. Community resistance, however, is emerging as a genuine project risk: DC BLOX's Nashville proposal faces a 386,000-signature petition and a potential moratorium, Wonder Valley is pushing forward in Beaver County despite a local commissioner moratorium, and Panattoni is now seeking to recover cash from Turtle, Wisconsin on a stalled 430-acre project. For developers and operators, the week's read is straightforward—financing and hyperscaler demand are not the binding constraints, but local permitting and community opposition are increasingly capable of stalling or killing projects that looked viable on paper.</p>
+      <p>Elementl Power is advancing a 1.5-GW SMR project with GE Vernova Hitachi along the Ohio River, while TerraSpark Energy pursues a 1.6-GW coal-plus-CCS campus in West Virginia backed by $18.5M in DOE funding—signaling that firm, dispatchable capacity is the dominant supply-side thesis in PJM. Meta signed a 298-MW solar PPA with RWE in Texas as Microsoft broke ground on a 17-building campus in La Porte, Indiana, and Prometheus Hyperscale advances a $1.2B data center in Cheyenne, Wyoming, keeping load-growth pressure on every interconnection queue. Energy Dome and Salt River Project are moving a 19-MW CO2 battery system in Arizona toward a 2029 online date as an Arizona Court of Appeals vacated utility surcharges on residential solar customers, pulling long-duration storage and net metering economics into the same WECC policy frame.</p>
       <p>Power market intelligence from a practitioner with two decades in origination and interconnection — 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
     </div>
 
@@ -430,33 +442,25 @@ body {
         <thead>
           <tr>
             <th>Market</th>
-            <th>Load Signal</th>
-            <th>MW</th>
-            <th>Viable Supply in Queue</th>
-            <th>Strategic Note</th>
+            <th>Signal</th>
           </tr>
         </thead>
         <tbody>
         <tr>
           <td><span class="market-tag">TX · ERCOT</span></td>
-          <td><span class="load-name">Cipher Mining</span><div class="queue-note">Stingray data center site in West Texas; Amazon and Fluidstack pre-leases in place; $810M senior secured notes financing sought</div></td>
-          <td><span class="mw-val">n/a</span></td>
-          <td><span class="supply-count">Multiple active utility-scale solar and wind projects present in ERCOT queue</span><div class="queue-note">Desert Hill Solar (250MW, Solar - Photovoltaic Solar, Active, Tap 345kV 10180 El Capitan - 10073 Drill Hole); Proteus London-Leigh Solar SLF (600MW, Solar - Photovoltaic Solar, Active, 345kV Bernoulli bus # 59907); Prairie Power Wind (302.9MW, Wind - Wind Turbine, Active, Tap 345 kV Longshore Switch to Cattleman Switch CKT 4); Cherry Sage Solar 1 SLF (142.51MW, Solar - Photovoltaic Solar, Active, TREADWELL 138kV)</div></td>
-          <td style="font-size:11px;color:#374151">Cipher Mining's Stingray site already carries Amazon and Fluidstack pre-leases, indicating load is substantially contracted; any renewable origination opportunity is secondary to existing offtake structure and should focus on supplemental or additive green power agreements rather than primary PPA origination.</td>
+          <td><span class="load-name">Meta</span> — Meta's renewable PPA with RWE anchors a growing hyperscale load-plus-generation pairing inside ERCOT.</td>
         </tr>
         <tr>
-          <td><span class="market-tag">TX · ERCOT</span></td>
-          <td><span class="load-name">Applied Digital</span><div class="queue-note">210MW AI campus signed to hyperscaler; fifth campus under development with three already leased to same tenant; located in North Dakota but signal tagged to Unknown region — ERCOT queue included given explicit MW and hyperscaler context</div></td>
-          <td><span class="mw-val">210MW</span></td>
-          <td><span class="supply-count">Multiple active utility-scale solar and wind projects present in ERCOT queue</span><div class="queue-note">Proteus London-Leigh Solar SLF (600MW, Solar - Photovoltaic Solar, Active, 345kV Bernoulli bus # 59907); Prairie Power Wind (302.9MW, Wind - Wind Turbine, Active, Tap 345 kV Longshore Switch to Cattleman Switch CKT 4); Desert Hill Solar (250MW, Solar - Photovoltaic Solar, Active, Tap 345kV 10180 El Capitan - 10073 Drill Hole)</div></td>
-          <td style="font-size:11px;color:#374151">Applied Digital has a 210MW campus already signed to a hyperscaler tenant, with additional campuses under active leasing; power supply for the signed campus is likely contracted or in advanced negotiation, but the fifth campus under development represents a potential open origination window for a new renewable PPA at that scale.</td>
+          <td><span class="market-tag">IN · MISO</span></td>
+          <td><span class="load-name">Microsoft</span> — Microsoft's hyperscale campus groundbreaking in La Porte adds a significant new demand node to MISO's constrained north-Indiana grid.</td>
         </tr>
         <tr>
-          <td><span class="market-tag">VA · PJM</span></td>
-          <td><span class="load-name">Corscale</span><div class="queue-note">Northern Virginia data center fully leased; $975M financing secured from Blue Owl with Affinius</div></td>
-          <td><span class="mw-val">n/a</span></td>
-          <td><span class="supply-count">Limited active renewable supply visible in PJM queue from provided data; one withdrawn solar project noted for PJM footprint</span><div class="queue-note">Victoria DP-Martin DP 115 kV (90MW, Solar, Withdrawn) is the only PJM-tagged queue entry; no active PJM renewable projects appear verbatim in the queue data</div></td>
-          <td style="font-size:11px;color:#374151">Corscale's Northern Virginia campus is fully leased and has secured institutional financing, indicating power and offtake are already arranged; this is not an open renewable PPA origination target, and any engagement should focus on future phases or expansion campuses rather than the currently financed asset.</td>
+          <td><span class="market-tag">MO · MISO</span></td>
+          <td><span class="load-name">Amazon, Google</span> — Amazon and Google are simultaneously building hyperscale data centers in Missouri, rapidly concentrating new load inside MISO.</td>
+        </tr>
+        <tr>
+          <td><span class="market-tag">OH · PJM</span></td>
+          <td><span class="load-name">Elementl Power</span> — Elementl Power's SMR nuclear development with GE Vernova Hitachi along the Ohio River targets PJM, where data-center load growth is most acute.</td>
         </tr>
         </tbody>
       </table>
@@ -465,20 +469,20 @@ body {
         <div class="qs-label">Queue Spotlight — Highest-Capacity Acquisition Targets This Week</div>
         <div class="qs-row">
         <div class="qs-item">
-            <div class="qs-id">Proteus London-Leigh Solar SLF</div>
-            <div class="qs-desc">600 MW Solar - Photovoltaic Solar · ERCOT<br>Active · 345kV Bernoulli (bus # 59907)</div>
+            <div class="qs-id">Combined Cycle</div>
+            <div class="qs-desc">2220 MW Gas · MISO<br>active · SIOUX</div>
           </div>
           <div class="qs-item">
-            <div class="qs-id">Wind</div>
-            <div class="qs-desc">376.2 MW WND · ISONE<br>Withdrawn · MEPCO 396 line</div>
+            <div class="qs-id">Larrabee Collector Station 230 kV</div>
+            <div class="qs-desc">2138.85 MW Offshore Wind · PJM<br>active · Larrabee Collector Station 230 kV</div>
           </div>
           <div class="qs-item">
-            <div class="qs-id">Prairie Power Wind</div>
-            <div class="qs-desc">302.9 MW Wind - Wind Turbine · ERCOT<br>Active · Tap 345 kV Longshore Switch (Bus# 1058) to Cattleman Switch (Bus# 10053) CKT 4</div>
+            <div class="qs-id">Larrabee 230 kV</div>
+            <div class="qs-desc">2100 MW Offshore Wind · PJM<br>active · Larrabee 230 kV</div>
           </div>
           <div class="qs-item">
-            <div class="qs-id">Desert Hill Solar</div>
-            <div class="qs-desc">250 MW Solar - Photovoltaic Solar · ERCOT<br>Active · Tap 345kV 10180 El Capitan - 10073 Drill Hole</div>
+            <div class="qs-id">Flint Run 500 kV</div>
+            <div class="qs-desc">2075 MW Natural Gas · PJM<br>Active · Flint Run 500 kV</div>
           </div>
         </div>
       </div>
@@ -489,21 +493,20 @@ body {
     <!-- ══ LEAD STORY ══ -->
     <div class="sec">
       <div class="sec-label">Interconnection</div>
-      <h2>Data Center Site Selection Bypasses Queues as Capacity Crunch Deepens</h2>
+      <h2>Nuclear and Coal-CCS Signal PJM's Baseload Bet for Data-Center Load</h2>
     </div>
 
     <div class="lead-story">
-      <p class="dek">A wave of developer moves this week reveals that the interconnection queue is now a secondary constraint—capital structure, behind-the-meter generation, and local permitting have become the primary battlegrounds for large-load siting.</p>
-      <p class="body-text">The most consequential pattern visible in this week's signals is not any single project announcement but the collective strategy emerging across developers to route around the interconnection queue entirely. The clearest example is the Stark Power acquisition of Sagebrush sites, where Stark raised up to $140M to fund the acquisition, with terms undisclosed, specifically to control co-located natural-gas-fired power plants capable of serving load through behind-the-meter gas generation bypassing interconnection queues. That approach—own the generation, skip the queue—is becoming a template rather than an exception, and it has direct implications for how IPPs and power developers should think about asset value in the current cycle.</p>
-      <p class="body-text" style="margin-top:8px">On the hyperscale lease side, the financing activity this week underscores how rapidly capital is moving to lock in capacity ahead of queue resolution. Corscale and Affinius secured $975M in financing from Blue Owl for a fully leased Northern Virginia data center, a transaction that reflects lender comfort with contracted load even in a region where PJM interconnection timelines remain extended. Separately, Applied Digital disclosed a 210MW campus lease to a hyperscaler—its fifth AI campus—with three campuses now leased to the same unnamed tenant, signaling that hyperscalers are concentrating capacity commitments with proven operators rather than spreading risk across the market. Cipher Mining, meanwhile, is seeking $810M in senior secured notes to finance its Stingray site in West Texas after securing Amazon and Fluidstack pre-leases, reinforcing that pre-contracted load is now the prerequisite for accessing institutional debt at scale.</p>
-      <p class="body-text" style="margin-top:8px">The geographic diversification story is real but complicated by local politics. Projects are spreading into West Virginia, Indiana, Pennsylvania, Utah, and rural Tennessee, yet the signal from DC BLOX's Nashville proposal—where a petition exceeding 386,000 signatures is threatening a moratorium on a 24-acre site—illustrates that community opposition can stall even modestly sized campuses. The Wonder Valley project in Utah's Beaver County is advancing despite a local commissioner moratorium, suggesting developers are willing to litigate or outlast local resistance when the power and land economics are compelling enough. For data-center operators and developers, the practical read is that site control and community relations now carry interconnection-equivalent risk weight in project timelines.</p>
-      <p class="body-text" style="margin-top:8px">Hut 8's Nueces County campus—the Hut 8 Beacon Point campus in Texas—anchors the ERCOT end of the spectrum, where the combination of a 352MW hyperscaler lease and a $4.25B note offering signals the scale at which the market is operating. ERCOT's lack of a traditional interconnection queue for generation, combined with Texas's permitting environment, continues to attract the largest tranches of capital. The cumulative picture across this week's signals is one where interconnection queue position has been partially displaced as the scarcest resource by a new triad: behind-the-meter or on-site generation capacity, contracted anchor tenants, and local political clearance. Developers and IPP executives underwriting new sites should be stress-testing all three variables in parallel rather than treating grid access as the single critical path item.</p>
+      <p class="dek">Two greenfield firm-power projects totaling multi-gigawatt scale are advancing in PJM, reflecting developer confidence that dispatchable, interconnection-queue-eligible generation can command premium off-take from hyperscalers.</p>
+      <p class="body-text">Elementl Power is developing up to 1,500 MW of SMR nuclear capacity with GE Vernova Hitachi along the Ohio River, roughly 100 miles southeast of Columbus, while TerraSpark Energy is pursuing a 1,600-MW greenfield coal-plus-CCS campus in West Virginia targeting a 2030 startup, backed by $18.5M in DOE funding. Both projects are sited inside PJM, the grid region absorbing the heaviest hyperscale load growth in the country, and both are pursuing firm, dispatchable interconnection positions rather than the variable-resource queue slots that have historically bottlenecked solar and wind developers.</p>
+      <p class="body-text" style="margin-top:8px">The pairing matters because it reflects a structural shift in how developers are positioning generation assets: around load certainty rather than energy arbitrage. Microsoft's groundbreaking on a 17-building campus in LaPorte, Indiana, Amazon and Google's multibillion-dollar commitments in Missouri, and Meta's 298-MW solar PPA with RWE in ERCOT all reinforce that hyperscale counterparties are actively locking in long-duration supply across every major grid—creating the off-take visibility that makes capital-intensive, long-lead projects like SMR and CCS financeable.</p>
+      <p class="body-text" style="margin-top:8px">Watch whether either the Elementl or TerraSpark project secures a hyperscale anchor tenant before entering the formal PJM interconnection queue, as that sequencing—load commitment before queue filing—is emerging as the template for de-risking large baseload interconnection studies. The Birmingham zoning reversal by an unnamed AI firm also signals that municipal permitting is becoming a parallel gating factor alongside FERC queue timelines, particularly for campus-scale loads that trigger infrastructure upgrade studies.</p>
       <div class="data-box">
-        <div class="data-label">Selected Transactions &amp; Project Metrics, Week of June 8–13 2026</div>
+        <div class="data-label">NexPhase Signal Tracker, week of June 16–20, 2026</div>
         <div class="data-grid">
-          <div class="data-item"><div class="num">$975M</div><div class="lbl">Blue Owl financing for Corscale/Affinius Northern Virginia data center</div></div>
-          <div class="data-item"><div class="num">210 MW</div><div class="lbl">Applied Digital hyperscaler campus lease, North Dakota</div></div>
-          <div class="data-item"><div class="num">$810M</div><div class="lbl">Cipher Mining senior secured notes sought for Stingray West Texas site</div></div>
+          <div class="data-item"><div class="num">1,500 MW</div><div class="lbl">Elementl Power SMR project capacity (Ohio River, PJM)</div></div>
+          <div class="data-item"><div class="num">1,600 MW</div><div class="lbl">TerraSpark Energy coal+CCS campus capacity (West Virginia, PJM)</div></div>
+          <div class="data-item"><div class="num">$18.5M</div><div class="lbl">DOE funding backing TerraSpark Energy development</div></div>
         </div>
       </div>
     </div>
@@ -516,28 +519,24 @@ body {
 
     <div class="story-grid">
     <div class="story">
-        <div class="hed">Hut 8 Locks 352MW Nueces County Hyperscaler Lease</div>
-        <div class="dek">Hut 8's Beacon Point campus in Nueces County, Texas secures a 352MW hyperscaler lease backed by a $4.25B note offering.</div>
-        <p class="body-text">Hut 8's Nueces County campus, internally branded Beacon Point, is emerging as one of the largest single-site load commitments in ERCOT this cycle. The 352MW hyperscaler lease signals a fully contracted anchor tenant at a scale that will demand serious transmission study work from ERCOT staff, given the coastal Texas grid's existing congestion profile and the sheer size of the incremental load block.</p>
-      <p class="body-text" style="margin-top:8px">The $4.25B note offering tied to the same campus underscores how capital markets are now willing to underwrite large-scale AI infrastructure at the project level rather than the corporate balance sheet. For interconnection practitioners, the combination of a named hyperscaler offtake and a discrete debt instrument sets a structuring precedent that other merchant campus developers in ERCOT will likely attempt to replicate.</p>
+        <div class="hed">Elementl Power Plans 1.5 GW SMR Project on Ohio River</div>
+        <div class="dek">Elementl Power and GE Vernova Hitachi are developing up to 1,500 MW of small modular reactor capacity roughly 100 miles southeast of Columbus, Ohio, in PJM territory.</div>
+        <p class="body-text">The project would represent one of the largest SMR commitments announced in PJM, sited along the Ohio River to leverage existing transmission and cooling infrastructure.</p>
       </div>
       <div class="story">
-        <div class="hed">Goochland County, Virginia Draws Two Separate Campus Proposals</div>
-        <div class="dek">Tract and the undisclosed Tuckahoe Tech Park developer both propose large data center campuses in Goochland County, Virginia near the West Creek corridor.</div>
-        <p class="body-text">PJM's Northern Virginia constrained zone is already well-documented, but the West Creek corridor in Goochland County is attracting a second wave of large proposals as developers seek land with transmission adjacency outside the most congested Loudoun County pockets. Tract's proposal and the separately filed 900-acre Tuckahoe Tech Park—whose developer remains undisclosed—represent meaningful incremental queue pressure on Dominion Energy Virginia's transmission system in the same geographic pocket.</p>
-      <p class="body-text" style="margin-top:8px">Two large proposals in the same county filing window will force local planners and Dominion interconnection staff to think carefully about cumulative substation loading and whether existing 500kV and 230kV infrastructure can absorb both projects on overlapping timelines. Goochland's relative greenfield status compared to Ashburn makes it attractive, but the Tuckahoe Tech Park's 900-acre footprint alone suggests a multi-gigawatt build-out ambition that will require its own network upgrade study.</p>
+        <div class="hed">TerraSpark's 1.6 GW Coal-CCS Campus Targets 2030 in West Virginia</div>
+        <div class="dek">TerraSpark Energy is developing a 1,600 MW greenfield coal-plus-CCS campus in West Virginia, backed by $18.5 million in DOE funding and targeting a 2030 startup.</div>
+        <p class="body-text">The project would add significant dispatchable capacity to PJM from a state with existing coal supply and transmission infrastructure.</p>
       </div>
       <div class="story">
-        <div class="hed">Applied Digital Signs Fifth Campus With Repeat Hyperscaler at 210MW</div>
-        <div class="dek">Applied Digital's new 210MW North Dakota campus is leased to the same hyperscaler already occupying three of its existing AI campuses.</div>
-        <p class="body-text">Applied Digital's announcement that a single hyperscaler tenant has now absorbed capacity across four of its campuses—including the newly signed 210MW North Dakota site—points to a deepening bilateral relationship that goes well beyond a spot lease. For load-serving entities and regional transmission organizations watching North Dakota load growth, the cumulative MW commitment from this one tenant relationship deserves close attention as a driver of regional generation and transmission need.</p>
-      <p class="body-text" style="margin-top:8px">The repeat-tenant structure also carries project finance implications: a demonstrated pattern of lease renewals and expansions from the same creditworthy offtaker substantially de-risks the debt stack on new campuses before a single rack is energized. Developers competing in the hyperscaler supply chain will note that Applied Digital's model—purpose-built AI campuses anchored by a single large tenant—is now five campuses deep and still expanding.</p>
+        <div class="hed">Meta Signs 298 MW Solar PPA with RWE in Texas</div>
+        <div class="dek">Meta has contracted 298 MW of solar generation from RWE for a Texas project, adding to both companies' ERCOT renewable portfolios.</div>
+        <p class="body-text">The deal marks a direct offtake commitment from a major hyperscaler to a utility-scale solar developer in one of the country's fastest-growing power markets.</p>
       </div>
       <div class="story">
-        <div class="hed">Cipher Mining Seeks $810M for West Texas Stingray Site</div>
-        <div class="dek">Cipher Mining is pursuing $810M in senior secured notes to finance its Stingray data center site in West Texas, which already holds Amazon and Fluidstack pre-leases.</div>
-        <p class="body-text">Cipher Mining's $810M senior secured note offering for the Stingray site represents one of the larger project-level debt raises for a West Texas AI data center, and the presence of both Amazon and Fluidstack as pre-lease counterparties gives the capital stack a multi-tenant foundation that should support underwriting. For ERCOT observers, West Texas continues to attract large data center load that will interact directly with the region's substantial wind and solar generation surplus—and its well-documented transmission bottlenecks on the 345kV system moving power eastward.</p>
-      <p class="body-text" style="margin-top:8px">The Stingray site's pre-lease structure, combined with Hut 8's concurrent 352MW Nueces County transaction, signals that ERCOT's data center pipeline is moving from speculative development into bankable, contracted assets at a pace that will accelerate the need for ERCOT and transmission owners to model cumulative load additions in West and South Texas more aggressively in near-term planning cycles.</p>
+        <div class="hed">Microsoft Breaks Ground on 17-Building Indiana Data Center Campus</div>
+        <div class="dek">Microsoft has broken ground on a 17-building hyperscale data center campus in La Porte, Indiana, adding a major new load center to MISO.</div>
+        <p class="body-text">The campus joins a wave of hyperscale announcements in MISO's footprint, including Amazon and Google committing multibillion-dollar investments in Montgomery County, Missouri.</p>
       </div>
     </div>
 
@@ -552,24 +551,24 @@ body {
     <div class="flag-box">
       <div class="flag-label">This Week's Policy Flags</div>
       <div class="flag-item">
-        <span class="flag-co">DC BLOX · Nashville, TN</span>
-        <span class="flag-note">A 386K+ signature petition and potential municipal moratorium threaten to block DC BLOX's 24-acre Nashville campus; developers should monitor whether Tennessee or other SERC-region municipalities adopt formal moratorium ordinances, as this could signal a broader community-opposition playbook that delays power procurement timelines and interconnection queue positions.</span>
+        <span class="flag-co"><span class="sector-badge" style="background:#1a3a6b">Data Centers</span>Birmingham · Alabama</span>
+        <span class="flag-note">An AI firm reversed planned data center campus changes after Birmingham enacted new data center zoning rules, signaling that municipal zoning ordinances can directly constrain hyperscale siting decisions.</span>
       </div>
       <div class="flag-item">
-        <span class="flag-co">Wonder Valley · Beaver County, UT</span>
-        <span class="flag-note">A Kevin O'Leary-backed project is advancing despite an active county commissioner moratorium, creating a test case for how state-level approvals can override local opposition; the outcome will matter to developers eyeing Western markets outside established ISO territories where regulatory backstops are less defined.</span>
+        <span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Arizona Court of Appeals · Net Metering</span>
+        <span class="flag-note">The Arizona Court of Appeals vacated a ruling that would have allowed utilities to impose extra charges on residential solar customers, preserving net metering economics and potentially emboldening similar legal challenges in other states.</span>
       </div>
       <div class="flag-item">
-        <span class="flag-co">Panattoni · Turtle, WI (MISO)</span>
-        <span class="flag-note">Panattoni's attempt to recover costs from a stalled 430-acre Wisconsin project highlights the financial and legal exposure when local approvals collapse after capital is committed; developers in MISO should watch this dispute as a precedent for municipal liability and the risks of advancing procurement agreements before land-use certainty is secured.</span>
+        <span class="flag-co"><span class="sector-badge" style="background:#0b5d4e">IPP</span>TerraSpark Energy · West Virginia</span>
+        <span class="flag-note">TerraSpark is developing a 1.6-GW greenfield coal+CCS campus targeting 2030 startup with $18.5M in DOE backing, making it a bellwether for whether CCS-enabled fossil generation can clear PJM interconnection and permitting hurdles at scale.</span>
       </div>
       <div class="flag-item">
-        <span class="flag-co">Goochland County · Virginia (PJM)</span>
-        <span class="flag-note">At least two large campus proposals—Tract and the 900-acre Tuckahoe Tech Park—are converging on the same Northern Virginia exurban corridor, intensifying competition for PJM interconnection queue slots and local grid capacity; procurement teams should monitor whether Dominion Energy Virginia signals transmission constraints or accelerated upgrade requirements for this area.</span>
+        <span class="flag-co"><span class="sector-badge" style="background:#0b5d4e">IPP</span>Elementl Power · SMR · Ohio</span>
+        <span class="flag-note">Elementl Power is advancing a 1.5-GW SMR project with GE Vernova Hitachi along the Ohio River, representing a leading-edge PJM nuclear interconnection queue filing that developers should track for NRC licensing and queue position precedent.</span>
       </div>
       <div class="flag-item">
-        <span class="flag-co">Cipher Mining · West Texas (ERCOT)</span>
-        <span class="flag-note">Cipher's $810M debt raise tied to pre-leases from Amazon and Fluidstack at its Stingray site, alongside Hut 8's Beacon Point campus Nueces County plans, signals accelerating large-load pressure on ERCOT West and South zones; developers should track ERCOT's large-load interconnection study queue and any nodal congestion or curtailment risk disclosures for these regions.</span>
+        <span class="flag-co"><span class="sector-badge" style="background:#1a3a6b">Data Centers</span>Prometheus Hyperscale · Cheyenne WY</span>
+        <span class="flag-note">Prometheus Hyperscale is advancing a $1.2B data center campus in Cheyenne under an independent transmission region, raising critical questions about power supply adequacy and grid interconnection outside major ISO queues.</span>
       </div>
     </div>
 
@@ -582,8 +581,7 @@ body {
     </div>
 
     <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
-    <p class="body-text">The high-yield debt market is clearly open for West Texas AI infrastructure plays right now, and the pricing signals are instructive. Cipher Mining is seeking $810M in senior secured notes to finance its Stingray site in West Texas, backstopped by Amazon and Fluidstack pre-leases — a structure that mirrors how developers are using anchor hyperscaler offtake to unlock investment-grade-adjacent debt terms on what would otherwise be speculative merchant builds. Hut 8's Nueces County campus (the 352MW hyperscaler lease tied to its Beacon Point campus) is pursuing a $4.25B note offering on the same basic logic: contracted load de-risks the capital structure enough to support nine-figure-plus debt tranches at acceptable spreads. On the equity and mezz side, Corscale and Affinius just closed a $975M Blue Owl financing for a fully leased Northern Virginia asset, confirming that 'fully leased at signing' remains the threshold at which institutional private credit will write very large checks without requiring construction completion risk to clear first. The common thread across all three: hyperscaler or named-tenant lease coverage is now the underwriting prerequisite, not a nice-to-have.</p>
-      <p class="body-text" style="margin-top:8px">PPA economics in ERCOT and PJM are being shaped by the sheer volume of load announcements hitting both grids simultaneously — Nueces County, the Tract and Tuckahoe Tech Park proposals clustering around Goochland/West Creek in PJM, Fundamental Data in Mason County WV, and Moonshot in Muncy PA all competing for the same constrained interconnection queue positions and the same pool of uncontracted renewable capacity. That congestion dynamic is pushing developers toward structures that sidestep the queue entirely: Stark Power's acquisition of Sagebrush assets, funded by up to $140M raised with terms undisclosed, is the clearest current example of behind-the-meter gas generation bypassing interconnection queues to deliver dispatchable power directly to co-located load. For PPA analysts, this matters because it sets an implicit price ceiling on utility-scale renewable PPAs in constrained markets — if a developer can source behind-the-meter gas at an all-in cost below the queue-delivered renewable alternative, that becomes the competitive benchmark. Applied Digital's model, now with a 210MW hyperscaler lease on its fifth AI campus and three campuses leased to the same tenant, also signals that repeat-tenant concentration is becoming a financing feature rather than a credit risk, as lenders treat the repeat relationship as implicit offtake optionality on future phases.</p>
+    <p class="body-text">Meta's 298 MW solar PPA with RWE in ERCOT is the clearest utility-scale pricing signal this week, representing a hyperscaler locking in long-dated renewable offtake in one of the most liquid merchant markets in North America — a structure that increasingly sets the floor for corporate PPA benchmarks across the region. With hyperscaler groundbreakings from Microsoft in Indiana and multibillion-dollar commitments from Amazon and Google in Missouri, offtake demand is outpacing contracted supply pipelines in MISO, which should sustain PPA price tension through mid-decade. The Elementl/GE Vernova Hitachi SMR project in PJM and TerraSpark's coal-plus-CCS campus in West Virginia both signal developer appetite for long-tenor, capacity-heavy structures where traditional renewable PPAs can't deliver firm power — implying a bifurcating market where dispatchable assets command a meaningful $/MWh premium over variable renewables. For counterparties underwriting new offtake, the operative implication is that firm, 24/7-capable generation is repricing faster than the headline solar PPA comp would suggest.</p>
     </div>
 
     <hr class="rule">
@@ -611,11 +609,12 @@ body {
       </div>
       <div style="text-align:right">
         <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
-        <div style="margin-top:3px">Week of June 14, 2026 &nbsp;·&nbsp; Vol. 1, No. 2</div>
+        <div style="margin-top:3px">Week of June 21, 2026 &nbsp;·&nbsp; Vol. 1, No. 3</div>
       </div>
     </div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available to subscribers on request.</div>
     <div class="disc">
-      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of June 14, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of June 21, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
     </div>
   </div>
 
