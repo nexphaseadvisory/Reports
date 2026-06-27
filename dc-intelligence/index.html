@@ -76,6 +76,8 @@
            font-size:12px; color:var(--muted); }
   footer .by { font-family:var(--sans); font-weight:600; color:var(--ink); font-size:13px; }
   footer .credo { color:var(--accent); font-family:var(--sans); margin:2px 0 10px; }
+  footer .updated { margin-top:10px; font-family:var(--sans); font-size:11.5px;
+                    font-weight:600; color:var(--data); letter-spacing:.02em; }
   .pdf-btn { display:inline-block; font-family:var(--sans); font-size:12.5px; font-weight:600;
              color:#fff; background:var(--accent); padding:7px 15px; border-radius:4px;
              text-decoration:none; margin:0 0 6px; }
@@ -132,6 +134,7 @@
     <div>Compiled from publicly available sources — ISO/RTO interconnection queue data,
     EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects the
     author's independent professional assessment. Scores refresh weekly.</div>
+    <div class="updated" id="updated"></div>
   </footer>
 </div>
 
@@ -140,6 +143,14 @@ const FULL = {VA:"Virginia",TX:"Texas",GA:"Georgia",AZ:"Arizona",OH:"Ohio",OR:"O
   NV:"Nevada",IL:"Illinois",NC:"North Carolina",FL:"Florida",CA:"California",NJ:"New Jersey",
   PA:"Pennsylvania",WA:"Washington",CO:"Colorado",MN:"Minnesota",IA:"Iowa",IN:"Indiana",
   TN:"Tennessee",SC:"South Carolina"};
+const MONTHS = ["January","February","March","April","May","June","July","August",
+  "September","October","November","December"];
+function fmtUpdated(g){
+  if(!g) return new Date().toISOString().slice(0,10);
+  const [d,t] = g.split(" ");
+  const [y,mo,day] = d.split("-").map(Number);
+  return `${MONTHS[mo-1]} ${day}, ${y}` + (t ? ` · ${t}` : "");
+}
 const scoreColor = s => s>=6.5 ? "var(--accent)" : s>=4.5 ? "var(--gold)" : "var(--data)";
 const fmtGrowth = g => (g>=0?"+":"") + g.toFixed(1) + "%";
 const tierFrame = t => t==="Underdeveloped" ? "open runway — interconnection infrastructure ahead of current DC build-out"
@@ -165,6 +176,8 @@ fetch("ranked_markets.json", {cache:"no-store"})
     const m = d.markets;
     document.getElementById("date").textContent =
       (d.generated||"").split(" ")[0] || new Date().toISOString().slice(0,10);
+    document.getElementById("updated").textContent =
+      "Last updated: " + fmtUpdated(d.generated) + " · refreshes weekly";
 
     // Lede
     const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
