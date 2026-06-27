@@ -3,113 +3,251 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DC Site Intelligence | NexPhase Advisory</title>
+<title>DC Site Intelligence — NexPhase Advisory</title>
 <style>
-  :root { --paper:#fdfcfa; --outer:#e7e3da; --ink:#2b2b28; --muted:#6b665c;
+  :root {
+    --paper:#fdfcfa; --outer:#e7e3da; --ink:#2b2b28; --muted:#6b665c;
     --accent:#0b5d4e; --data:#1a3a6b; --gold:#a06d18; --rule:#ddd8cd;
-    --serif:Georgia,'Times New Roman',serif; --sans:'Helvetica Neue',Helvetica,Arial,sans-serif; }
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--outer); color:var(--ink); font-family:var(--serif); line-height:1.55;
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:var(--serif); line-height:1.55;
          -webkit-font-smoothing:antialiased; }
-  .paper { max-width:1080px; margin:32px auto; background:var(--paper); padding:56px 64px 40px;
-           box-shadow:0 2px 24px rgba(40,36,28,.14); border:1px solid var(--rule); }
-  .label { font-family:var(--sans); text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:600;
-           color:var(--muted); }
+  .paper { max-width:880px; margin:32px auto; background:var(--paper);
+           padding:56px 64px 40px; box-shadow:0 2px 24px rgba(40,36,28,.14);
+           border:1px solid var(--rule); }
+  .label { font-family:var(--sans); text-transform:uppercase;
+           letter-spacing:.14em; font-size:11px; font-weight:600; color:var(--muted); }
+
+  /* 1. Masthead */
   .masthead { border-bottom:3px solid var(--accent); padding-bottom:18px; margin-bottom:26px; }
-  .masthead h1 { font-family:var(--serif); font-size:42px; line-height:1.05; margin:6px 0 4px; letter-spacing:-.01em; }
-  .masthead .org { font-family:var(--sans); font-size:15px; font-weight:600; color:var(--accent); letter-spacing:.04em; }
-  .masthead .date { float:right; font-family:var(--sans); font-size:12px; color:var(--muted); margin-top:4px; }
-  .lede { font-size:18px; line-height:1.6; color:#39352e; margin:0 0 30px; border-left:3px solid var(--gold);
-          padding-left:18px; }
+  .masthead h1 { font-family:var(--serif); font-size:42px; line-height:1.05;
+                 margin:6px 0 4px; letter-spacing:-.01em; }
+  .masthead .org { font-family:var(--sans); font-size:15px; font-weight:600;
+                   color:var(--accent); letter-spacing:.04em; }
+  .masthead .date { float:right; font-family:var(--sans); font-size:12px; color:var(--muted);
+                    margin-top:4px; }
+
+  /* 2. Lede */
+  .lede { font-size:18px; line-height:1.6; color:#39352e; margin:0 0 30px;
+          border-left:3px solid var(--gold); padding-left:18px; }
   .lede strong { color:var(--accent); }
-  h2.section { font-family:var(--sans); font-size:13px; font-weight:700; color:var(--data); text-transform:uppercase;
-               letter-spacing:.12em; margin:34px 0 14px; padding-bottom:6px; border-bottom:1px solid var(--rule); }
-  table { width:100%; max-width:520px; border-collapse:collapse; font-size:15px; }
-  thead th { font-family:var(--sans); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em;
-             color:var(--muted); text-align:left; padding:6px 8px; border-bottom:2px solid var(--rule); }
+
+  h2.section { font-family:var(--sans); font-size:13px; font-weight:700; color:var(--data);
+               text-transform:uppercase; letter-spacing:.12em; margin:34px 0 14px;
+               padding-bottom:6px; border-bottom:1px solid var(--rule); }
+
+  /* 3. Ranked table */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead th { font-family:var(--sans); font-size:10.5px; text-transform:uppercase;
+             letter-spacing:.08em; color:var(--muted); text-align:left;
+             padding:6px 8px; border-bottom:2px solid var(--rule); }
   thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums; }
-  tbody td { padding:8px 8px; border-bottom:1px solid #efece4; }
-  .rk { font-family:var(--sans); font-size:12px; color:var(--muted); width:36px; }
+  tbody td { padding:7px 8px; border-bottom:1px solid #efece4; }
+  tbody tr:hover { background:#f6f3ec; }
+  .rk { font-family:var(--sans); font-size:12px; color:var(--muted); width:30px; }
   .st { font-weight:bold; font-family:var(--sans); }
-  .score-chip { display:inline-block; min-width:38px; text-align:center; padding:2px 8px; border-radius:3px;
-                color:#fff; font-family:var(--sans); font-weight:700; font-size:13px; }
-  .client { font-family:var(--sans); font-size:14px; font-weight:600; color:var(--accent); margin:14px 0 0; }
-  .method { font-size:15px; max-width:760px; }
-  .method p { margin:0 0 12px; }
-  .method b { font-family:var(--sans); font-size:12.5px; color:var(--data); }
+  .score-chip { display:inline-block; min-width:34px; text-align:center; padding:2px 8px;
+                border-radius:3px; color:#fff; font-family:var(--sans);
+                font-weight:700; font-size:13px; }
+  .tier { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
+          letter-spacing:.03em; }
+  .tier.Underdeveloped { background:#e6f0ec; color:var(--accent); }
+  .tier.Emerging { background:#faf1dd; color:var(--gold); }
+  .tier.CompetitiveMarket { background:#eee; color:var(--muted); }
+  .pos { color:var(--accent); }
+  .neg { color:#9a3b2f; }
+
+  /* 4. Narratives */
+  .market { margin:0 0 18px; }
+  .market h3 { font-family:var(--serif); font-size:20px; margin:0 0 4px; }
+  .market h3 .badge { font-family:var(--sans); font-size:12px; font-weight:700;
+                      color:var(--data); margin-left:8px; }
+  .market p { margin:0; color:#3a362f; }
+
+  /* 5/6. Methodology + footer */
+  .method { font-size:14px; }
   .method ul { margin:8px 0; padding-left:20px; }
   .method li { margin:5px 0; }
-  .disclaimer { background:#f6f3ec; border-left:3px solid var(--gold); padding:11px 15px; margin:14px 0 0;
-                font-size:13px; line-height:1.55; color:#39352e; }
-  .disclaimer b { font-family:var(--sans); }
-  .pdf-btn { display:inline-block; font-family:var(--sans); font-size:12.5px; font-weight:600; color:#fff;
-             background:var(--accent); padding:7px 15px; border-radius:4px; text-decoration:none; margin:0 0 6px; }
-  .pdf-btn:hover { background:#0a4d40; }
-  footer { margin-top:40px; padding-top:18px; border-top:3px solid var(--accent); font-size:12px; color:var(--muted); }
+  .method b { font-family:var(--sans); font-size:12px; color:var(--data); }
+  footer { margin-top:40px; padding-top:18px; border-top:3px solid var(--accent);
+           font-size:12px; color:var(--muted); }
   footer .by { font-family:var(--sans); font-weight:600; color:var(--ink); font-size:13px; }
   footer .credo { color:var(--accent); font-family:var(--sans); margin:2px 0 10px; }
-  footer .credo a { color:var(--accent); }
-  footer .contact { font-family:var(--sans); margin:2px 0 6px; }
-  footer .contact a { color:var(--accent); text-decoration:none; font-weight:600; }
-  footer .updated { margin-top:10px; font-family:var(--sans); font-size:11.5px; font-weight:600; color:var(--data);
-                    letter-spacing:.02em; }
+  footer .updated { margin-top:10px; font-family:var(--sans); font-size:11.5px;
+                    font-weight:600; color:var(--data); letter-spacing:.02em; }
   footer .vintage { margin-top:5px; font-family:var(--sans); font-size:11px; color:var(--muted); }
-  footer .copyright { margin-top:14px; padding-top:10px; border-top:1px solid var(--rule); font-family:var(--sans);
-                      font-size:11px; color:var(--muted); }
-  footer .copyright a { color:var(--accent); text-decoration:none; }
-  @media (max-width:700px) {
-    .paper { margin:0; padding:24px 16px 28px; border:none; box-shadow:none; }
-    .masthead h1 { font-size:32px; } .masthead .date { float:none; display:block; margin:0 0 6px; }
-    .lede { font-size:16.5px; padding-left:12px; }
-  }
+  .disclaimer { background:#f6f3ec; border-left:3px solid var(--gold); padding:11px 15px;
+                margin:14px 0 0; font-size:13px; line-height:1.55; color:#39352e; }
+  .disclaimer b { font-family:var(--sans); }
+  .pdf-btn { display:inline-block; font-family:var(--sans); font-size:12.5px; font-weight:600;
+             color:#fff; background:var(--accent); padding:7px 15px; border-radius:4px;
+             text-decoration:none; margin:0 0 6px; }
+  .pdf-btn:hover { background:#0a4d40; }
+  .err { color:#9a3b2f; font-family:var(--sans); }
   @media print { body { background:#fff; } .paper { box-shadow:none; border:none; margin:0; } }
 </style>
 </head>
 <body>
 <div class="paper">
   <div class="masthead">
-    <span class="date">2026-10-18</span>
+    <span class="date" id="date"></span>
     <div class="label">Market Intelligence</div>
     <h1>DC Site Intelligence</h1>
     <div class="org">NexPhase Advisory</div>
   </div>
 
-  <p class="lede">Across all 50 US states, <strong>Arizona</strong> leads NexPhase's DC Site Intelligence ranking at <strong>9.6/10</strong> on grid infrastructure depth and quality, followed by <strong>Texas</strong> and <strong>Nevada</strong>.</p>
+  <p class="lede" id="lede">Loading the latest market ranking…</p>
 
-  <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the PDF brief</a>
+  <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the 2-page PDF brief</a>
 
-  <h2 class="section">Top 10 States for Data-Center Siting</h2>
+  <h2 class="section">Ranked Markets — 20 Priority US Data-Center States</h2>
   <table>
-    <thead><tr><th class="num">#</th><th>State</th><th class="num">Score (1-10)</th></tr></thead>
-    <tbody><tr><td class="num rk">1</td><td class="st">Arizona</td><td class="num"><span class="score-chip" style="background:var(--accent)">9.6</span></td></tr><tr><td class="num rk">2</td><td class="st">Texas</td><td class="num"><span class="score-chip" style="background:var(--accent)">9.3</span></td></tr><tr><td class="num rk">3</td><td class="st">Nevada</td><td class="num"><span class="score-chip" style="background:var(--accent)">8.9</span></td></tr><tr><td class="num rk">4</td><td class="st">Oregon</td><td class="num"><span class="score-chip" style="background:var(--accent)">8.6</span></td></tr><tr><td class="num rk">5</td><td class="st">Georgia</td><td class="num"><span class="score-chip" style="background:var(--accent)">8.3</span></td></tr><tr><td class="num rk">6</td><td class="st">California</td><td class="num"><span class="score-chip" style="background:var(--accent)">8.1</span></td></tr><tr><td class="num rk">7</td><td class="st">Ohio</td><td class="num"><span class="score-chip" style="background:var(--accent)">8.1</span></td></tr><tr><td class="num rk">8</td><td class="st">Utah</td><td class="num"><span class="score-chip" style="background:var(--accent)">7.9</span></td></tr><tr><td class="num rk">9</td><td class="st">Florida</td><td class="num"><span class="score-chip" style="background:var(--accent)">7.8</span></td></tr><tr><td class="num rk">10</td><td class="st">Oklahoma</td><td class="num"><span class="score-chip" style="background:var(--accent)">7.8</span></td></tr></tbody>
+    <thead><tr>
+      <th class="num">#</th><th>State</th><th class="num">Score</th>
+      <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
+      <th class="num">Load&nbsp;Growth</th>
+    </tr></thead>
+    <tbody id="rows"><tr><td colspan="6" class="err" id="rowerr"></td></tr></tbody>
   </table>
-  <p class="client">The full 50-state index is available to clients.</p>
 
-  <h2 class="section">How the Index Works</h2>
+  <h2 class="section">Top 3 Markets</h2>
+  <div id="narratives"></div>
+
+  <h2 class="section">Methodology</h2>
   <div class="method">
-    <p><b>What it measures.</b> The index ranks the 50 states on the grid infrastructure already in place for large new loads, from measured public data only: where utility-scale generation is queued to connect to the grid, how many substations show strong or moderate queue activity, and how fast retail electricity sales have grown.</p><p><b>What it does not measure.</b> It does not measure load-serving capacity: whether a utility can serve a new large load at a given site. A high score points to strong transmission; a utility service availability study still has to confirm spare capacity and timelines.</p><p><b>How to use it.</b> Use it to pre-screen markets before utility outreach. High-scoring states warrant further diligence. For any state, confirm large-load service timelines with the utility.</p><p><b>How it is scored.</b> Each state gets a score from 1 to 10. A state with no retail sales data is scored on the other measures; missing data never counts against it. Scores refresh weekly.</p>
-    <div class="disclaimer"><b>This report does not replace a utility service availability confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for further diligence.</div>
+    <p><b>What this index measures.</b> This report is a <em>Generation Infrastructure
+    Density Index</em>. It measures where transmission and interconnection infrastructure
+    exists based on active interconnection-queue activity — the concentration of
+    utility-scale generation projects queuing to inject power at each substation. High
+    infrastructure density indicates that transmission lines have been built or are being
+    built, utilities have invested in that node, and power is moving through that location
+    at scale.</p>
+
+    <p><b>What it does not measure.</b> This index does not measure <em>load-serving
+    capacity</em> — the ability of a utility to serve a new large power consumer at a
+    specific location. A high-scoring state has strong transmission infrastructure but may
+    still require a utility service availability study to confirm spare transformer capacity
+    and large-load interconnection timelines.</p>
+
+    <p><b>How to use this report.</b> Use this index to pre-screen markets before utility
+    outreach. High-scoring markets warrant further diligence. Low-scoring markets signal
+    thin grid infrastructure where large-load service timelines may extend 24–48+ months.</p>
+
+    <div class="disclaimer"><b>This report does not replace a utility service availability
+    confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for
+    further diligence.</div>
   </div>
 
   <h2 class="section">Data Sources</h2>
   <div class="method">
-    <p>From public interconnection queues, utility filings and federal energy data.</p>
     <ul>
-      <li><b>Interconnection queues</b>: live as of 2026-10-18.</li>
-      <li><b>Substation data</b>: 2023.</li>
-      <li><b>Utility load data</b>: retail sales, 2022-2024 (historical).</li>
+      <li><b>Interconnection queue data</b> — live as of <span id="queueDate"></span>,
+        sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
+      <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
+      <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
     </ul>
   </div>
 
   <footer>
     <div class="by">NexPhase Advisory</div>
-    <div class="contact">Contact: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
-    <div class="credo">DC Site Intelligence is part of the NexPhase Intelligence Platform, alongside The Interconnect and The Morning Read: <a href="https://intel.nexphaseadvisory.net/platform/">intel.nexphaseadvisory.net/platform/</a></div>
-    <div>Compiled from public interconnection queues, utility filings and federal energy data. Analysis reflects NexPhase Advisory&#x27;s independent assessment. Scores refresh weekly.</div>
-    <div class="updated">Last updated: October 18, 2026 · 15:51 · refreshes weekly</div>
-    <div class="vintage">Queue data: live as of 2026-10-18 &nbsp;|&nbsp; Substation data: 2023 &nbsp;|&nbsp; Utility load data: retail sales, 2022-2024 (historical)</div>
-    <div class="copyright">&copy; 2026 NexPhase Advisory&nbsp;|&nbsp;Power Deliverability Intelligence&nbsp;|&nbsp;<a href="https://nexphaseadvisory.net">nexphaseadvisory.net</a></div>
+    <div class="credo">Power Origination · Interconnection · Market Strategy</div>
+    <div>Compiled from publicly available sources — ISO/RTO interconnection queue data,
+    EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects
+    NexPhase Advisory's independent professional assessment. Scores refresh weekly.</div>
+    <div class="updated" id="updated"></div>
+    <div class="vintage" id="vintage"></div>
   </footer>
 </div>
+
+<script>
+const FULL = {VA:"Virginia",TX:"Texas",GA:"Georgia",AZ:"Arizona",OH:"Ohio",OR:"Oregon",
+  NV:"Nevada",IL:"Illinois",NC:"North Carolina",FL:"Florida",CA:"California",NJ:"New Jersey",
+  PA:"Pennsylvania",WA:"Washington",CO:"Colorado",MN:"Minnesota",IA:"Iowa",IN:"Indiana",
+  TN:"Tennessee",SC:"South Carolina"};
+const MONTHS = ["January","February","March","April","May","June","July","August",
+  "September","October","November","December"];
+function fmtUpdated(g){
+  if(!g) return new Date().toISOString().slice(0,10);
+  const [d,t] = g.split(" ");
+  const [y,mo,day] = d.split("-").map(Number);
+  return `${MONTHS[mo-1]} ${day}, ${y}` + (t ? ` · ${t}` : "");
+}
+const scoreColor = s => s>=6.5 ? "var(--accent)" : s>=4.5 ? "var(--gold)" : "var(--data)";
+const fmtGrowth = g => (g>=0?"+":"") + g.toFixed(1) + "%";
+const tierClass = t => t.replace(/\s+/g,"");
+const tierClause = t => t==="Underdeveloped" ? "an underdeveloped DC market with open runway (grid infrastructure ahead of current build-out)"
+                      : t==="Emerging" ? "an emerging DC market building momentum, not yet crowded"
+                      : "a competitive, built-out DC market";
+
+function narrative(m){
+  const name = FULL[m.state]||m.state;
+  const depthClause = (m.strong_substations + m.moderate_substations) >= 5
+      ? `${m.strong_substations} STRONG and ${m.moderate_substations} MODERATE density substations (avg ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} queue substations)`
+      : `an average infrastructure density of ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} interconnection-queue substations`;
+  const growthClause = m.weighted_load_growth_pct>=1
+      ? `utility load is growing (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`
+      : m.weighted_load_growth_pct<=-1
+      ? `load growth is soft (${fmtGrowth(m.weighted_load_growth_pct)} weighted), so the case rests on grid capacity rather than demand momentum`
+      : `load growth is roughly flat (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`;
+  return `${name} ranks <b>#${m.rank}</b> at <b>${m.dc_site_score.toFixed(1)}/10</b>, carried by ${depthClause}. As ${tierClause(m.saturation_tier)}, ${growthClause}.`;
+}
+
+fetch("ranked_markets.json", {cache:"no-store"})
+  .then(r => { if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+  .then(d => {
+    const m = d.markets;
+    document.getElementById("date").textContent =
+      (d.generated||"").split(" ")[0] || new Date().toISOString().slice(0,10);
+    document.getElementById("updated").textContent =
+      "Last updated: " + fmtUpdated(d.generated) + " · refreshes weekly";
+
+    // Data vintage
+    const dv = d.data_vintage || {};
+    const qd = dv.queue_live_as_of || (d.generated||"").split(" ")[0];
+    if (document.getElementById("queueDate")) document.getElementById("queueDate").textContent = qd;
+    if (document.getElementById("v860")) document.getElementById("v860").textContent = dv.eia_860_year || "2023";
+    if (document.getElementById("v861")) document.getElementById("v861").textContent = dv.eia_861_latest_year || "2023";
+    document.getElementById("vintage").textContent =
+      `Queue data: live as of ${qd}  |  EIA substation data: ${dv.eia_860_year||"2023"} vintage (EIA-860)`
+      + `  |  Utility load data: ${dv.eia_861_latest_year||"2023"} vintage (EIA-861)`;
+
+    // Lede
+    const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
+    const t = m.slice(0,3).map(x=>FULL[x.state]||x.state);
+    document.getElementById("lede").innerHTML =
+      `Across 20 priority US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
+      + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong> on grid `
+      + `infrastructure depth and quality, followed by <strong>${t[1]}</strong> and `
+      + `<strong>${t[2]}</strong>. ${under} of the 20 markets remain underdeveloped for data centers — `
+      + `open runway where grid infrastructure is ahead of current build-out.`;
+
+    // Table
+    document.getElementById("rows").innerHTML = m.map(x => {
+      const g = x.weighted_load_growth_pct;
+      return `<tr>
+        <td class="num rk">${x.rank}</td>
+        <td class="st">${x.state} <span style="color:var(--muted);font-weight:normal">${FULL[x.state]||""}</span></td>
+        <td class="num"><span class="score-chip" style="background:${scoreColor(x.dc_site_score)}">${x.dc_site_score.toFixed(1)}</span></td>
+        <td><span class="tier ${tierClass(x.saturation_tier)}">${x.saturation_tier}</span></td>
+        <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
+        <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
+      </tr>`;
+    }).join("");
+
+    // Narratives
+    document.getElementById("narratives").innerHTML = m.slice(0,3).map(x =>
+      `<div class="market"><h3>${FULL[x.state]||x.state}<span class="badge">#${x.rank} · ${x.dc_site_score.toFixed(1)}/10</span></h3>`
+      + `<p>${narrative(x)}</p></div>`).join("");
+  })
+  .catch(e => {
+    document.getElementById("lede").innerHTML =
+      `<span class="err">Could not load ranked_markets.json (${e.message}). `
+      + `Serve this page over HTTP (e.g. GitHub Pages) — a local <code>file://</code> open blocks the data fetch.</span>`;
+    document.getElementById("rowerr").textContent = "No data — see note above.";
+  });
+</script>
 </body>
 </html>
