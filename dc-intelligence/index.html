@@ -107,7 +107,7 @@
   <table>
     <thead><tr>
       <th class="num">#</th><th>State</th><th class="num">Score</th>
-      <th>Market&nbsp;Tier</th><th class="num">Grid&nbsp;Depth&nbsp;(S·M)</th>
+      <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
     </tr></thead>
     <tbody id="rows"><tr><td colspan="6" class="err" id="rowerr"></td></tr></tbody>
@@ -118,42 +118,36 @@
 
   <h2 class="section">Methodology</h2>
   <div class="method">
-    <p>Each of the 20 priority markets is scored <b>1–10</b> from four factors. The three
-    continuous factors are min-max normalized across the 20 states, then weighted:</p>
-    <ul>
-      <li><b>Avg Infrastructure Density (35%)</b> — the mean per-substation infrastructure-
-        density score (1–10) across the state's interconnection-queue substations. Measures
-        the typical <em>quality</em> of grid interconnection points.</li>
-      <li><b>Infrastructure Depth (25%)</b> — a normalized count of the state's STRONG and
-        MODERATE density substations (STRONG weighted 2×). Measures grid <em>breadth</em>, so
-        a large state with distributed infrastructure is not penalized for lacking a single
-        dominant hub. (Replaces a raw STRONG-only count, which zeroed out distributed-grid
-        states.)</li>
-      <li><b>Weighted Load Growth (25%)</b> — utility retail-sales year-over-year growth,
-        weighted by load; non-organic reporting outliers (new-entrant retailers, &gt;100%)
-        are excluded.</li>
-      <li><b>Competitive Market (15%)</b> — data-center <em>market</em> competition, <b>not</b>
-        grid capacity. A "Competitive Market" is a built-out market with more rivals for sites
-        and power; less-developed markets score higher (open runway). This factor never
-        indicates a thin grid — grid is measured entirely by the two factors above.</li>
-    </ul>
-    <p><b>"Competitive Market" = market-competition pressure, not absence of grid
-    infrastructure.</b> A state can be a Competitive Market and still have deep, high-quality
-    grid (e.g., Virginia, California).</p>
-    <div class="disclaimer"><b>This report is a market screening tool.</b> It identifies
-    power-advantaged markets for further diligence. It does not replace utility service
-    availability confirmation.</div>
+    <p><b>What this index measures.</b> This report is a <em>Generation Infrastructure
+    Density Index</em>. It measures where transmission and interconnection infrastructure
+    exists based on active interconnection-queue activity — the concentration of
+    utility-scale generation projects queuing to inject power at each substation. High
+    infrastructure density indicates that transmission lines have been built or are being
+    built, utilities have invested in that node, and power is moving through that location
+    at scale.</p>
+
+    <p><b>What it does not measure.</b> This index does not measure <em>load-serving
+    capacity</em> — the ability of a utility to serve a new large power consumer at a
+    specific location. A high-scoring state has strong transmission infrastructure but may
+    still require a utility service availability study to confirm spare transformer capacity
+    and large-load interconnection timelines.</p>
+
+    <p><b>How to use this report.</b> Use this index to pre-screen markets before utility
+    outreach. High-scoring markets warrant further diligence. Low-scoring markets signal
+    thin grid infrastructure where large-load service timelines may extend 24–48+ months.</p>
+
+    <div class="disclaimer"><b>This report does not replace a utility service availability
+    confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for
+    further diligence.</div>
   </div>
 
-  <h2 class="section">Data Sources &amp; Vintage</h2>
+  <h2 class="section">Data Sources</h2>
   <div class="method">
     <ul>
-      <li><b>Interconnection queue</b> — live ISO/RTO interconnection-queue data (PJM, MISO,
-        ERCOT, CAISO, SPP, NYISO, ISO-NE, Southeast); refreshed weekly.</li>
-      <li><b>Grid infrastructure</b> — EIA-860 (<span id="v860"></span> vintage): plant-level
-        grid-interconnection voltage and location.</li>
-      <li><b>Utility load</b> — EIA-861 (<span id="v861"></span> vintage): utility retail
-        sales and year-over-year load growth.</li>
+      <li><b>Interconnection queue data</b> — live as of <span id="queueDate"></span>,
+        sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
+      <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
+      <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
     </ul>
   </div>
 
@@ -213,6 +207,7 @@ fetch("ranked_markets.json", {cache:"no-store"})
     // Data vintage
     const dv = d.data_vintage || {};
     const qd = dv.queue_live_as_of || (d.generated||"").split(" ")[0];
+    if (document.getElementById("queueDate")) document.getElementById("queueDate").textContent = qd;
     if (document.getElementById("v860")) document.getElementById("v860").textContent = dv.eia_860_year || "2023";
     if (document.getElementById("v861")) document.getElementById("v861").textContent = dv.eia_861_latest_year || "2023";
     document.getElementById("vintage").textContent =
