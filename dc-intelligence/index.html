@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DC Site Intelligence — NexPhase Advisory</title>
+<style>
+  :root {
+    --paper:#fdfcfa; --outer:#e7e3da; --ink:#2b2b28; --muted:#6b665c;
+    --accent:#0b5d4e; --data:#1a3a6b; --gold:#a06d18; --rule:#ddd8cd;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--outer); color:var(--ink);
+         font-family:var(--serif); line-height:1.55;
+         -webkit-font-smoothing:antialiased; }
+  .paper { max-width:880px; margin:32px auto; background:var(--paper);
+           padding:56px 64px 40px; box-shadow:0 2px 24px rgba(40,36,28,.14);
+           border:1px solid var(--rule); }
+  .label { font-family:var(--sans); text-transform:uppercase;
+           letter-spacing:.14em; font-size:11px; font-weight:600; color:var(--muted); }
+
+  /* 1. Masthead */
+  .masthead { border-bottom:3px solid var(--accent); padding-bottom:18px; margin-bottom:26px; }
+  .masthead h1 { font-family:var(--serif); font-size:42px; line-height:1.05;
+                 margin:6px 0 4px; letter-spacing:-.01em; }
+  .masthead .org { font-family:var(--sans); font-size:15px; font-weight:600;
+                   color:var(--accent); letter-spacing:.04em; }
+  .masthead .date { float:right; font-family:var(--sans); font-size:12px; color:var(--muted);
+                    margin-top:4px; }
+
+  /* 2. Lede */
+  .lede { font-size:18px; line-height:1.6; color:#39352e; margin:0 0 30px;
+          border-left:3px solid var(--gold); padding-left:18px; }
+  .lede strong { color:var(--accent); }
+
+  h2.section { font-family:var(--sans); font-size:13px; font-weight:700; color:var(--data);
+               text-transform:uppercase; letter-spacing:.12em; margin:34px 0 14px;
+               padding-bottom:6px; border-bottom:1px solid var(--rule); }
+
+  /* 3. Ranked table */
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  thead th { font-family:var(--sans); font-size:10.5px; text-transform:uppercase;
+             letter-spacing:.08em; color:var(--muted); text-align:left;
+             padding:6px 8px; border-bottom:2px solid var(--rule); }
+  thead th.num, tbody td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  tbody td { padding:7px 8px; border-bottom:1px solid #efece4; }
+  tbody tr:hover { background:#f6f3ec; }
+  .rk { font-family:var(--sans); font-size:12px; color:var(--muted); width:30px; }
+  .st { font-weight:bold; font-family:var(--sans); }
+  .score-chip { display:inline-block; min-width:34px; text-align:center; padding:2px 8px;
+                border-radius:3px; color:#fff; font-family:var(--sans);
+                font-weight:700; font-size:13px; }
+  .tier { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
+          letter-spacing:.03em; }
+  .tier.Underdeveloped { background:#e6f0ec; color:var(--accent); }
+  .tier.Emerging { background:#faf1dd; color:var(--gold); }
+  .tier.Saturated { background:#eee; color:var(--muted); }
+  .pos { color:var(--accent); }
+  .neg { color:#9a3b2f; }
+
+  /* 4. Narratives */
+  .market { margin:0 0 18px; }
+  .market h3 { font-family:var(--serif); font-size:20px; margin:0 0 4px; }
+  .market h3 .badge { font-family:var(--sans); font-size:12px; font-weight:700;
+                      color:var(--data); margin-left:8px; }
+  .market p { margin:0; color:#3a362f; }
+
+  /* 5/6. Methodology + footer */
+  .method { font-size:14px; }
+  .method ul { margin:8px 0; padding-left:20px; }
+  .method li { margin:5px 0; }
+  .method b { font-family:var(--sans); font-size:12px; color:var(--data); }
+  footer { margin-top:40px; padding-top:18px; border-top:3px solid var(--accent);
+           font-size:12px; color:var(--muted); }
+  footer .by { font-family:var(--sans); font-weight:600; color:var(--ink); font-size:13px; }
+  footer .credo { color:var(--accent); font-family:var(--sans); margin:2px 0 10px; }
+  .err { color:#9a3b2f; font-family:var(--sans); }
+  @media print { body { background:#fff; } .paper { box-shadow:none; border:none; margin:0; } }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="masthead">
+    <span class="date" id="date"></span>
+    <div class="label">Market Intelligence</div>
+    <h1>DC Site Intelligence</h1>
+    <div class="org">NexPhase Advisory</div>
+  </div>
+
+  <p class="lede" id="lede">Loading the latest market ranking…</p>
+
+  <h2 class="section">Ranked Markets — 20 Priority US Data-Center States</h2>
+  <table>
+    <thead><tr>
+      <th class="num">#</th><th>State</th><th class="num">Score</th>
+      <th>Saturation</th><th class="num">STRONG&nbsp;Substations</th>
+      <th class="num">Load&nbsp;Growth</th>
+    </tr></thead>
+    <tbody id="rows"><tr><td colspan="6" class="err" id="rowerr"></td></tr></tbody>
+  </table>
+
+  <h2 class="section">Top 3 Markets</h2>
+  <div id="narratives"></div>
+
+  <h2 class="section">Methodology</h2>
+  <div class="method">
+    <p>Each of the 20 priority markets is scored 1–10 from four factors. The three
+    continuous factors are min-max normalized across the 20 states, then weighted:</p>
+    <ul>
+      <li><b>Avg Infrastructure Density (35%)</b> — mean transmission-infrastructure
+        density of the state's interconnection-queue substations.</li>
+      <li><b>STRONG Substation Count (25%)</b> — substations rated STRONG for
+        infrastructure density (deep, active queue + high voltage).</li>
+      <li><b>Weighted Load Growth (25%)</b> — utility retail-sales YoY growth, weighted
+        by load; excludes non-organic reporting outliers.</li>
+      <li><b>Saturation Tier (15%)</b> — DC build-out maturity
+        (underdeveloped &gt; emerging &gt; saturated — more runway scores higher).</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="by">Chris Santiago · NexPhase Advisory</div>
+    <div class="credo">20+ years power origination &amp; interconnection · NextEra alumni · 5+ GW to NTP · FERC Order 1000 wins</div>
+    <div>Compiled from publicly available sources — ISO/RTO interconnection queue data,
+    EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects the
+    author's independent professional assessment. Scores refresh weekly.</div>
+  </footer>
+</div>
+
+<script>
+const FULL = {VA:"Virginia",TX:"Texas",GA:"Georgia",AZ:"Arizona",OH:"Ohio",OR:"Oregon",
+  NV:"Nevada",IL:"Illinois",NC:"North Carolina",FL:"Florida",CA:"California",NJ:"New Jersey",
+  PA:"Pennsylvania",WA:"Washington",CO:"Colorado",MN:"Minnesota",IA:"Iowa",IN:"Indiana",
+  TN:"Tennessee",SC:"South Carolina"};
+const scoreColor = s => s>=6.5 ? "var(--accent)" : s>=4.5 ? "var(--gold)" : "var(--data)";
+const fmtGrowth = g => (g>=0?"+":"") + g.toFixed(1) + "%";
+const tierFrame = t => t==="Underdeveloped" ? "open runway — interconnection infrastructure ahead of current DC build-out"
+                     : t==="Emerging" ? "building momentum, not yet crowded"
+                     : "a built-out, competitive market";
+
+function narrative(m){
+  const name = FULL[m.state]||m.state;
+  const driver = m.strong_substations>=5
+      ? `${m.strong_substations} substations rated STRONG for infrastructure density (avg ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} queue substations)`
+      : `an average infrastructure-density of ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} interconnection-queue substations`;
+  const growthClause = m.weighted_load_growth_pct>=1
+      ? `utility load is growing (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`
+      : m.weighted_load_growth_pct<=-1
+      ? `load growth is soft (${fmtGrowth(m.weighted_load_growth_pct)} weighted), so the case rests on grid capacity rather than demand momentum`
+      : `load growth is roughly flat (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`;
+  return `${name} ranks <b>#${m.rank}</b> at <b>${m.dc_site_score.toFixed(1)}/10</b>, carried by ${driver}. As ${tierFrame(m.saturation_tier).replace(/^a /,'a ')} (${m.saturation_tier.toLowerCase()} tier), ${growthClause}.`;
+}
+
+fetch("ranked_markets.json", {cache:"no-store"})
+  .then(r => { if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+  .then(d => {
+    const m = d.markets;
+    document.getElementById("date").textContent =
+      (d.generated||"").split(" ")[0] || new Date().toISOString().slice(0,10);
+
+    // Lede
+    const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
+    const t = m.slice(0,3).map(x=>FULL[x.state]||x.state);
+    document.getElementById("lede").innerHTML =
+      `Across 20 priority US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
+      + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong>, on the `
+      + `deepest interconnection pipeline in the set. <strong>${t[1]}</strong> and `
+      + `<strong>${t[2]}</strong> follow. ${under} of the 20 markets sit in the `
+      + `underdeveloped tier — where grid infrastructure is ahead of current DC build-out.`;
+
+    // Table
+    document.getElementById("rows").innerHTML = m.map(x => {
+      const g = x.weighted_load_growth_pct;
+      return `<tr>
+        <td class="num rk">${x.rank}</td>
+        <td class="st">${x.state} <span style="color:var(--muted);font-weight:normal">${FULL[x.state]||""}</span></td>
+        <td class="num"><span class="score-chip" style="background:${scoreColor(x.dc_site_score)}">${x.dc_site_score.toFixed(1)}</span></td>
+        <td><span class="tier ${x.saturation_tier}">${x.saturation_tier}</span></td>
+        <td class="num">${x.strong_substations}</td>
+        <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
+      </tr>`;
+    }).join("");
+
+    // Narratives
+    document.getElementById("narratives").innerHTML = m.slice(0,3).map(x =>
+      `<div class="market"><h3>${FULL[x.state]||x.state}<span class="badge">#${x.rank} · ${x.dc_site_score.toFixed(1)}/10</span></h3>`
+      + `<p>${narrative(x)}</p></div>`).join("");
+  })
+  .catch(e => {
+    document.getElementById("lede").innerHTML =
+      `<span class="err">Could not load ranked_markets.json (${e.message}). `
+      + `Serve this page over HTTP (e.g. GitHub Pages) — a local <code>file://</code> open blocks the data fetch.</span>`;
+    document.getElementById("rowerr").textContent = "No data — see note above.";
+  });
+</script>
+</body>
+</html>
