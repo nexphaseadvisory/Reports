@@ -56,7 +56,7 @@
           letter-spacing:.03em; }
   .tier.Underdeveloped { background:#e6f0ec; color:var(--accent); }
   .tier.Emerging { background:#faf1dd; color:var(--gold); }
-  .tier.Saturated { background:#eee; color:var(--muted); }
+  .tier.CompetitiveMarket { background:#eee; color:var(--muted); }
   .pos { color:var(--accent); }
   .neg { color:#9a3b2f; }
 
@@ -78,6 +78,10 @@
   footer .credo { color:var(--accent); font-family:var(--sans); margin:2px 0 10px; }
   footer .updated { margin-top:10px; font-family:var(--sans); font-size:11.5px;
                     font-weight:600; color:var(--data); letter-spacing:.02em; }
+  footer .vintage { margin-top:5px; font-family:var(--sans); font-size:11px; color:var(--muted); }
+  .disclaimer { background:#f6f3ec; border-left:3px solid var(--gold); padding:11px 15px;
+                margin:14px 0 0; font-size:13px; line-height:1.55; color:#39352e; }
+  .disclaimer b { font-family:var(--sans); }
   .pdf-btn { display:inline-block; font-family:var(--sans); font-size:12.5px; font-weight:600;
              color:#fff; background:var(--accent); padding:7px 15px; border-radius:4px;
              text-decoration:none; margin:0 0 6px; }
@@ -103,7 +107,7 @@
   <table>
     <thead><tr>
       <th class="num">#</th><th>State</th><th class="num">Score</th>
-      <th>Saturation</th><th class="num">STRONG&nbsp;Substations</th>
+      <th>Market&nbsp;Tier</th><th class="num">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
     </tr></thead>
     <tbody id="rows"><tr><td colspan="6" class="err" id="rowerr"></td></tr></tbody>
@@ -114,27 +118,53 @@
 
   <h2 class="section">Methodology</h2>
   <div class="method">
-    <p>Each of the 20 priority markets is scored 1–10 from four factors. The three
+    <p>Each of the 20 priority markets is scored <b>1–10</b> from four factors. The three
     continuous factors are min-max normalized across the 20 states, then weighted:</p>
     <ul>
-      <li><b>Avg Infrastructure Density (35%)</b> — mean transmission-infrastructure
-        density of the state's interconnection-queue substations.</li>
-      <li><b>STRONG Substation Count (25%)</b> — substations rated STRONG for
-        infrastructure density (deep, active queue + high voltage).</li>
-      <li><b>Weighted Load Growth (25%)</b> — utility retail-sales YoY growth, weighted
-        by load; excludes non-organic reporting outliers.</li>
-      <li><b>Saturation Tier (15%)</b> — DC build-out maturity
-        (underdeveloped &gt; emerging &gt; saturated — more runway scores higher).</li>
+      <li><b>Avg Infrastructure Density (35%)</b> — the mean per-substation infrastructure-
+        density score (1–10) across the state's interconnection-queue substations. Measures
+        the typical <em>quality</em> of grid interconnection points.</li>
+      <li><b>Infrastructure Depth (25%)</b> — a normalized count of the state's STRONG and
+        MODERATE density substations (STRONG weighted 2×). Measures grid <em>breadth</em>, so
+        a large state with distributed infrastructure is not penalized for lacking a single
+        dominant hub. (Replaces a raw STRONG-only count, which zeroed out distributed-grid
+        states.)</li>
+      <li><b>Weighted Load Growth (25%)</b> — utility retail-sales year-over-year growth,
+        weighted by load; non-organic reporting outliers (new-entrant retailers, &gt;100%)
+        are excluded.</li>
+      <li><b>Competitive Market (15%)</b> — data-center <em>market</em> competition, <b>not</b>
+        grid capacity. A "Competitive Market" is a built-out market with more rivals for sites
+        and power; less-developed markets score higher (open runway). This factor never
+        indicates a thin grid — grid is measured entirely by the two factors above.</li>
+    </ul>
+    <p><b>"Competitive Market" = market-competition pressure, not absence of grid
+    infrastructure.</b> A state can be a Competitive Market and still have deep, high-quality
+    grid (e.g., Virginia, California).</p>
+    <div class="disclaimer"><b>This report is a market screening tool.</b> It identifies
+    power-advantaged markets for further diligence. It does not replace utility service
+    availability confirmation.</div>
+  </div>
+
+  <h2 class="section">Data Sources &amp; Vintage</h2>
+  <div class="method">
+    <ul>
+      <li><b>Interconnection queue</b> — live ISO/RTO interconnection-queue data (PJM, MISO,
+        ERCOT, CAISO, SPP, NYISO, ISO-NE, Southeast); refreshed weekly.</li>
+      <li><b>Grid infrastructure</b> — EIA-860 (<span id="v860"></span> vintage): plant-level
+        grid-interconnection voltage and location.</li>
+      <li><b>Utility load</b> — EIA-861 (<span id="v861"></span> vintage): utility retail
+        sales and year-over-year load growth.</li>
     </ul>
   </div>
 
   <footer>
-    <div class="by">Chris Santiago · NexPhase Advisory</div>
-    <div class="credo">20+ years power origination &amp; interconnection · NextEra alumni · 5+ GW to NTP · FERC Order 1000 wins</div>
+    <div class="by">NexPhase Advisory</div>
+    <div class="credo">Power Origination · Interconnection · Market Strategy</div>
     <div>Compiled from publicly available sources — ISO/RTO interconnection queue data,
-    EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects the
-    author's independent professional assessment. Scores refresh weekly.</div>
+    EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects
+    NexPhase Advisory's independent professional assessment. Scores refresh weekly.</div>
     <div class="updated" id="updated"></div>
+    <div class="vintage" id="vintage"></div>
   </footer>
 </div>
 
@@ -153,21 +183,22 @@ function fmtUpdated(g){
 }
 const scoreColor = s => s>=6.5 ? "var(--accent)" : s>=4.5 ? "var(--gold)" : "var(--data)";
 const fmtGrowth = g => (g>=0?"+":"") + g.toFixed(1) + "%";
-const tierFrame = t => t==="Underdeveloped" ? "open runway — interconnection infrastructure ahead of current DC build-out"
-                     : t==="Emerging" ? "building momentum, not yet crowded"
-                     : "a built-out, competitive market";
+const tierClass = t => t.replace(/\s+/g,"");
+const tierClause = t => t==="Underdeveloped" ? "an underdeveloped DC market with open runway (grid infrastructure ahead of current build-out)"
+                      : t==="Emerging" ? "an emerging DC market building momentum, not yet crowded"
+                      : "a competitive, built-out DC market";
 
 function narrative(m){
   const name = FULL[m.state]||m.state;
-  const driver = m.strong_substations>=5
-      ? `${m.strong_substations} substations rated STRONG for infrastructure density (avg ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} queue substations)`
-      : `an average infrastructure-density of ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} interconnection-queue substations`;
+  const depthClause = (m.strong_substations + m.moderate_substations) >= 5
+      ? `${m.strong_substations} STRONG and ${m.moderate_substations} MODERATE density substations (avg ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} queue substations)`
+      : `an average infrastructure density of ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} interconnection-queue substations`;
   const growthClause = m.weighted_load_growth_pct>=1
       ? `utility load is growing (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`
       : m.weighted_load_growth_pct<=-1
       ? `load growth is soft (${fmtGrowth(m.weighted_load_growth_pct)} weighted), so the case rests on grid capacity rather than demand momentum`
       : `load growth is roughly flat (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`;
-  return `${name} ranks <b>#${m.rank}</b> at <b>${m.dc_site_score.toFixed(1)}/10</b>, carried by ${driver}. As ${tierFrame(m.saturation_tier).replace(/^a /,'a ')} (${m.saturation_tier.toLowerCase()} tier), ${growthClause}.`;
+  return `${name} ranks <b>#${m.rank}</b> at <b>${m.dc_site_score.toFixed(1)}/10</b>, carried by ${depthClause}. As ${tierClause(m.saturation_tier)}, ${growthClause}.`;
 }
 
 fetch("ranked_markets.json", {cache:"no-store"})
@@ -179,15 +210,24 @@ fetch("ranked_markets.json", {cache:"no-store"})
     document.getElementById("updated").textContent =
       "Last updated: " + fmtUpdated(d.generated) + " · refreshes weekly";
 
+    // Data vintage
+    const dv = d.data_vintage || {};
+    const qd = dv.queue_live_as_of || (d.generated||"").split(" ")[0];
+    if (document.getElementById("v860")) document.getElementById("v860").textContent = dv.eia_860_year || "2023";
+    if (document.getElementById("v861")) document.getElementById("v861").textContent = dv.eia_861_latest_year || "2023";
+    document.getElementById("vintage").textContent =
+      `Queue data: live as of ${qd}  |  EIA substation data: ${dv.eia_860_year||"2023"} vintage (EIA-860)`
+      + `  |  Utility load data: ${dv.eia_861_latest_year||"2023"} vintage (EIA-861)`;
+
     // Lede
     const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
     const t = m.slice(0,3).map(x=>FULL[x.state]||x.state);
     document.getElementById("lede").innerHTML =
       `Across 20 priority US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
-      + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong>, on the `
-      + `deepest interconnection pipeline in the set. <strong>${t[1]}</strong> and `
-      + `<strong>${t[2]}</strong> follow. ${under} of the 20 markets sit in the `
-      + `underdeveloped tier — where grid infrastructure is ahead of current DC build-out.`;
+      + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong> on grid `
+      + `infrastructure depth and quality, followed by <strong>${t[1]}</strong> and `
+      + `<strong>${t[2]}</strong>. ${under} of the 20 markets remain underdeveloped for data centers — `
+      + `open runway where grid infrastructure is ahead of current build-out.`;
 
     // Table
     document.getElementById("rows").innerHTML = m.map(x => {
@@ -196,8 +236,8 @@ fetch("ranked_markets.json", {cache:"no-store"})
         <td class="num rk">${x.rank}</td>
         <td class="st">${x.state} <span style="color:var(--muted);font-weight:normal">${FULL[x.state]||""}</span></td>
         <td class="num"><span class="score-chip" style="background:${scoreColor(x.dc_site_score)}">${x.dc_site_score.toFixed(1)}</span></td>
-        <td><span class="tier ${x.saturation_tier}">${x.saturation_tier}</span></td>
-        <td class="num">${x.strong_substations}</td>
+        <td><span class="tier ${tierClass(x.saturation_tier)}">${x.saturation_tier}</span></td>
+        <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
         <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
       </tr>`;
     }).join("");
