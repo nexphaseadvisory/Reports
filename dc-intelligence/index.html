@@ -57,6 +57,11 @@
   .tier.Underdeveloped { background:#e6f0ec; color:var(--accent); }
   .tier.Emerging { background:#faf1dd; color:var(--gold); }
   .tier.CompetitiveMarket { background:#eee; color:var(--muted); }
+  .permit { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
+            letter-spacing:.03em; }
+  .permit.Permissive { background:#e6f0ec; color:var(--accent); }
+  .permit.Neutral { background:#faf1dd; color:var(--gold); }
+  .permit.Restrictive { background:#f6e3df; color:#9a3b2f; }
   .pos { color:var(--accent); }
   .neg { color:#9a3b2f; }
 
@@ -109,8 +114,9 @@
       <th class="num">#</th><th>State</th><th class="num">Score</th>
       <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
+      <th title="Large-load siting & generation-permitting friction (15% scoring factor): Permissive / Neutral / Restrictive.">Permitting</th>
     </tr></thead>
-    <tbody id="rows"><tr><td colspan="6" class="err" id="rowerr"></td></tr></tbody>
+    <tbody id="rows"><tr><td colspan="7" class="err" id="rowerr"></td></tr></tbody>
   </table>
 
   <h2 class="section">Top 3 Markets</h2>
@@ -136,9 +142,20 @@
     outreach. High-scoring markets warrant further diligence. Low-scoring markets signal
     thin grid infrastructure where large-load service timelines may extend 24–48+ months.</p>
 
+    <p><b>How the index is scored.</b> Each market is scored <b>1–10</b> from five
+    min-max-normalized factors: infrastructure density (30%), STRONG+MODERATE grid depth
+    (20%), weighted utility load growth (20%), market-saturation runway (15%), and
+    <em>permitting ease</em> (15%). The permitting-ease factor tiers each state by large-load
+    siting and generation-permitting friction — <b>Permissive</b>, <b>Neutral</b>, or
+    <b>Restrictive</b> — rewarding states where projects clear faster.</p>
+
     <div class="disclaimer"><b>This report does not replace a utility service availability
     confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for
     further diligence.</div>
+
+    <div class="disclaimer"><b>Behind-the-meter (BTM) policy.</b> BTM generation rules vary by
+    utility within each state. Consult utility tariff schedules before assuming BTM viability.
+    This field reflects general state-level regulatory posture only.</div>
   </div>
 
   <h2 class="section">Data Sources</h2>
@@ -234,6 +251,7 @@ fetch("ranked_markets.json", {cache:"no-store"})
         <td><span class="tier ${tierClass(x.saturation_tier)}">${x.saturation_tier}</span></td>
         <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
         <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
+        <td>${x.permitting_ease ? `<span class="permit ${x.permitting_ease}">${x.permitting_ease}</span>` : "—"}</td>
       </tr>`;
     }).join("");
 
