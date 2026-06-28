@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect&#8482; — Week of June 28, 2026</title>
+<style>
+:root {
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 28px 42px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.masthead h1 {
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: .2px;
+  margin-bottom: 14px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.meta-bar strong { color: var(--ink); }
+
+/* ── BODY ── */
+.body { padding: 0 42px 32px; }
+
+/* ── LEDE ── */
+.lede {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lede p + p { margin-top: 10px; }
+.lede .author {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
+}
+.sec-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
+
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.connector-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sector-badge {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flag-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e8dfc8;
+}
+.flag-item:last-child { border-bottom: none; }
+.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
+.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #b0b8c4;
+  padding: 20px 42px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ══ MASTHEAD ══ -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
+    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development — for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of June 28, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 4</span>
+      <span>nexphaseadvisory.net</span>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div class="body">
+
+    <!-- LEDE -->
+    <div class="lede">
+      <p>Permanent Power Company closed $600M in construction financing for a 250MW/600MWh solar-plus-storage project in California while Sabanci Renewables signed a PPA with Meta for a Texas solar portfolio, marking a week of large-scale clean power contracting tied directly to hyperscale demand. Z Squared acquired an Arkansas site for a 150MW behind-the-meter gas-powered AI campus and Valley Electric Association pushed for a novel gas plant in Nevada to serve data center load, signaling that off-grid and utility-scale gas remain active strategies where grid interconnection timelines are prohibitive. Karis moved on a Dubuque County, Iowa data center despite a local moratorium, and a rural California county reversed approval of a data center project under community pressure, adding to a pattern of siting friction that is reshaping where development pencils.</p>
+      <p>Power market intelligence from a practitioner with two decades in origination and interconnection — 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
+    </div>
+
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>Connector Markets — Load &amp; Supply in the Same Geography</h2>
+    </div>
+
+    <div class="connector-section">
+      <p class="connector-intro">A "connector market" exists where a known data center load announcement overlaps with viable generation in the same ISO/state footprint. These are the highest-value origination windows — one conversation can structure both sides of a deal.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td><span class="market-tag">TX · ERCOT</span></td>
+          <td><span class="load-name">Meta (via Sabanci Renewables PPA)</span> — Meta is anchoring new solar supply in ERCOT just as Nexus DC files to add a large Dallas campus, tightening the load-generation race.</td>
+        </tr>
+        <tr>
+          <td><span class="market-tag">MI · MISO</span></td>
+          <td><span class="load-name">Hyperscale Data</span> — Hyperscale Data is expanding its Michigan campus and signing neocloud capacity deals, signaling fast-rising load pressure inside MISO.</td>
+        </tr>
+        <tr>
+          <td><span class="market-tag">CA · CAISO</span></td>
+          <td><span class="load-name">Permanent Power Company</span> — Permanent Power Company's freshly financed solar-plus-storage project enters CAISO as data center reversals leave supply-demand signals mixed.</td>
+        </tr>
+        <tr>
+          <td><span class="market-tag">AR · SPP</span></td>
+          <td><span class="load-name">Z Squared</span> — Z Squared's behind-the-meter AI campus in Arkansas bypasses SPP's grid queue entirely, raising origination interest in off-grid load structures.</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="queue-spotlight">
+        <div class="qs-label">Queue Spotlight — Highest-Capacity Acquisition Targets This Week</div>
+        <div class="qs-row">
+        <div class="qs-item">
+            <div class="qs-id"><span style="color:#0b5d4e;font-weight:700;font-size:9px;letter-spacing:.5px;">NEW </span>SIOUX</div>
+            <div class="qs-desc">2220 MW  · MISO<br>Active · SIOUX</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Navajo 500kV Substation</div>
+            <div class="qs-desc">2000 MW Solar+Battery · West<br>active · Navajo 500kV Substation</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Ashe Substation, or Ashe - Marion No 2 500 kV line, or Ashe - Slatt No 1 500 kV line.</div>
+            <div class="qs-desc">2000 MW Solar+Battery · West<br>active · Ashe Substation, or Ashe - Marion No 2 500 kV line, or Ashe - Slatt No 1 500 kV line.</div>
+          </div>
+          <div class="qs-item">
+            <div class="qs-id">Smarr CC</div>
+            <div class="qs-desc">2000 MW Gas · Southeast<br>active · Big Smarr 500 kV substation (TBD)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Interconnection</div>
+      <h2>ERCOT's Batch Zero Signals a New Era for Large-Load Reviews</h2>
+    </div>
+
+    <div class="lead-story">
+      <p class="dek">Texas's new centralized interconnection framework arrives just as a $2B transmission dispute and surging data-center filings expose the limits of the existing process.</p>
+      <p class="body-text">ERCOT approved its Batch Zero framework this week, centralizing and streamlining large-load interconnection reviews in direct response to AI and data-center demand overwhelming the queue. The timing is pointed: a separate dispute at the PUC over the $2B, 765-kV Permian Basin transmission line—where landowners are seeking a pause after route changes tied to ERCOT grid expansion triggered improper-notice claims—illustrates exactly the kind of downstream friction that accelerated queue reform is meant to outrun. DataBank's concurrent filing for a 200MW campus outside Atlanta is a reminder that the large-load pressure driving Texas's policy shift is regional, not local.</p>
+      <p class="body-text" style="margin-top:8px">Batch Zero matters because it converts interconnection review from a first-come, first-served queue into a coordinated, bulk-intake process, giving ERCOT visibility into cumulative load additions before individual studies propagate conflicting assumptions through the system. The Permian Basin line dispute underscores the stakes: transmission infrastructure committed to serve new load is now legally contested mid-build, and any procedural delay on a 765-kV project ripples across reliability planning for the entire west Texas corridor. For hyperscalers and IPPs simultaneously negotiating large-load service agreements in ERCOT, queue position just became less important than cohort timing under the new batch structure.</p>
+      <p class="body-text" style="margin-top:8px">Watch whether ERCOT publishes intake windows and MW caps for subsequent batches, which will effectively set the pace of large-load additions the grid operator is willing to absorb per cycle. The Oncor/LCRA transmission case at the PUC is the near-term pressure test: if landowner objections succeed in pausing that route, the transmission backbone underpinning future batch approvals faces a credibility gap. Nexus DC's ~500,000 sq ft Dallas filing targeting go-live next year will be an early indicator of whether developers believe Batch Zero timelines are compatible with their commercial schedules.</p>
+      <div class="data-box">
+        <div class="data-label">NexPhase Signal Log, week of June 27 2026</div>
+        <div class="data-grid">
+          <div class="data-item"><div class="num">$2B</div><div class="lbl">Permian Basin 765-kV transmission line under PUC dispute</div></div>
+          <div class="data-item"><div class="num">200MW</div><div class="lbl">DataBank campus filed near Atlanta</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Campus Announcements — Scale &amp; Power Implications</h2>
+    </div>
+
+    <div class="story-grid">
+    <div class="story">
+        <div class="hed">Z Squared Breaks Ground on 150MW Arkansas AI Campus</div>
+        <div class="dek">Z Squared has acquired an Arkansas site for a 150MW immersion-cooled AI/HPC campus to be powered by behind-the-meter natural gas.</div>
+        <p class="body-text">The acquisition marks one of the larger behind-the-meter gas-powered data center plays to enter the SPP footprint.</p>
+      </div>
+      <div class="story">
+        <div class="hed">DataBank Files 200MW Campus Plans Near Atlanta</div>
+        <div class="dek">DataBank has filed permits for a 200MW data center campus outside Atlanta, Georgia, adding significant load to the SERC region.</div>
+        <p class="body-text">The filing represents one of the largest single-campus load additions recently proposed in Georgia.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Permanent Power Secures $600M for 250MW California Solar-Storage Project</div>
+        <div class="dek">Permanent Power Company closed $600M in construction financing for a 250MW/600MWh solar-plus-storage project in California.</div>
+        <p class="body-text">The project adds a significant block of paired generation and storage capacity to the CAISO queue.</p>
+      </div>
+      <div class="story">
+        <div class="hed">Hyperscale Data Signs 20MW Michigan Neocloud Deal, Eyes 52MW</div>
+        <div class="dek">Hyperscale Data signed a 20MW capacity agreement at its Michigan campus with a neocloud customer, with contractual potential to scale to 52MW.</div>
+        <p class="body-text">The company also completed acquisition of 48.5 acres adjacent to the same Michigan campus to support further expansion.</p>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory &amp; Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+        <span class="flag-co"><span class="sector-badge" style="background:#1a3a6b">Data Centers</span>Karis · Dubuque County IA</span>
+        <span class="flag-note">Karis is pushing a data center project despite an active local moratorium, signaling that developers willing to challenge municipal bans face material permitting and community-opposition risk that could stall or kill projects.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co"><span class="sector-badge" style="background:#1a3a6b">Data Centers</span>Rural CA County · Undisclosed Developer</span>
+        <span class="flag-note">A rural California county reversed approval of a large data center following local pushback, underscoring that even permitted projects remain vulnerable to rescission when community opposition intensifies post-approval.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co"><span class="sector-badge" style="background:#5f5e5a">Both</span>ERCOT · Batch Zero Framework</span>
+        <span class="flag-note">ERCOT adopted a centralized Batch Zero process to streamline large-load interconnection reviews, which could accelerate queue timelines for AI/data center and IPP projects in Texas but may also concentrate approval bottlenecks in a single review cycle.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co"><span class="sector-badge" style="background:#633806">Transmission</span>Oncor / LCRA · PUC Texas 765-kV Line</span>
+        <span class="flag-note">Landowners are seeking a procedural pause at the PUC over improper notice tied to route changes on the $2B Permian Basin 765-kV line, creating schedule uncertainty for a transmission project critical to ERCOT grid expansion.</span>
+      </div>
+      <div class="flag-item">
+        <span class="flag-co"><span class="sector-badge" style="background:#1a3a6b">Data Centers</span>Valley Electric Association · Nevada</span>
+        <span class="flag-note">A Nevada co-op is requesting a novel gas plant to serve surging data center load, a regulatory first that could set a precedent for how utilities in other states justify new fossil generation to serve hyperscale customers.</span>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA &amp; Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+    <p class="body-text">Permanent Power Company's $600M construction financing for a 250MW/600MWh solar-plus-storage project in California implies a roughly $2.40/W all-in capital intensity benchmark for paired utility-scale assets in CAISO — a useful datapoint as lenders price similar structures elsewhere. The concurrent wave of behind-the-meter natural gas deployments (Z Squared's 150MW immersion-cooled Arkansas campus, Valley Electric's Nevada gas plant request) signals that developers are actively pricing the optionality of bypassing interconnection queues against the fuel-cost and offtake risk of merchant gas, with no grid-tied PPA required. Sabanci's undisclosed-price PPA with Meta in ERCOT reinforces that hyperscaler offtake continues to clear at terms that support project finance, even as ERCOT's new Batch Zero framework introduces procedural uncertainty on interconnection timelines that lenders will need to underwrite.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About This Brief</div>
+      <h2>NexPhase Advisory</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is produced by NexPhase Advisory — a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <strong style="color:var(--accent)">DC Site Intelligence</strong> — explore NexPhase's
+      <a href="/dc-intelligence/" style="color:var(--accent);text-decoration:none;font-weight:600">data-center market ranking</a>:
+      20 priority US markets scored 1&ndash;10 on grid infrastructure density, transmission capacity, and utility load growth. Refreshed weekly.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Questions, feedback, or to discuss a specific market or project: <a href="mailto:info@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">info@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of June 28, 2026 &nbsp;·&nbsp; Vol. 1, No. 4</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available to subscribers on request.</div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of June 28, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+    </div>
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
