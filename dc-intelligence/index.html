@@ -56,12 +56,19 @@
           letter-spacing:.03em; }
   .tier.Underdeveloped { background:#e6f0ec; color:var(--accent); }
   .tier.Emerging { background:#faf1dd; color:var(--gold); }
-  .tier.CompetitiveMarket { background:#eee; color:var(--muted); }
+  .tier.Competitive { background:#eee; color:var(--muted); }
   .permit { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
             letter-spacing:.03em; }
   .permit.Streamlined { background:#e6f0ec; color:var(--accent); }
   .permit.Standard { background:#faf1dd; color:var(--gold); }
   .permit.Complex { background:#f6e3df; color:#9a3b2f; }
+  .btm { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
+         letter-spacing:.03em; }
+  .btm.Permissive { background:#e6f0ec; color:var(--accent); }
+  .btm.Restricted { background:#faf1dd; color:var(--gold); }
+  .btm.Prohibitive { background:#f6e3df; color:#9a3b2f; }
+  sup.cov { color:var(--gold); font-weight:700; cursor:help; font-size:10px; }
+  .footnote { font-size:11.5px; color:var(--muted); font-family:var(--sans); margin:8px 0 0; }
   .sent { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
           letter-spacing:.03em; white-space:nowrap; }
   .sent.Positive { background:#e6f0ec; color:var(--accent); }
@@ -114,17 +121,21 @@
 
   <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the 2-page PDF brief</a>
 
-  <h2 class="section">Ranked Markets — 20 Priority US Data-Center States</h2>
+  <h2 class="section">Ranked Markets — 50 US Data-Center States</h2>
   <table>
     <thead><tr>
       <th class="num">#</th><th>State</th><th class="num">Score</th>
       <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
       <th title="Large-load siting & generation-permitting friction (15% scoring factor): Streamlined / Standard / Complex. Sentiment-adjusted (strong community opposition can lock the tier down a level).">Permitting</th>
-      <th title="Community/public sentiment toward data-center development, scored -2..+2 by Claude from Google News + Reddit headlines (refreshed daily).">Sentiment</th>
+      <th title="Behind-the-meter / on-site generation regulatory posture (informational — NO scoring weight): Permissive / Restricted / Prohibitive.">BTM</th>
+      <th title="Community/public sentiment toward data-center development, scored -2..+2 by Claude from Google News headlines (refreshed daily).">Sentiment</th>
     </tr></thead>
-    <tbody id="rows"><tr><td colspan="8" class="err" id="rowerr"></td></tr></tbody>
+    <tbody id="rows"><tr><td colspan="9" class="err" id="rowerr"></td></tr></tbody>
   </table>
+  <p class="footnote">† Incomplete data coverage — no EIA-861 utility load-growth data matched
+  for this state, so the load-growth factor is floored (treated as a negative signal, not
+  neutral). Hover the marker for the coverage level.</p>
 
   <h2 class="section">Top 3 Markets</h2>
   <div id="narratives"></div>
@@ -158,8 +169,9 @@
 
     <p><b>Community sentiment.</b> Each state's permitting-ease factor is adjusted by a
     daily <em>community-sentiment</em> read. Headlines about data-center development are
-    pulled from <b>Google News RSS</b> (community opposition, grid impact, water-usage
-    concerns) and <b>Reddit</b>, then scored <b>−2 to +2</b> by Claude
+    pulled from five balanced <b>Google News RSS</b> queries (opposition/moratorium,
+    water/grid burden, investment/jobs, approvals/permits, and a neutral catch-all), then
+    scored <b>−2 to +2</b> by Claude
     (<code>claude-sonnet-4-6</code>): +2 strong local support … −2 strong opposition
     (active campaigns, moratoriums, significant water/grid concerns). The modifier is
     <b>tier-locking</b>: a <b>Strong Negative</b> reading (≤ −1.5) forces the permitting
@@ -184,7 +196,7 @@
         sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
       <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
       <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
-      <li><b>Community sentiment</b> — Google News RSS + Reddit headlines on data-center
+      <li><b>Community sentiment</b> — five balanced Google News RSS queries on data-center
         development, scored −2..+2 by Claude (<code>claude-sonnet-4-6</code>); refreshed
         <b>daily</b>.</li>
     </ul>
@@ -202,10 +214,15 @@
 </div>
 
 <script>
-const FULL = {VA:"Virginia",TX:"Texas",GA:"Georgia",AZ:"Arizona",OH:"Ohio",OR:"Oregon",
-  NV:"Nevada",IL:"Illinois",NC:"North Carolina",FL:"Florida",CA:"California",NJ:"New Jersey",
-  PA:"Pennsylvania",WA:"Washington",CO:"Colorado",MN:"Minnesota",IA:"Iowa",IN:"Indiana",
-  TN:"Tennessee",SC:"South Carolina"};
+const FULL = {AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"California",
+  CO:"Colorado",CT:"Connecticut",DE:"Delaware",FL:"Florida",GA:"Georgia",HI:"Hawaii",
+  ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",
+  ME:"Maine",MD:"Maryland",MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",
+  MO:"Missouri",MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",
+  NM:"New Mexico",NY:"New York",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",OK:"Oklahoma",
+  OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",
+  TN:"Tennessee",TX:"Texas",UT:"Utah",VT:"Vermont",VA:"Virginia",WA:"Washington",
+  WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming"};
 const MONTHS = ["January","February","March","April","May","June","July","August",
   "September","October","November","December"];
 function fmtUpdated(g){
@@ -257,10 +274,10 @@ fetch("ranked_markets.json", {cache:"no-store"})
     const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
     const t = m.slice(0,3).map(x=>FULL[x.state]||x.state);
     document.getElementById("lede").innerHTML =
-      `Across 20 priority US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
+      `Across all 50 US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
       + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong> on grid `
       + `infrastructure depth and quality, followed by <strong>${t[1]}</strong> and `
-      + `<strong>${t[2]}</strong>. ${under} of the 20 markets remain underdeveloped for data centers — `
+      + `<strong>${t[2]}</strong>. ${under} of the 50 markets remain underdeveloped for data centers — `
       + `open runway where grid infrastructure is ahead of current build-out.`;
 
     // Table
@@ -268,12 +285,13 @@ fetch("ranked_markets.json", {cache:"no-store"})
       const g = x.weighted_load_growth_pct;
       return `<tr>
         <td class="num rk">${x.rank}</td>
-        <td class="st">${x.state} <span style="color:var(--muted);font-weight:normal">${FULL[x.state]||""}</span></td>
+        <td class="st">${x.state}${x.data_coverage && x.data_coverage!=="Full" ? `<sup class="cov" title="Data coverage: ${x.data_coverage} — load-growth factor floored for this state">†</sup>` : ""}</td>
         <td class="num"><span class="score-chip" style="background:${scoreColor(x.dc_site_score)}">${x.dc_site_score.toFixed(1)}</span></td>
         <td><span class="tier ${tierClass(x.saturation_tier)}">${x.saturation_tier}</span></td>
         <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
         <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
         <td>${x.permitting_ease ? `<span class="permit ${x.permitting_ease}">${x.permitting_ease}</span>` : "—"}</td>
+        <td>${x.btm_policy ? `<span class="btm ${tierClass(x.btm_policy)}">${x.btm_policy}</span>` : "—"}</td>
         <td>${x.sentiment_label ? `<span class="sent ${tierClass(x.sentiment_label)}">${x.sentiment_label}</span>` : "—"}</td>
       </tr>`;
     }).join("");
