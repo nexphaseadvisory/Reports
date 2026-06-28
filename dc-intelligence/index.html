@@ -59,9 +59,15 @@
   .tier.CompetitiveMarket { background:#eee; color:var(--muted); }
   .permit { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
             letter-spacing:.03em; }
-  .permit.Permissive { background:#e6f0ec; color:var(--accent); }
-  .permit.Neutral { background:#faf1dd; color:var(--gold); }
-  .permit.Restrictive { background:#f6e3df; color:#9a3b2f; }
+  .permit.Streamlined { background:#e6f0ec; color:var(--accent); }
+  .permit.Standard { background:#faf1dd; color:var(--gold); }
+  .permit.Complex { background:#f6e3df; color:#9a3b2f; }
+  .sent { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
+          letter-spacing:.03em; white-space:nowrap; }
+  .sent.Positive { background:#e6f0ec; color:var(--accent); }
+  .sent.Neutral { background:#eee; color:var(--muted); }
+  .sent.ModerateNegative { background:#faf1dd; color:var(--gold); }
+  .sent.StrongNegative { background:#f6e3df; color:#9a3b2f; }
   .pos { color:var(--accent); }
   .neg { color:#9a3b2f; }
 
@@ -114,9 +120,10 @@
       <th class="num">#</th><th>State</th><th class="num">Score</th>
       <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
-      <th title="Large-load siting & generation-permitting friction (15% scoring factor): Permissive / Neutral / Restrictive.">Permitting</th>
+      <th title="Large-load siting & generation-permitting friction (15% scoring factor): Streamlined / Standard / Complex. Sentiment-adjusted (strong community opposition can lock the tier down a level).">Permitting</th>
+      <th title="Community/public sentiment toward data-center development, scored -2..+2 by Claude from Google News + Reddit headlines (refreshed daily).">Sentiment</th>
     </tr></thead>
-    <tbody id="rows"><tr><td colspan="7" class="err" id="rowerr"></td></tr></tbody>
+    <tbody id="rows"><tr><td colspan="8" class="err" id="rowerr"></td></tr></tbody>
   </table>
 
   <h2 class="section">Top 3 Markets</h2>
@@ -146,8 +153,20 @@
     min-max-normalized factors: infrastructure density (30%), STRONG+MODERATE grid depth
     (20%), weighted utility load growth (20%), market-saturation runway (15%), and
     <em>permitting ease</em> (15%). The permitting-ease factor tiers each state by large-load
-    siting and generation-permitting friction — <b>Permissive</b>, <b>Neutral</b>, or
-    <b>Restrictive</b> — rewarding states where projects clear faster.</p>
+    siting and generation-permitting friction — <b>Streamlined</b>, <b>Standard</b>, or
+    <b>Complex</b> — rewarding states where projects clear faster.</p>
+
+    <p><b>Community sentiment.</b> Each state's permitting-ease factor is adjusted by a
+    daily <em>community-sentiment</em> read. Headlines about data-center development are
+    pulled from <b>Google News RSS</b> (community opposition, grid impact, water-usage
+    concerns) and <b>Reddit</b>, then scored <b>−2 to +2</b> by Claude
+    (<code>claude-sonnet-4-6</code>): +2 strong local support … −2 strong opposition
+    (active campaigns, moratoriums, significant water/grid concerns). The modifier is
+    <b>tier-locking</b>: a <b>Strong Negative</b> reading (≤ −1.5) forces the permitting
+    tier down one level (Streamlined→Standard, Standard→Complex) and applies a penalty;
+    Moderate Negative applies a smaller penalty; Positive a small bonus (capped); Neutral
+    (or no coverage) leaves the tier unchanged. The Sentiment column shows each state's
+    current label.</p>
 
     <div class="disclaimer"><b>This report does not replace a utility service availability
     confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for
@@ -165,6 +184,9 @@
         sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
       <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
       <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
+      <li><b>Community sentiment</b> — Google News RSS + Reddit headlines on data-center
+        development, scored −2..+2 by Claude (<code>claude-sonnet-4-6</code>); refreshed
+        <b>daily</b>.</li>
     </ul>
   </div>
 
@@ -252,6 +274,7 @@ fetch("ranked_markets.json", {cache:"no-store"})
         <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
         <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
         <td>${x.permitting_ease ? `<span class="permit ${x.permitting_ease}">${x.permitting_ease}</span>` : "—"}</td>
+        <td>${x.sentiment_label ? `<span class="sent ${tierClass(x.sentiment_label)}">${x.sentiment_label}</span>` : "—"}</td>
       </tr>`;
     }).join("");
 
