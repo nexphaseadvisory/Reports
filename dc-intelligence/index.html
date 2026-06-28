@@ -69,6 +69,9 @@
   .btm.Prohibitive { background:#f6e3df; color:#9a3b2f; }
   sup.cov { color:var(--gold); font-weight:700; cursor:help; font-size:10px; }
   .footnote { font-size:11.5px; color:var(--muted); font-family:var(--sans); margin:8px 0 0; }
+  .framing { font-size:12.5px; color:var(--muted); font-style:italic; margin:-6px 0 12px;
+             line-height:1.5; }
+  .method .framing { font-style:normal; font-size:14px; color:#39352e; margin:0 0 14px; }
   .sent { font-family:var(--sans); font-size:11px; padding:2px 8px; border-radius:10px;
           letter-spacing:.03em; white-space:nowrap; }
   .sent.Positive { background:#e6f0ec; color:var(--accent); }
@@ -122,6 +125,9 @@
   <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the 2-page PDF brief</a>
 
   <h2 class="section">Ranked Markets — 50 US Data-Center States</h2>
+  <p class="framing">Rankings reflect forward-looking site opportunity, not existing market
+  concentration. Saturated markets may rank lower due to permitting complexity, grid
+  constraints, and community opposition.</p>
   <table>
     <thead><tr>
       <th class="num">#</th><th>State</th><th class="num">Score</th>
@@ -142,6 +148,13 @@
 
   <h2 class="section">Methodology</h2>
   <div class="method">
+    <p class="framing">This index scores each state on its forward-looking viability for new
+    data center development — not current market size or existing inventory. States with large
+    existing concentrations (e.g. Northern Virginia) may rank lower due to grid saturation,
+    permitting complexity, and elevated community opposition, all of which increase cost and
+    timeline risk for new entrants. States with strong grid infrastructure, streamlined
+    permitting, and lower opposition density rank higher regardless of current market
+    maturity.</p>
     <p><b>What this index measures.</b> This report is a <em>Generation Infrastructure
     Density Index</em>. It measures where transmission and interconnection infrastructure
     exists based on active interconnection-queue activity — the concentration of
