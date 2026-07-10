@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexPhase Intelligence Platform — NexPhase Advisory</title>
+<meta property="og:title" content="NexPhase Intelligence Platform">
+<meta property="og:description" content="Proprietary AI-powered market intelligence for power origination, interconnection strategy, and data center development. Built by Chris Santiago, NexPhase Advisory.">
+<meta property="og:type" content="website">
+<meta name="description" content="Proprietary AI-powered market intelligence for power origination, interconnection strategy, and data center development.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f5f1e8;
+    color: #1a1a18;
+    font-family: Georgia, 'Times New Roman', serif;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  /* Masthead */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0b5d4e;
+    margin-bottom: 6px;
+  }
+
+  .masthead-brand {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0b5d4e;
+    font-weight: 600;
+  }
+
+  .masthead-right {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: #7a7060;
+    letter-spacing: 0.04em;
+  }
+
+  /* Platform title block */
+  .title-block {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid #c8bfaa;
+    margin-bottom: 28px;
+  }
+
+  .platform-eyebrow {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #0b5d4e;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .platform-title {
+    font-family: Georgia, serif;
+    font-size: 34px;
+    font-weight: 400;
+    font-style: italic;
+    color: #1a1a18;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .platform-title em {
+    font-style: normal;
+    color: #1a3a6b;
+  }
+
+  .platform-desc {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #5c5850;
+    line-height: 1.5;
+  }
+
+  /* Thesis */
+  .thesis {
+    border-left: 3px solid #0b5d4e;
+    padding: 12px 18px;
+    margin-bottom: 28px;
+    background: #ede9df;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #3a3830;
+    font-style: italic;
+  }
+
+  /* Stats */
+  .section-label {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #0b5d4e;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: #c8bfaa;
+    border: 1px solid #c8bfaa;
+    margin-bottom: 32px;
+  }
+
+  .stat {
+    background: #ede9df;
+    padding: 16px 14px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a3a6b;
+    line-height: 1;
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-lbl {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #7a7060;
+  }
+
+  /* Architecture */
+  .arch {
+    display: grid;
+    grid-template-columns: 1fr 32px 1fr 32px 1fr;
+    margin-bottom: 10px;
+    align-items: stretch;
+  }
+
+  .layer {
+    background: #ede9df;
+    border: 1px solid #c8bfaa;
+    border-top: 3px solid #1a3a6b;
+    padding: 16px;
+  }
+
+  .layer-verb {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #0b5d4e;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .layer-name {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: #1a1a18;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .layer-list {
+    list-style: none;
+  }
+
+  .layer-list li {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: #5c5850;
+    padding: 4px 0;
+    border-bottom: 1px solid #d4c9b4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.3;
+  }
+
+  .layer-list li:last-child { border-bottom: none; }
+
+  .layer-list li::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #0b5d4e;
+    flex-shrink: 0;
+  }
+
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c8bfaa;
+    font-size: 18px;
+  }
+
+  /* Rule between sections */
+  .rule {
+    border: none;
+    border-top: 1px solid #c8bfaa;
+    margin: 24px 0;
+  }
+
+  /* Published intelligence */
+  .outputs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #c8bfaa;
+    border: 1px solid #c8bfaa;
+    margin-bottom: 32px;
+  }
+
+  .output {
+    background: #ede9df;
+    border-top: 3px solid #0b5d4e;
+    padding: 16px 14px;
+  }
+
+  .output-freq {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #a06d18;
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+
+  .output-name {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: #1a1a18;
+    margin-bottom: 7px;
+    line-height: 1.2;
+  }
+
+  .output-name a {
+    color: #1a1a18;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(26,58,107,0.3);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .output-name a:hover {
+    color: #0b5d4e;
+    border-bottom-color: #0b5d4e;
+  }
+
+  .output-desc {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: #7a7060;
+    line-height: 1.55;
+  }
+
+  .output-stats {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    color: #a06d18;
+    font-weight: 600;
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #d4c9b4;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 2px solid #0b5d4e;
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .footer-name {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: #1a1a18;
+    margin-bottom: 3px;
+  }
+
+  .footer-role {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: #7a7060;
+    line-height: 1.65;
+  }
+
+  .footer-links {
+    text-align: right;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: #7a7060;
+    line-height: 1.9;
+    flex-shrink: 0;
+  }
+
+  .footer-links span { color: #0b5d4e; }
+  .footer-links a { color: #7a7060; text-decoration: none; border-bottom: 1px solid #c8bfaa; }
+  .footer-links a:hover { color: #0b5d4e; border-bottom-color: #0b5d4e; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { max-width: 100%; }
+    .platform-title { font-size: 28px; }
+    .thesis { margin-bottom: 20px; }
+    .stats, .outputs { margin-bottom: 20px; }
+    .arch { margin-bottom: 6px; }
+    .rule { margin: 16px 0; }
+    .title-block { padding: 20px 0 14px; margin-bottom: 20px; }
+    a { border-bottom: none !important; }
+    @page { margin: 0.6in; }
+  }
+
+  @media (max-width: 640px) {
+    .stats, .outputs { grid-template-columns: repeat(2, 1fr); }
+    .arch { grid-template-columns: 1fr; }
+    .arch-arrow { transform: rotate(90deg); height: 24px; }
+    .footer { flex-direction: column; }
+    .footer-links { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-brand">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <div class="masthead-right">July 2026 &nbsp;·&nbsp; info@nexphaseadvisory.net</div>
+  </div>
+
+  <div class="title-block">
+    <div class="platform-eyebrow">Intelligence Platform</div>
+    <h1 class="platform-title">The <em>NexPhase</em> Intelligence Platform</h1>
+    <p class="platform-desc">Proprietary AI-powered market intelligence for power origination, interconnection strategy, and data center development.</p>
+  </div>
+
+  <div class="thesis">
+    This platform monitors FERC, all major ISOs and RTOs, regulatory proceedings, and developer activity in real time. It generates daily site leads, queue signals, and market analysis that drive origination strategy, interconnection positioning, and commercial development decisions. Most development executives rely on trade press and RTO portals. This is what purpose-built intelligence looks like instead.
+  </div>
+
+  <div class="section-label">Track record</div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">5+ GW</div>
+      <div class="stat-lbl">Delivered to NTP</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">2+ GW</div>
+      <div class="stat-lbl">Closed PPAs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">2</div>
+      <div class="stat-lbl">FERC Order 1000 wins (non-incumbent)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">216 mi</div>
+      <div class="stat-lbl">Gen-tie delivered (Texas)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">20+</div>
+      <div class="stat-lbl">Years experience</div>
+    </div>
+  </div>
+
+  <div class="section-label">Platform architecture</div>
+  <div class="arch">
+    <div class="layer">
+      <div class="layer-verb">Ingest</div>
+      <div class="layer-name">Data sources</div>
+      <ul class="layer-list">
+        <li>FERC eLibrary</li>
+        <li>ISO / RTO queue feeds (17,689+ records)</li>
+        <li>Regulatory dockets</li>
+        <li>Trade press signals</li>
+        <li>Utility procurement pages</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">&#8594;</div>
+    <div class="layer">
+      <div class="layer-verb">Analyze</div>
+      <div class="layer-name">Intelligence engine</div>
+      <ul class="layer-list">
+        <li>Queue position analysis</li>
+        <li>Six-factor site scoring</li>
+        <li>Developer pipeline tracking</li>
+        <li>Lead qualification gate</li>
+        <li>Regulatory flag monitoring</li>
+      </ul>
+    </div>
+    <div class="arch-arrow">&#8594;</div>
+    <div class="layer">
+      <div class="layer-verb">Deploy</div>
+      <div class="layer-name">Market intelligence</div>
+      <ul class="layer-list">
+        <li>Qualified site leads</li>
+        <li>Queue position signals</li>
+        <li>Deliverability scorecards</li>
+        <li>Regulatory alerts</li>
+        <li>Strategic market analysis</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section-label">Published intelligence</div>
+  <div class="outputs">
+    <div class="output">
+      <div class="output-freq">Daily · weekdays</div>
+      <div class="output-name"><a href="https://intel.nexphaseadvisory.net/morning-read/" target="_blank">The Morning Read</a></div>
+      <div class="output-desc">Interconnection activity, regulatory developments, and data center demand signals</div>
+    </div>
+    <div class="output">
+      <div class="output-freq">Weekly</div>
+      <div class="output-name"><a href="https://intel.nexphaseadvisory.net/interconnect/" target="_blank">The Interconnect</a></div>
+      <div class="output-desc">Queue dynamics and PPA market conditions across all major ISOs and RTOs</div>
+      <div class="output-stats">110+ subscribers &nbsp;·&nbsp; 55% open rate</div>
+    </div>
+    <div class="output">
+      <div class="output-freq">On-demand</div>
+      <div class="output-name"><a href="https://intel.nexphaseadvisory.net/dc-intelligence/" target="_blank">DC Site Intelligence</a></div>
+      <div class="output-desc">Composite state scoring for grid infrastructure, load growth, permitting, and BTM posture</div>
+    </div>
+    <div class="output">
+      <div class="output-freq">Daily · internal</div>
+      <div class="output-name">Daily Brief</div>
+      <div class="output-desc">Qualified leads, active pipeline, and curated intelligence feed for active deal flow</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>
+      <div class="footer-name">Chris Santiago</div>
+      <div class="footer-role">
+        Founder, NexPhase Advisory<br>
+        End-to-End Development &nbsp;·&nbsp; Land Control to Offtake
+      </div>
+    </div>
+    <div class="footer-links">
+      <div><span>Email:</span> <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
