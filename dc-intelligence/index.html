@@ -136,9 +136,9 @@
       <th class="num">#</th><th>State</th><th class="num">Score</th>
       <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
       <th class="num">Load&nbsp;Growth</th>
-      <th title="Large-load siting & generation-permitting friction (15% scoring factor): Streamlined / Standard / Complex. Sentiment-adjusted (strong community opposition can lock the tier down a level).">Permitting</th>
-      <th title="Behind-the-meter / on-site generation regulatory posture (informational — NO scoring weight): Permissive / Restricted / Prohibitive.">BTM</th>
-      <th title="Community/public sentiment toward data-center development, scored -2..+2 by Claude from Google News headlines (refreshed daily).">Sentiment</th>
+      <th title="Large-load siting & generation-permitting friction: Streamlined / Standard / Complex. Adjusted by a daily sentiment read from news coverage.">Permitting</th>
+      <th title="Behind-the-meter / on-site generation regulatory posture (informational): Permissive / Restricted / Prohibitive.">BTM</th>
+      <th title="Community/public sentiment toward data-center development, a daily read from news coverage.">Sentiment</th>
     </tr></thead>
     <tbody id="rows"><tr><td colspan="9" class="err" id="rowerr"></td></tr></tbody>
   </table>
@@ -177,23 +177,14 @@
     thin grid infrastructure where large-load service timelines may extend 24–48+ months.</p>
 
     <p><b>How the index is scored.</b> Each market is scored <b>1–10</b> from five
-    min-max-normalized factors: infrastructure density (30%), STRONG+MODERATE grid depth
-    (20%), weighted utility load growth (20%), market-saturation runway (15%), and
-    <em>permitting ease</em> (15%). The permitting-ease factor tiers each state by large-load
+    min-max-normalized factors: infrastructure density, STRONG+MODERATE grid depth,
+    weighted utility load growth, market-saturation runway, and
+    <em>permitting ease</em>. The permitting-ease factor tiers each state by large-load
     siting and generation-permitting friction — <b>Streamlined</b>, <b>Standard</b>, or
     <b>Complex</b> — rewarding states where projects clear faster.</p>
 
-    <p><b>Community sentiment.</b> Each state's permitting-ease factor is adjusted by a
-    daily <em>community-sentiment</em> read. Headlines about data-center development are
-    pulled from five balanced <b>Google News RSS</b> queries (opposition/moratorium,
-    water/grid burden, investment/jobs, approvals/permits, and a neutral catch-all), then
-    scored <b>−2 to +2</b> by Claude
-    (<code>claude-sonnet-4-6</code>): +2 strong local support … −2 strong opposition
-    (active campaigns, moratoriums, significant water/grid concerns). The modifier is
-    <b>tier-locking</b>: a <b>Strong Negative</b> reading (≤ −1.5) forces the permitting
-    tier down one level (Streamlined→Standard, Standard→Complex) and applies a penalty;
-    Moderate Negative applies a smaller penalty; Positive a small bonus (capped); Neutral
-    (or no coverage) leaves the tier unchanged. The Sentiment column shows each state's
+    <p><b>Community sentiment.</b> Permitting ease is adjusted by a daily sentiment read
+    from news coverage of data-center development. The Sentiment column shows each state's
     current label.</p>
 
     <div class="disclaimer"><b>This report does not replace a utility service availability
@@ -212,9 +203,8 @@
         sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
       <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
       <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
-      <li><b>Community sentiment</b> — five balanced Google News RSS queries on data-center
-        development, scored −2..+2 by Claude (<code>claude-sonnet-4-6</code>); refreshed
-        <b>daily</b>.</li>
+      <li><b>Community sentiment</b> — a daily read from news coverage of data-center
+        development; refreshed <b>daily</b>.</li>
     </ul>
   </div>
 
