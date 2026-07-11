@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect&#8482;, Week of July 11, 2026</title>
+<style>
+:root {
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 28px 42px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.masthead h1 {
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: .2px;
+  margin-bottom: 14px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.meta-bar strong { color: var(--ink); }
+
+/* ── BODY ── */
+.body { padding: 0 42px 32px; }
+
+/* ── LEDE ── */
+.lede {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lede p + p { margin-top: 10px; }
+.lede .author {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
+}
+.sec-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
+
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.connector-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sector-badge {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flag-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e8dfc8;
+}
+.flag-item:last-child { border-bottom: none; }
+.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
+.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #b0b8c4;
+  padding: 20px 42px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ══ MASTHEAD ══ -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
+    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development, for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of July 11, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 6</span>
+      <span>nexphaseadvisory.net</span>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div class="body">
+
+    <!-- LEDE -->
+    <div class="lede">
+      <p>Anthropic&#x27;s $19 billion, 20-year commitment to TeraWulf in Kentucky is the clearest signal yet that frontier AI labs are no longer shopping for data center capacity, they are locking it up for a generation, and the regions that can deliver reliable, low-cost power with room to scale are the ones capturing that demand first. That dynamic is now compounding across the market: Meta secured 1 GW of Alberta grid capacity years before anyone knew a campus was coming, Prologis is converting industrial land in San Jose to absorb hyperscale power demand that has no other outlet, and the post-July 4 ITC deadline has permanently shrunk the pool of economically viable new renewable supply just as long-term offtake appetite is peaking. For site selectors and power procurement teams, the window to act on optionality is closing faster than project timelines suggest, the capacity being announced today was claimed quietly, months or years ago.</p>
+      <p>Power market intelligence from a practitioner with two decades in origination and interconnection, 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
+    </div>
+
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>CONNECTOR MARKETS, Queue Depth &middot; Load Signal &middot; This Week</h2>
+    </div>
+
+    <div class="connector-section">
+      <p class="connector-intro">Where interconnection queue activity, load growth, and current market signals converge.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>ISO</th>
+            <th>Queue Depth</th>
+            <th>Load Signal</th>
+            <th>This Week's Signal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr><td><span class="load-name">ERCOT</span></td><td><span class="supply-count">1,828</span></td><td><span style="color:#0b5d4e;font-weight:700">+3.1%</span></td><td>Texas Governor Abbott calls for banning data centers in rural areas, a shift from his historically pro-DC stance.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">FRCC</span></td><td><span class="supply-count">1,162</span></td><td><span style="color:#0b5d4e;font-weight:700">+0.9%</span></td><td>Data center developers are reconsidering Florida projects amid stark local opposition to siting and power demands.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">SPP</span></td><td><span class="supply-count">1,009</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>Kansas prepares for state&#x27;s first hyperscale data center.</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">NYISO</span></td><td><span class="supply-count">346</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>No signals this week</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">ISO-NE</span></td><td><span class="supply-count">373</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>No signals this week</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">WECC</span></td><td><span class="supply-count">1,564</span></td><td><span style="color:#8b2020;font-weight:700">-0.1%</span></td><td>Meta&#x27;s yet-to-open AI data center in Cheyenne, Wyoming has already triggered a local wastewater crackdown amid infrastructure strain.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">MISO</span></td><td><span class="supply-count">1,655</span></td><td><span style="color:#8b2020;font-weight:700">-0.5%</span></td><td>Meta&#x27;s Rosemount, MN hyperscale data center, Minnesota&#x27;s first, is nearing completion.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">PJM</span></td><td><span class="supply-count">1,558</span></td><td><span style="color:#8b2020;font-weight:700">-1.5%</span></td><td>Virginia budget clears way for $100B, ~3,500-acre Berry Hill data center campus in Pittsylvania County, VA.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">CAISO</span></td><td><span class="supply-count">358</span></td><td><span style="color:#8b2020;font-weight:700">-2.4%</span></td><td>Prologis files plans for 99MW data center in San Jose, CA on a site previously earmarked for industrial warehouse</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="queue-spotlight">
+        <div class="qs-label">Spotlight, Highest-Capacity Projects This Week</div>
+        <div class="qs-row">
+        <div class="qs-item">
+<div class="qs-id">Meta&#x27;s first Canadian AI campus in Alberta secured 1 GW of power and transmission years ahead of the announcement.</div>
+<div class="qs-desc">Meta quietly locked in 1 GW of Alberta grid capacity years before its Canadian AI campus announcement, signaling that hyperscalers are securing power rights well in advance of public project disclosures. For data center developers and CRE investors, this underscores that Alberta&#x27;s deregulated power market rewards early movers, and that visible land deals are likely lagging indicators of capacity that&#x27;s already been claimed.</div>
+</div>
+<div class="qs-item">
+<div class="qs-id">Prologis files plans for 99MW data center in San Jose, CA on a site previously earmarked for industrial warehouse</div>
+<div class="qs-desc">Prologis is converting a formerly industrial-zoned San Jose site into a 99MW data center, signaling that even established logistics REITs are repricing land toward hyperscale power demand. For site selectors, this reinforces the Silicon Valley supply squeeze, developable parcels with grid access are being absorbed faster than new capacity can be permitted, tightening the window for securing interconnection queue positions in the market.</div>
+</div>
+<div class="qs-item">
+<div class="qs-id">EQT acquires Copia Power from Carlyle; platform has 2.6GW energy assets and 9GW+ of data centers in development plus 25GW solar/storage and 7GW gas pipeline.</div>
+<div class="qs-desc">EQT&#x27;s acquisition of Copia Power consolidates a vertically integrated platform spanning 2.6GW of operating assets, 25GW of solar/storage, 7GW of gas generation pipeline, and 9GW+ of co-located data center development, signaling that large infrastructure funds are moving aggressively to control both generation and load under one ownership structure. For data center developers and CRE investors, this deal reinforces the strategic premium now placed on platforms that can self-supply power at scale, tightening the competitive window for third parties seeking to secure grid capacity in contested markets.</div>
+</div>
+<div class="qs-item">
+<div class="qs-id">Microsoft reports 25% YoY CO2 emissions rise driven by data center expansion; signed 40GW renewable capacity agreements (19GW online) across 26 countries.</div>
+<div class="qs-desc">Microsoft&#x27;s aggressive data center expansion has driven a 25% year-over-year CO2 emissions increase, exposing the widening gap between load growth and renewable energy availability even for the best-capitalized buyers. With 40GW contracted but only 19GW online across 26 countries, developers and investors should expect prolonged interconnection queues and offtake competition to intensify in markets where Microsoft is active.</div>
+</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+<div class="sec-label">Lead Story</div>
+<h2>Anthropic signs $19bn, 20-year lease with TeraWulf for Kentucky data center capacity</h2>
+</div>
+
+<div class="lead-story">
+<p class="dek">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf in Kentucky, signaling that frontier AI labs are now willing to sign ultra-long-term offtake agreements to secure dedicated power and infrastructure. For site selectors and CRE investors, this validates Kentucky as a serious AI compute market and demonstrates that nuclear-adjacent, low-cost power regions can command premium, decade-plus commitments from hyperscale-tier tenants.</p>
+<p class="body-text">Anthropic Signs $19B, 20-Year Lease with TeraWulf for Kentucky Data Center Capacity</p>
+<p class="body-text" style="margin-top:8px">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf at its Kentucky campus, marking one of the longest and largest offtake agreements ever executed in the AI infrastructure sector. The deal is not a land acquisition or a joint venture. It is a straight capacity lease, meaning Anthropic is willing to pay a long-duration premium to avoid the capital intensity and permitting risk of building its own facility. For a market that has spent the last 18 months debating whether frontier AI labs would eventually self-develop at scale or rely on third-party operators, this deal is a meaningful data point in favor of the latter, at least where power access and speed-to-capacity are the binding constraints.</p>
+<p class="body-text" style="margin-top:8px">The market mechanics here deserve close attention. TeraWulf built its Kentucky position around access to low-cost, nuclear-influenced power from the Ohio Valley grid, a deliberate bet that clean, baseload power would eventually command a scarcity premium as AI load growth overwhelmed constrained markets in Northern Virginia, Phoenix, and the Pacific Northwest. That bet is now validated with a 20-year signature. For independent power producers and data center developers, the implication is direct: tenants of this caliber are no longer shopping on a 3-to-5-year lease horizon. They are underwriting infrastructure decisions the way utilities underwrite generation assets. Developers who can offer credible, long-duration power certainty, whether through nuclear proximity, PPA structures, or behind-the-meter generation, are now competing in a fundamentally different conversation than those offering standard colocation terms.</p>
+<p class="body-text" style="margin-top:8px">For site selectors and queue strategists, several specifics warrant tracking. First, Kentucky&#x27;s grid position, historically underappreciated in data center site selection rankings, now has a marquee reference transaction that will accelerate inbound developer interest and compress available land and fiber corridors near TeraWulf&#x27;s campus. Second, the 20-year structure implies that Anthropic has high confidence in the underlying power cost and reliability profile, which means competing sites in MISO and PJM territories with similar baseload characteristics should be actively stress-testing their own lease structures and power contracts for long-duration viability. Third, developers sitting on interconnection queue positions in low-cost, nuclear-adjacent regions should treat this transaction as evidence that offtake risk, historically the hardest variable to solve in greenfield AI campus development, is now solvable at a scale and duration that justifies aggressive site investment.</p>
+<p class="body-text" style="margin-top:8px"><a href="https://www.datacenterdynamics.com/en/news/anthropic-signs-19bn-20-year-lease-for-kentucky-data-center-with-terawulf/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Announcements</h2>
+    </div>
+
+    <div class="story-grid">
+    <div class="story">
+<div class="hed">DOE Office of Electricity releases draft 2026 National Transmission Needs Study, finding pressing transmission need driven by data center load growth</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">DOE&#x27;s Office of Electricity published its draft 2026 National Transmission Needs Study on July 9, opening a 60-day comment period with comments due September 7. The study identifies a pressing near-term transmission need driven by data center load growth, and singles out NYISO, NorthernGrid South, and MISO as the regions with the highest congestion-relief potential. For developers and large loads, the comment window is the leverage point: the study frames the federal case for transmission buildout, and the regions named as congestion-relief priorities are where interconnection capacity is most likely to be unlocked.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: publicpower.org</div>
+<p class="body-text"><a href="https://www.publicpower.org/periodical/article/does-office-electricity-publishes-2026-draft-national-transmission-needs-study" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory &amp; Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Post-July 4 tax credit cliff: solar and wind projects that missed the construction-start deadline must be in service by Dec 31, 2027</span>
+<span class="flag-note">The July 4, 2026 construction-start deadline has now passed. Solar and wind projects that did not begin construction in time are locked out of the 30% ITC unless they are placed in service by December 31, 2027, an 18-month window that most greenfield projects cannot meet. Treasury Notice 2025-42 also replaced the 5% cost safe harbor with the Physical Work Test for solar projects above 1.5 MW, raising the bar for what counts as having started. The practical effect for large loads: the pool of tax-credit-eligible renewable supply is now fixed, and any project not already safe-harbored carries materially worse economics, which tightens the market for new offtake.</span>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA &amp; Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+    <p class="body-text" style="color:var(--muted)">No PPA pricing context this week.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About This Brief</div>
+      <h2>NexPhase Advisory</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is produced by NexPhase Advisory, a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Questions, feedback, or to discuss a specific market or project: <a href="mailto:info@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">info@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of July 11, 2026 &nbsp;·&nbsp; Vol. 1, No. 6</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available to subscribers on request.</div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of July 11, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+    </div>
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
