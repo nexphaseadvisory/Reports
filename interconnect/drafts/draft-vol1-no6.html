@@ -342,16 +342,39 @@ body {
   color: var(--gold);
   margin-bottom: 6px;
 }
+/* Stacked flag: bold takeaway header (with its tag) on its own line, context paragraph BELOW it,
+   then a Read more link + source-of-truth attribution. Was a flex row (tag+entity beside the
+   note), which buried the takeaway in a narrow 130px column. */
 .flag-item {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 3px 0;
+  display: block;
+  padding: 9px 0 10px;
   border-bottom: 1px solid #e8dfc8;
 }
 .flag-item:last-child { border-bottom: none; }
-.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
-.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+.flag-head {
+  display: block;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 12.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.flag-head .sector-badge { margin-right: 6px; vertical-align: 1px; }
+.flag-note {
+  display: block;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.flag-src {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+}
+.flag-src a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.flag-src .flag-attr { color: var(--muted); font-style: italic; }
+/* legacy: kept so an older cached draft still renders sanely */
+.flag-co { font-weight: 700; color: var(--ink); font-size: 11px; }
 
 /* ── FOOTER ── */
 .footer {
@@ -426,7 +449,7 @@ body {
 
     <!-- LEDE -->
     <div class="lede">
-      <p>Anthropic&#x27;s $19 billion, 20-year commitment to TeraWulf in Kentucky is the clearest signal yet that frontier AI tenants are willing to lock in decade-plus infrastructure contracts to secure power certainty, and it arrives precisely as that certainty is becoming harder and more expensive to manufacture. The July 4 construction-start deadline has closed the gate on new ITC-eligible renewable development, leaving a fixed ~170 GW safe-harbored pipeline as the only cost-competitive clean energy supply available, which means PPA prices for everything outside that pool are heading higher and safe-harbor status is now the first diligence question on any offtake term sheet. Meanwhile, the Texas permitting investigation is a warning that the other popular workaround, behind-the-meter gas staged through minor air permits to avoid public scrutiny, carries real regulatory tail risk, making low-cost grid-connected markets with clean power access, like Kentucky, structurally more attractive than they looked even six months ago.</p>
+      <p>Anthropic&#x27;s $19 billion, 20-year commitment to TeraWulf in Kentucky is the clearest signal yet that frontier AI tenants are racing to lock in dedicated, low-cost power for the long term, and the post-July 4 tax credit cliff explains exactly why that race is accelerating. With the ITC construction-start deadline now closed, the roughly 170 gigawatts of safe-harbored renewables represents a fixed, shrinking pool of creditworthy offtake supply, meaning PPA prices for everything outside that pipeline will rise and site selectors who have not already contracted into it are negotiating from a weakening position. Layer in the Texas permitting controversy, where behind-the-meter gas strategies built on minor-source air permits are drawing federal aggregation scrutiny, and the strategic picture sharpens: the developers and investors who move fastest to secure nuclear-adjacent or safe-harbored renewable power in credible regulatory markets will define the competitive landscape, while those relying on permitting arbitrage or uncontracted greenfield supply face a materially harder path to penciling deals.</p>
       <p>Power market intelligence from a practitioner with two decades in origination and interconnection, 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
     </div>
 
@@ -468,18 +491,22 @@ body {
         <div class="qs-item">
 <div class="qs-id">Meta&#x27;s first Canadian AI campus in Alberta secured 1 GW of power and transmission years ahead of the announcement.</div>
 <div class="qs-desc">Meta quietly locked in 1 GW of Alberta grid capacity years before its Canadian AI campus announcement, signaling that hyperscalers are securing power rights well in advance of public project disclosures. For data center developers and CRE investors, this underscores that Alberta&#x27;s deregulated power market rewards early movers, and that visible land deals are likely lagging indicators of capacity that&#x27;s already been claimed.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterknowledge.com/data-center-construction/meta-s-first-canadian-ai-campus-was-planned-around-the-grid" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: datacenter</span></div>
 </div>
 <div class="qs-item">
 <div class="qs-id">Prologis files plans for 99MW data center in San Jose, CA on a site previously earmarked for industrial warehouse</div>
 <div class="qs-desc">Prologis is converting a formerly industrial-zoned San Jose site into a 99MW data center, signaling that even established logistics REITs are repricing land toward hyperscale power demand. For site selectors, this reinforces the Silicon Valley supply squeeze, developable parcels with grid access are being absorbed faster than new capacity can be permitted, tightening the window for securing interconnection queue positions in the market.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/prologis-files-to-build-99mw-data-center-in-san-jose-california/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: datacenter</span></div>
 </div>
 <div class="qs-item">
 <div class="qs-id">EQT acquires Copia Power from Carlyle; platform has 2.6GW energy assets and 9GW+ of data centers in development plus 25GW solar/storage and 7GW gas pipeline.</div>
 <div class="qs-desc">EQT&#x27;s acquisition of Copia Power consolidates a vertically integrated platform spanning 2.6GW of operating assets, 25GW of solar/storage, 7GW of gas generation pipeline, and 9GW+ of co-located data center development, signaling that large infrastructure funds are moving aggressively to control both generation and load under one ownership structure. For data center developers and CRE investors, this deal reinforces the strategic premium now placed on platforms that can self-supply power at scale, tightening the competitive window for third parties seeking to secure grid capacity in contested markets.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/eqt-acquires-energy-and-data-center-developer-copia-power-from-carlyle/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: datacenter</span></div>
 </div>
 <div class="qs-item">
 <div class="qs-id">Microsoft reports 25% YoY CO2 emissions rise driven by data center expansion; signed 40GW renewable capacity agreements (19GW online) across 26 countries.</div>
 <div class="qs-desc">Microsoft&#x27;s aggressive data center expansion has driven a 25% year-over-year CO2 emissions increase, exposing the widening gap between load growth and renewable energy availability even for the best-capitalized buyers. With 40GW contracted but only 19GW online across 26 countries, developers and investors should expect prolonged interconnection queues and offtake competition to intensify in markets where Microsoft is active.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/microsoft-reports-25-percent-increase-in-co2-emissions-on-back-on-data-center-growth/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: datacenter</span></div>
 </div>
         </div>
       </div>
@@ -496,9 +523,9 @@ body {
 <div class="lead-story">
 <p class="dek">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf in Kentucky, signaling that frontier AI labs are now willing to sign ultra-long-term offtake agreements to secure dedicated power and infrastructure. For site selectors and CRE investors, this validates Kentucky as a serious AI compute market and demonstrates that nuclear-adjacent, low-cost power regions can command premium, decade-plus commitments from hyperscale-tier tenants.</p>
 <p class="body-text">Anthropic Signs $19B, 20-Year Lease with TeraWulf for Kentucky Data Center Capacity</p>
-<p class="body-text" style="margin-top:8px">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf at its nuclear-powered Kentucky campus, making it one of the largest and longest-duration compute infrastructure agreements on record. The deal signals a structural shift in how frontier AI labs are approaching power and capacity procurement. Rather than negotiating standard 5-to-10-year colocation terms, Anthropic has effectively treated this like a power purchase agreement, locking in a dedicated, long-duration position to insulate itself from the growing scarcity of clean, firm, low-cost power. In a market where generation interconnection queues are measured in years and grid constraints are tightening across Tier 1 markets, that kind of certainty commands a serious premium.</p>
-<p class="body-text" style="margin-top:8px">For data center developers and independent power producers, this deal redefines what &quot;creditworthy offtake&quot; looks like in the AI compute era. TeraWulf&#x27;s ability to secure a 20-year commitment at this scale validates the vertically integrated model, where controlling the power source, particularly nuclear or nuclear-adjacent baseload, is the differentiating asset. Developers who have treated power procurement as a cost-center rather than a strategic moat are now watching a competitor use it as the central value proposition to attract tier-one tenants. The implication is straightforward: sites with contracted, firm, low-carbon power are not just operationally superior, they are financeable at a different level and capable of supporting a fundamentally different leasing conversation.</p>
-<p class="body-text" style="margin-top:8px">For site selectors and CRE investors, the Kentucky deal is a data point that demands recalibration of regional market rankings. PJM and MISO markets in the Ohio Valley, Kentucky, and Indiana corridors have historically been overshadowed by Northern Virginia, Phoenix, and Dallas in AI infrastructure conversations. This transaction puts those markets on the map for greenfield development underwriting, particularly where low wholesale power prices, available land, and transmission access converge. Queue strategy should be reassessed accordingly: developers sitting on interconnection positions in MISO South or PJM West zones with access to firm capacity should be prioritizing those assets and accelerating commercial conversations with AI labs that are clearly willing to commit at a duration the market has not seen before.</p>
+<p class="body-text" style="margin-top:8px">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf at its Kentucky campus, marking one of the longest and largest fixed-term compute infrastructure agreements ever executed by a frontier AI lab. The deal is not incidental to broader market trends -- it is a direct response to them. As power constraints tighten across traditional hyperscale corridors and interconnection queues stretch past five years in marquee markets, AI labs are being forced to lock in infrastructure years before they need it at scale. Anthropic is not buying optionality here; it is paying a premium to eliminate execution risk on power and capacity at a time when both are genuinely scarce.</p>
+<p class="body-text" style="margin-top:8px">For data center developers and independent power producers, the market mechanics of this deal deserve close attention. TeraWulf&#x27;s Kentucky campus benefits from proximity to low-cost baseload generation, including nuclear, and sits outside the congested PJM and ERCOT interconnection queues that have become bottlenecks for new builds. The 20-year term transforms what might have been a speculative development asset into a fully underwritten infrastructure play with investment-grade cash flow characteristics. That structure changes the financing conversation entirely -- long-tenor lease commitments of this nature can support project-level debt at terms that shorter hyperscale deals simply cannot. Developers sitting on sites with reliable baseload access and clear interconnection paths should read this as a signal that the right tenant, at the right location, will sign terms that were unthinkable two years ago.</p>
+<p class="body-text" style="margin-top:8px">For site selectors and investors actively working the market, the implications are specific. Kentucky was not a consensus top-tier AI compute market entering 2024 -- it lacked the brand recognition of Northern Virginia, Phoenix, or the Texas Triangle. This deal resets that framing. States with TVA or rural co-op power access, modest land costs, and constructive utility relationships should be actively reassessed. On queue strategy, developers should prioritize sites where they can demonstrate a credible path to energization within three to five years; frontier labs evaluating similar arrangements will not wait on speculative timelines. Power procurement structure also matters -- AI tenants at this tier appear willing to accept long-duration fixed commitments in exchange for rate stability, which means developers who can offer known all-in power costs, rather than pass-through exposure, hold a meaningful competitive advantage in lease negotiations.</p>
 <p class="body-text" style="margin-top:8px"><a href="https://www.datacenterdynamics.com/en/news/anthropic-signs-19bn-20-year-lease-for-kentucky-data-center-with-terawulf/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
 </div>
 
@@ -534,24 +561,29 @@ body {
     <div class="flag-box">
       <div class="flag-label">This Week's Policy Flags</div>
       <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Post-July 4 tax credit cliff: solar and wind projects that missed the construction-start deadline must be in service by Dec 31, 2027</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Post-July 4 tax credit cliff: solar and wind projects that missed the construction-start deadline must be in service by Dec 31, 2027</span>
 <span class="flag-note">The July 4, 2026 construction-start deadline has now passed. Solar and wind projects that did not begin construction in time are locked out of the 30% ITC unless they are placed in service by December 31, 2027, an 18-month window that most greenfield projects cannot meet. Treasury Notice 2025-42 also replaced the 5% cost safe harbor with the Physical Work Test for solar projects above 1.5 MW, raising the bar for what counts as having started. The practical effect for large loads: the pool of tax-credit-eligible renewable supply is now fixed, and any project not already safe-harbored carries materially worse economics, which tightens the market for new offtake.</span>
+<span class="flag-src"><a href="https://pv-magazine-usa.com/2026/07/08/qualifying-for-solar-tax-credits-beyond-the-july-4th-deadline/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: pv magazine USA</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Analysts expect PPA prices to keep rising as clean energy tax credits phase out; ~170 GW safe-harbored pipeline becomes the scarce supply</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Analysts expect PPA prices to keep rising as clean energy tax credits phase out; ~170 GW safe-harbored pipeline becomes the scarce supply</span>
 <span class="flag-note">With the July 4 construction-start deadline past, the tax-credit-eligible renewable pipeline is effectively fixed. Crux estimated a roughly 170 GW pipeline of safe-harbored projects, and analysts expect PPA prices to rise for projects that no longer qualify for IRA credits. That makes the safe-harbored pipeline the scarce supply: buyers who fail to contract into it face materially higher costs. For large loads negotiating offtake now, the safe-harbor status of a counterparty&#x27;s project is the single most important diligence item in the term sheet.</span>
+<span class="flag-src"><a href="https://www.esgdive.com/news/rising-ppa-prices-anticipated-as-clean-energy-tax-credits-phase-out/824566/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: ESG Dive</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Regulatory</span>Floodlight/Texas Tribune investigation: Texas data centers using minor air permits to build on-site gas plants with no public notice</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>Floodlight/Texas Tribune investigation: Texas data centers using minor air permits to build on-site gas plants with no public notice</span>
 <span class="flag-note">A Floodlight and Texas Tribune investigation found Texas data centers are permitting on-site gas generation under minor-source air permits, which carry no public notice requirement, then expanding, a &#x27;small first, big later&#x27; sequence that keeps each increment below the major-source threshold. The practice is drawing scrutiny under EPA&#x27;s aggregation policy, which can require related sources to be permitted as one. For anyone underwriting behind-the-meter gas as a queue bypass, permit-stacking risk now belongs in the model: an aggregation finding can retroactively pull a campus into major-source review.</span>
+<span class="flag-src"><a href="https://www.texastribune.org/2026/07/09/texas-data-centers-ai-power-plants-pollution-state-permits/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Texas Tribune</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Regulatory</span>PUCT weighs full-load emergency curtailment on the 525MW Crusoe/Ensign co-located AI campus, the first real test of the SB6 co-location framework</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>PUCT weighs full-load emergency curtailment on the 525MW Crusoe/Ensign co-located AI campus, the first real test of the SB6 co-location framework</span>
 <span class="flag-note">ERCOT has recommended that the Crusoe One and Crusoe Two loads fully curtail 525.5MW of AI compute within 30 minutes of an emergency declaration, at the Goodnight campus sited behind an existing 265.5MW wind farm. The dispute is whether curtailment should be capped at the paired generator&#x27;s output or extend to the site&#x27;s entire load, and the answer sets the price of behind-the-meter co-location in ERCOT. This is the first real test of the SB6 co-location framework, with a PUCT decision expected later this summer. Anyone modeling BTM as a queue bypass should treat full-load curtailment as the downside case until this docket lands.</span>
+<span class="flag-src"><a href="https://www.datacenterknowledge.com/energy-power-supply/texas-tests-new-rules-for-ai-campuses-behind-existing-power-plants">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Data Center Knowledge</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Regulatory</span>FERC generation adequacy reports due July 20: all six RTOs must explain how they will serve existing and new large loads</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>FERC generation adequacy reports due July 20: all six RTOs must explain how they will serve existing and new large loads</span>
 <span class="flag-note">Under the June 18 Section 206 show cause orders, all six RTOs and ISOs (PJM, MISO, SPP, CAISO, ISO-NE, NYISO) must file generation adequacy reports by July 20 explaining how they will ensure adequate generation to serve both existing and new large loads. A separate deadline on August 17 requires them to justify their current large-load interconnection tariffs or propose reforms. These filings are the clearest forward read available on how each market intends to ration capacity between incumbent load and new data centers, and they land inside the next two weeks.</span>
+<span class="flag-src"><a href="https://www.ferc.gov/news-events/news/ferc-launches-aggressive-targeted-action-speed-large-load-integration">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: FERC</span></span>
 </div>
     </div>
 
@@ -564,7 +596,7 @@ body {
     </div>
 
     <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
-    <p class="body-text">LevelTen&#x27;s North American PPA Price Index shows solar PPA prices up roughly 13% and wind up roughly 24% year over year, the highest levels since LevelTen began indexing in 2018. With the July 4 construction-start deadline now passed, the pool of tax-credit-eligible projects is fixed, and analysts expect that escalation to continue rather than mean-revert. For large loads, the practical consequence is that renewable offtake priced off a safe-harbored project is now a scarce good, and the premium for arriving late to that pipeline compounds every quarter.</p>
+    <p class="body-text">LevelTen&#x27;s North American PPA Price Index shows solar PPA prices up roughly 13% and wind up roughly 24% year over year, the highest levels since LevelTen began indexing in 2018. With the July 4 construction-start deadline now passed, the pool of tax-credit-eligible projects is fixed, and analysts expect that escalation to continue rather than mean-revert. For large loads, the practical consequence is that renewable offtake priced off a safe-harbored project is now a scarce good, and the premium for arriving late to that pipeline compounds every quarter.</p><p class="body-text" style="margin-top:6px;font-size:11px"><a href="https://www.utilitydive.com/news/wind-solar-ppa-prices-levelten/817780/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="color:var(--muted);font-style:italic">Source: Utility Dive</span></p>
     </div>
 
     <hr class="rule">
