@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect&#8482;, Week of July 4, 2026</title>
+<style>
+:root {
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 28px 42px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.masthead h1 {
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: .2px;
+  margin-bottom: 14px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.meta-bar strong { color: var(--ink); }
+
+/* ── BODY ── */
+.body { padding: 0 42px 32px; }
+
+/* ── LEDE ── */
+.lede {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lede p + p { margin-top: 10px; }
+.lede .author {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
+}
+.sec-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
+
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.connector-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sector-badge {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.flag-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e8dfc8;
+}
+.flag-item:last-child { border-bottom: none; }
+.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
+.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #b0b8c4;
+  padding: 20px 42px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ══ MASTHEAD ══ -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
+    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development, for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of July 4, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 5</span>
+      <span>nexphaseadvisory.net</span>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div class="body">
+
+    <!-- LEDE -->
+    <div class="lede">
+      <p>The collapse of the Prince William Digital Gateway, killed not by capital markets or demand signals but by a flawed public notice in a county rezoning file, is the clearest signal yet that entitlement risk has become the defining constraint in large-scale data center development, and this week&#x27;s news makes clear the problem is systemic, not site-specific. From Birmingham, where Nebius is retreating from a 300-MW campus after the city weaponized mixed-use zoning to block AI infrastructure, to FERC issuing show-cause orders to PJM and MISO that could force restudies and reopen cost allocations on in-flight queue positions, developers are now exposed to regulatory reversal at every layer of the stack, local land use, utility tariff design, and federal interconnection rules simultaneously. For site selectors and power procurement teams, the practical takeaway is urgent: New Jersey&#x27;s new large-load tariff class, pending the governor&#x27;s signature, adds yet another variable to executed interconnection agreements in one of PJM&#x27;s most constrained territories, and any organization underwriting greenfield sites or active queue positions without stress-testing procedural and regulatory unwinding scenarios is carrying risk that the QTS withdrawal just priced in the hard way.</p>
+      <p>Power market intelligence from a practitioner with two decades in origination and interconnection, 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
+    </div>
+
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>CONNECTOR MARKETS, Queue Depth &middot; Load Signal &middot; This Week</h2>
+    </div>
+
+    <div class="connector-section">
+      <p class="connector-intro">Where interconnection queue activity, load growth, and current market signals converge.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>ISO</th>
+            <th>Queue Depth</th>
+            <th>Load Signal</th>
+            <th>This Week's Signal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr><td><span class="load-name">ERCOT</span></td><td><span class="supply-count">1,828</span></td><td><span style="color:#0b5d4e;font-weight:700">+3.1%</span></td><td>ERCOT approved a large-load interconnection process for its 438 GW queue, launching &#x27;Batch Zero&#x27;; ~90% of queue is data centers.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">FRCC</span></td><td><span class="supply-count">1,162</span></td><td><span style="color:#0b5d4e;font-weight:700">+0.9%</span></td><td>Data center developers are reconsidering Florida projects amid stark local opposition to siting and power demands.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">SPP</span></td><td><span class="supply-count">1,007</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>Digital Realty plans 600MW data center campus in Kansas and acquires investment firm Columbia Capital</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">NYISO</span></td><td><span class="supply-count">346</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>East Fishkill, NY passes three-year data center moratorium, blocking a planned 1 million sq ft data center campus</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">ISO-NE</span></td><td><span class="supply-count">373</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>No signals this week</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">WECC</span></td><td><span class="supply-count">1,564</span></td><td><span style="color:#8b2020;font-weight:700">-0.1%</span></td><td>Enlight closed $2.6B debt financing for the CO Bar solar-storage complex in Arizona, one of the largest US renewable project financings.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">MISO</span></td><td><span class="supply-count">1,654</span></td><td><span style="color:#8b2020;font-weight:700">-0.5%</span></td><td>Oracle&#x27;s lawsuit challenging Wisconsin&#x27;s AI data center tariff could reshape how states require financial guarantees for large-load power projects.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">PJM</span></td><td><span class="supply-count">1,558</span></td><td><span style="color:#8b2020;font-weight:700">-1.5%</span></td><td>Virginia approves first-ever data center electricity tax including self-generated power, projected to raise $600M annually.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">CAISO</span></td><td><span class="supply-count">358</span></td><td><span style="color:#8b2020;font-weight:700">-2.4%</span></td><td>Rural California county reversed its approval of a massive data center project amid local pushback.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="queue-spotlight">
+        <div class="qs-label">Spotlight, Highest-Capacity Projects This Week</div>
+        <div class="qs-row">
+        <div class="qs-item">
+<div class="qs-id">Prometheus Hyperscale advancing $1.2B data center campus in Cheyenne, Wyoming</div>
+<div class="qs-desc">Prometheus Hyperscale&#x27;s $1.2B campus commitment in Cheyenne signals continued hyperscale interest in Wyoming&#x27;s favorable tax environment, low-cost power, and available land as alternatives to saturated Tier 1 markets. For site selectors and CRE investors, this reinforces Cheyenne&#x27;s emerging status as a viable secondary market worth tracking for utility capacity headroom and future development parcels.</div>
+</div>
+<div class="qs-item">
+<div class="qs-id">DataBank filed plans for a 200MW data center campus outside Atlanta, Georgia</div>
+<div class="qs-desc">DataBank&#x27;s 200MW campus filing near Atlanta signals continued hyperscale-scale investment in the Southeast&#x27;s power corridor, where Georgia Power&#x27;s transmission infrastructure and competitive land costs remain key demand drivers. For site selectors and CRE investors, the filing reinforces metro Atlanta&#x27;s viability for large-load deployments, though it adds queue pressure on a utility already managing significant interconnection demand from the region&#x27;s expanding data center cluster.</div>
+</div>
+<div class="qs-item">
+<div class="qs-id">Google invests $1.5 billion to expand data center operations in Alabama</div>
+<div class="qs-desc">Google is committing $1.5 billion to expand its Alabama data center footprint, signaling continued hyperscaler appetite for markets outside traditional coastal hubs. For site selectors and CRE investors, Alabama&#x27;s combination of lower land costs, favorable utility rates, and available grid capacity is increasingly competitive with saturated Tier 1 markets like Northern Virginia and Phoenix.</div>
+</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+<div class="sec-label">Lead Story</div>
+<h2>QTS drops data center appeal, kills gigawatt PW Digital Gateway project in Virginia</h2>
+</div>
+
+<div class="lead-story">
+<p class="body-text">QTS Drops Appeal, Killing the Prince William Digital Gateway, and Putting Greenfield Entitlement Risk Back on the Table</p>
+<p class="body-text" style="margin-top:8px">On July 2, QTS Realty Trust filed notice withdrawing its appeal to the Virginia Supreme Court, formally terminating the Prince William Digital Gateway, a 2,100-acre campus near Manassas National Battlefield Park that would have been the largest proposed data center development in the world. At full buildout, the project encompassed 37 buildings and over 22 million square feet, a scale that made it a bellwether for hyperscale-era land strategies. What makes the collapse notable is what did not cause it: there was no financing failure, no demand shortfall, no utility rejection. The project died on a procedural defect in the county&#x27;s public notice process, which courts used to void the underlying rezoning approvals. Prince William County and co-developer Compass Datacenters had already withdrawn from litigation earlier in 2026; QTS, holding the position alone, finally concluded the fight was not winnable.</p>
+<p class="body-text" style="margin-top:8px">The market mechanics here deserve close attention. A project of this scale, backed by Blackstone, one of the most capitalized real estate platforms on earth, could not survive a title-level defect in its entitlement chain. That is the core lesson. Greenfield data center development depends on a sequence of approvals that, unlike most commercial real estate, often runs through politically contentious rezonings, frequently in jurisdictions where data centers are a newer and still-contested land use. When that sequence contains a procedural flaw, it does not merely create delay; it creates a vulnerability that opponents can exploit years into the development cycle, after capital has been committed and supply chain relationships have been established. For independent power producers and data center developers underwriting large-scale campuses, the Prince William outcome quantifies a category of risk that had previously been treated as manageable background noise.</p>
+<p class="body-text" style="margin-top:8px">For site selectors and queue strategists, the implications are immediate. First, due diligence on greenfield acquisitions needs to treat the integrity of the public notice and rezoning record as a hard underwriting criterion, not a legal formality to be confirmed at closing. Second, projects that rely on a single large rezoning action, rather than incremental approvals phased across multiple parcels or jurisdictions, carry concentrated entitlement exposure that does not diversify easily. Third, the Virginia market specifically is worth monitoring: the state remains the densest data center geography in the world, but the political and legal environment around large greenfield proposals has grown materially more complicated since 2022, and the Gateway&#x27;s collapse will not reduce scrutiny on future projects near sensitive historic or environmental corridors. Developers with active site control in Northern Virginia should be auditing their approval records now, not at the next litigation event.</p>
+<p class="body-text" style="margin-top:8px"><a href="https://www.datacenterdynamics.com/en/news/qts-drops-data-center-appeal-kills-gigawatt-pw-digital-gateway-project-in-virginia/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Announcements</h2>
+    </div>
+
+    <div class="story-grid">
+    <div class="story">
+<div class="hed">Microsoft signs 20-year PPA with Chevron subsidiary for 2 GW behind-the-meter gas facility in West Texas</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">Microsoft has signed a 20-year power purchase agreement with Energy Forge One LLC, a Chevron subsidiary, to co-locate a dedicated natural gas power facility with a new 2 GW data center campus in Pecos, Texas, one of the largest single capacity additions in the company&#x27;s history. The campus will operate under a behind-the-meter arrangement, fully independent of the public grid at launch, with a path to future interconnection as the project matures, marking a significant validation of the oil major-as-power-developer model for AI infrastructure.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: Orrick</div>
+<p class="body-text"><a href="https://www.orrick.com/en/News/2026/07/Microsoft-Expands-Global-Data-Center-Capacity-with-2-GW-Data-Center-and-Co-Located-Power-Facility" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+<div class="story">
+<div class="hed">Digital Realty acquires 1,440-acre Kansas City site for $475M, secures 2 GW utility power agreement</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">Digital Realty has acquired 1,440 acres at Astra Enterprise Park near Kansas City for approximately $475 million in cash and operating partnership units, marking its entry into the seventh-largest U.S. data center market. The company has signed an Energy Service Agreement with the local utility to deliver 600 MW of power by early 2028, scaling to 2 GW at full buildout, a structure that signals how major colocation platforms are increasingly securing powered land positions in secondary markets ahead of hyperscale tenant demand.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: Globe Newswire</div>
+<p class="body-text"><a href="https://investor.digitalrealty.com/news-releases/news-release-details/digital-realty-announces-transactions-drive-continued-platform" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory &amp; Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>State of New Jersey &middot; New Jersey</span>
+<span class="flag-note">New Jersey&#x27;s legislation creates a separate rate class for large DC loads in one of PJM&#x27;s most constrained service territories. The immediate uncertainty for developers with existing NJ facilities is how the new tariff interacts with executed interconnection agreements and any power purchase or utility service arrangements currently in place.</span>
+</div>
+<div class="flag-item">
+<span class="flag-co"><span class="sector-badge" style="background:#54606e">Signal</span>FERC / US Grid Operators (PJM, MISO, SPP, CAISO, NYISO, ISO-NE)</span>
+<span class="flag-note">FERC&#x27;s show-cause orders signal a move toward formal rulemaking that would standardize large-load interconnection rules across all major ISO/RTO markets. For developers with active queue positions in PJM and MISO, this creates near-term exposure, any rule changes could trigger restudy obligations, revised cost allocation methodologies, or tariff amendments affecting in-flight projects.</span>
+</div>
+<div class="flag-item">
+<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Unnamed AI company &middot; Alabama</span>
+<span class="flag-note">Nebius, a Netherlands-based AI company, has reversed planned expansion of its 300-MW Birmingham data center campus after the city enacted new mixed-use district zoning restrictions that residents and plaintiffs argue prohibit utility-scale AI infrastructure without a formal site-plan amendment and public hearing. A class-action lawsuit filed in Jefferson County Circuit Court alleges the city helped project developers accelerate over $34 million in permit filings ahead of a December 2025 data center moratorium, spotlighting the growing use of local zoning tools to challenge AI infrastructure siting decisions.</span>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA &amp; Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+    <p class="body-text">Sabanci Renewables has secured a PPA with Meta for a Texas solar PV portfolio, signaling continued hyperscaler appetite for contracted renewable capacity in ERCOT ahead of project completion. For data center developers and CRE investors, this reinforces Texas&#x27;s position as a priority market for long-term power offtake, tightening available clean energy inventory for future site entrants.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About This Brief</div>
+      <h2>NexPhase Advisory</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is produced by NexPhase Advisory, a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Questions, feedback, or to discuss a specific market or project: <a href="mailto:info@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">info@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of July 4, 2026 &nbsp;·&nbsp; Vol. 1, No. 5</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available to subscribers on request.</div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of July 4, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:info@nexphaseadvisory.net">info@nexphaseadvisory.net</a>
+    </div>
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
