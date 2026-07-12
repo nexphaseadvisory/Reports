@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Interconnect&#8482;, Week of July 4, 2026</title>
+<title>The Interconnect&#8482;, Week of July 11, 2026</title>
 <style>
 :root {
   --ink:     #16191d;
@@ -342,16 +342,39 @@ body {
   color: var(--gold);
   margin-bottom: 6px;
 }
+/* Stacked flag: bold takeaway header (with its tag) on its own line, context paragraph BELOW it,
+   then a Read more link + source-of-truth attribution. Was a flex row (tag+entity beside the
+   note), which buried the takeaway in a narrow 130px column. */
 .flag-item {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 3px 0;
+  display: block;
+  padding: 9px 0 10px;
   border-bottom: 1px solid #e8dfc8;
 }
 .flag-item:last-child { border-bottom: none; }
-.flag-co { font-weight: 700; color: var(--ink); min-width: 130px; font-size: 11px; }
-.flag-note { color: var(--muted); font-size: 11px; line-height: 1.4; }
+.flag-head {
+  display: block;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 12.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.flag-head .sector-badge { margin-right: 6px; vertical-align: 1px; }
+.flag-note {
+  display: block;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.flag-src {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+}
+.flag-src a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.flag-src .flag-attr { color: var(--muted); font-style: italic; }
+/* legacy: kept so an older cached draft still renders sanely */
+.flag-co { font-weight: 700; color: var(--ink); font-size: 11px; }
 
 /* ── FOOTER ── */
 .footer {
@@ -413,9 +436,11 @@ body {
   <div class="masthead">
     <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
     <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
-    <p class="tagline">Weekly intelligence on power procurement, interconnection queues, and data center development, for teams building at the grid edge.</p>
+    <div class="byline" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:-2px;margin-bottom:8px">by Chris Santiago</div>
+    <p class="tagline">Complimentary weekly intelligence on power procurement, interconnection queues, and data center development &mdash; for teams building at the grid edge.</p>
     <div class="meta-bar">
-      <span><strong>Week of July 4, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 5</span>
+      <span><strong>Week of July 11, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 6<br>
+      <span style="font-size:12px;color:var(--muted);font-weight:400">News window: July 5–11, 2026</span></span>
       <span>nexphaseadvisory.net</span>
     </div>
   </div>
@@ -424,9 +449,11 @@ body {
   <div class="body">
 
     <!-- LEDE -->
+    <!-- The credential paragraph that used to sit here was removed (2026-07-11): it is now stated
+         once, in the About block at the bottom. Stating it here too repeated it near-verbatim in
+         every issue. Do not re-add a credential line to the lede. -->
     <div class="lede">
-      <p>The collapse of the Prince William Digital Gateway, killed not by capital markets or demand signals but by a flawed public notice in a county rezoning file, is the clearest signal yet that entitlement risk has become the defining constraint in large-scale data center development, and this week&#x27;s news makes clear the problem is systemic, not site-specific. From Birmingham, where Nebius is retreating from a 300-MW campus after the city weaponized mixed-use zoning to block AI infrastructure, to FERC issuing show-cause orders to PJM and MISO that could force restudies and reopen cost allocations on in-flight queue positions, developers are now exposed to regulatory reversal at every layer of the stack, local land use, utility tariff design, and federal interconnection rules simultaneously. For site selectors and power procurement teams, the practical takeaway is urgent: New Jersey&#x27;s new large-load tariff class, pending the governor&#x27;s signature, adds yet another variable to executed interconnection agreements in one of PJM&#x27;s most constrained territories, and any organization underwriting greenfield sites or active queue positions without stress-testing procedural and regulatory unwinding scenarios is carrying risk that the QTS withdrawal just priced in the hard way.</p>
-      <p>Power market intelligence from a practitioner with two decades in origination and interconnection, 5+ GW delivered to NTP across CAISO, PJM, MISO, ERCOT, and WECC. The analysis connects public news to what's actually moving in the queue.</p>
+      <p>Anthropic&#x27;s $19 billion, 20-year commitment to TeraWulf in Kentucky is the clearest signal yet that frontier AI tenants are locking in power infrastructure on generation-length timescales, and the logic driving that urgency becomes obvious when you look at what is happening to the energy supply stack simultaneously: the July 4 construction-start deadline has now passed, the tax-credit-eligible renewable pipeline is effectively closed at roughly 170 gigawatts of safe-harbored projects, and PPA prices for everything outside that window are heading structurally higher. Meanwhile, a Texas investigation into data centers quietly building gas generation under minor air permits is exposing a behind-the-meter queue-bypass strategy that EPA aggregation doctrine could unwind retroactively, making the seemingly low-friction path to on-site power a latent liability. The through-line for site selectors and power buyers is that every credible route to large-scale, cost-controlled power is either shrinking or carrying new legal risk, which means the deals being signed today, whether a 20-year lease in a nuclear-adjacent market or a PPA against a safe-harbored solar project, are not aggressive bets but defensive ones.</p>
     </div>
 
     <!-- ══ CONNECTOR MARKETS ══ -->
@@ -449,15 +476,15 @@ body {
           </tr>
         </thead>
         <tbody>
-        <tr><td><span class="load-name">ERCOT</span></td><td><span class="supply-count">1,828</span></td><td><span style="color:#0b5d4e;font-weight:700">+3.1%</span></td><td>ERCOT approved a large-load interconnection process for its 438 GW queue, launching &#x27;Batch Zero&#x27;; ~90% of queue is data centers.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
-<tr><td><span class="load-name">FRCC</span></td><td><span class="supply-count">1,162</span></td><td><span style="color:#0b5d4e;font-weight:700">+0.9%</span></td><td>Data center developers are reconsidering Florida projects amid stark local opposition to siting and power demands.</td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
-<tr><td><span class="load-name">SPP</span></td><td><span class="supply-count">1,007</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>Digital Realty plans 600MW data center campus in Kansas and acquires investment firm Columbia Capital</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
-<tr><td><span class="load-name">NYISO</span></td><td><span class="supply-count">346</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>East Fishkill, NY passes three-year data center moratorium, blocking a planned 1 million sq ft data center campus</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
-<tr><td><span class="load-name">ISO-NE</span></td><td><span class="supply-count">373</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td>No signals this week</td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
-<tr><td><span class="load-name">WECC</span></td><td><span class="supply-count">1,564</span></td><td><span style="color:#8b2020;font-weight:700">-0.1%</span></td><td>Enlight closed $2.6B debt financing for the CO Bar solar-storage complex in Arizona, one of the largest US renewable project financings.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
-<tr><td><span class="load-name">MISO</span></td><td><span class="supply-count">1,654</span></td><td><span style="color:#8b2020;font-weight:700">-0.5%</span></td><td>Oracle&#x27;s lawsuit challenging Wisconsin&#x27;s AI data center tariff could reshape how states require financial guarantees for large-load power projects.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
-<tr><td><span class="load-name">PJM</span></td><td><span class="supply-count">1,558</span></td><td><span style="color:#8b2020;font-weight:700">-1.5%</span></td><td>Virginia approves first-ever data center electricity tax including self-generated power, projected to raise $600M annually.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
-<tr><td><span class="load-name">CAISO</span></td><td><span class="supply-count">358</span></td><td><span style="color:#8b2020;font-weight:700">-2.4%</span></td><td>Rural California county reversed its approval of a massive data center project amid local pushback.</td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+        <tr><td><span class="load-name">ERCOT</span></td><td><span class="supply-count">1,828</span></td><td><span style="color:#0b5d4e;font-weight:700">+3.1%</span></td><td><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPZFo4RU96Z080aW5pOFJzZlF3Wlc2NWlVOEZVZWlXZlVnTlpucmNBVG9UaEdPekhIeC1lTlNHZTd5TVdBX0ZPSTk5SHB0WXlNUUc5YUZyR3BJT04yLWVTRnlWMGtFU1o3OFRXbi1iVS1lYnJkdzNPUWRzeG81TlBxMWRxNjZGTk9xblFsRkZZQ1J3X0ZoVGp1T1BBY3h6aTRmQVdqQVR3?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">AWS files for $1.2bn data center campus outside Houston, Texas</a></td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">FRCC</span></td><td><span class="supply-count">1,162</span></td><td><span style="color:#0b5d4e;font-weight:700">+0.9%</span></td><td><span style="color:var(--muted)">No signals this week</span></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">SPP</span></td><td><span class="supply-count">1,009</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><a href="https://news.google.com/rss/articles/CBMipgFBVV95cUxPV3VISGJBY2RpdlVSNFhLNkx2d0ZldkM4R2cwQllJZnhNOHFieVk2bVJvdGotdDY3OVczWTVGTE5JeVZXNUVtbVNlYXFMUXNMQXFjWFdoemRLS0h0RXY3T1FHX1ltVjBBYTFYVHNLOVZWSWVtOGRDa0x0QWZPQkRtS29ieGVmZTFra1FkR3hhaXRuVjdobk9sWHgxNG1ZaGJIaTlWYm1B?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Kansas prepares for state&#x27;s first hyperscale data center.</a></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">NYISO</span></td><td><span class="supply-count">346</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><span style="color:var(--muted)">No signals this week</span></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">ISO-NE</span></td><td><span class="supply-count">373</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><span style="color:var(--muted)">No signals this week</span></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">WECC</span></td><td><span class="supply-count">1,564</span></td><td><span style="color:#8b2020;font-weight:700">-0.1%</span></td><td><a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOaERkZkl1bzhNV05iVmRhUFpobWxLcHdYcHZIVW1iUkg5MHdickVsN3pIbFlnOFItS3kwR0tKVENTSWtQeEJaa0FyUy1nOFMxVVoxeDlxc1hDM0FaNWEzdzlzTi1NbVdsaEdDQ3l6NDJsc3NDUldhNDdBcW8zVnNZWUFGMWZVb2R3SkVlc1lBb2dVZDZIUWd0Qk1aaHQ0N2FrNDg5eXI0UTIzYlVhcDFGazVReGZsb2EyTVc2MA?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Meta&#x27;s yet-to-open AI data center in Cheyenne, Wyoming has already triggered a local wastewater crackdown amid infrastructure strain.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">MISO</span></td><td><span class="supply-count">1,655</span></td><td><span style="color:#8b2020;font-weight:700">-0.5%</span></td><td><a href="https://www.datacenterdynamics.com/en/news/officials-in-elk-river-minnesota-deny-data-center-application-consider-moratorium/" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Elk River, MN city council denied Swervo/Irongate&#x27;s application to repurpose a warehouse into a data center; moratorium under consideration.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">PJM</span></td><td><span class="supply-count">1,558</span></td><td><span style="color:#8b2020;font-weight:700">-1.5%</span></td><td><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxQUWNKekhNM1VCSUVwN1NHaEFyZFNVUkRlVE5UcEc0a29DTzFYWFZ2UUR1SUpxbnlkaVNwUkFLQkZ1c00yUFZxaUt2dFVvaDZ3RWdKX0ttTE9qczJNcVRIRHd5NkY3b1RWcGVpYUF3dFExc25rSEwwbmtRZEU3dmg3VUhDdW95WG84bExOSUdLbHY2UXIt?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">A Maryland county adopted a two-year moratorium on new data center development, halting project approvals.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">CAISO</span></td><td><span class="supply-count">358</span></td><td><span style="color:#8b2020;font-weight:700">-2.4%</span></td><td><a href="https://www.datacenterdynamics.com/en/news/prologis-files-to-build-99mw-data-center-in-san-jose-california/" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Prologis files plans for 99MW data center in San Jose, CA on a site previously earmarked for industrial warehouse</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
         </tbody>
       </table>
 
@@ -465,16 +492,24 @@ body {
         <div class="qs-label">Spotlight, Highest-Capacity Projects This Week</div>
         <div class="qs-row">
         <div class="qs-item">
-<div class="qs-id">Prometheus Hyperscale advancing $1.2B data center campus in Cheyenne, Wyoming</div>
-<div class="qs-desc">Prometheus Hyperscale&#x27;s $1.2B campus commitment in Cheyenne signals continued hyperscale interest in Wyoming&#x27;s favorable tax environment, low-cost power, and available land as alternatives to saturated Tier 1 markets. For site selectors and CRE investors, this reinforces Cheyenne&#x27;s emerging status as a viable secondary market worth tracking for utility capacity headroom and future development parcels.</div>
+<div class="qs-id">Meta&#x27;s first Canadian AI campus in Alberta secured 1 GW of power and transmission years ahead of the announcement.</div>
+<div class="qs-desc">Meta quietly locked in 1 GW of Alberta grid capacity years before its Canadian AI campus announcement, signaling that hyperscalers are securing power rights well in advance of public project disclosures. For data center developers and CRE investors, this underscores that Alberta&#x27;s deregulated power market rewards early movers, and that visible land deals are likely lagging indicators of capacity that&#x27;s already been claimed.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterknowledge.com/data-center-construction/meta-s-first-canadian-ai-campus-was-planned-around-the-grid" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: Data Center Knowledge</span></div>
 </div>
 <div class="qs-item">
-<div class="qs-id">DataBank filed plans for a 200MW data center campus outside Atlanta, Georgia</div>
-<div class="qs-desc">DataBank&#x27;s 200MW campus filing near Atlanta signals continued hyperscale-scale investment in the Southeast&#x27;s power corridor, where Georgia Power&#x27;s transmission infrastructure and competitive land costs remain key demand drivers. For site selectors and CRE investors, the filing reinforces metro Atlanta&#x27;s viability for large-load deployments, though it adds queue pressure on a utility already managing significant interconnection demand from the region&#x27;s expanding data center cluster.</div>
+<div class="qs-id">Prologis files plans for 99MW data center in San Jose, CA on a site previously earmarked for industrial warehouse</div>
+<div class="qs-desc">Prologis is converting a formerly industrial-zoned San Jose site into a 99MW data center, signaling that even established logistics REITs are repricing land toward hyperscale power demand. For site selectors, this reinforces the Silicon Valley supply squeeze, developable parcels with grid access are being absorbed faster than new capacity can be permitted, tightening the window for securing interconnection queue positions in the market.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/prologis-files-to-build-99mw-data-center-in-san-jose-california/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: Data Center Dynamics</span></div>
 </div>
 <div class="qs-item">
-<div class="qs-id">Google invests $1.5 billion to expand data center operations in Alabama</div>
-<div class="qs-desc">Google is committing $1.5 billion to expand its Alabama data center footprint, signaling continued hyperscaler appetite for markets outside traditional coastal hubs. For site selectors and CRE investors, Alabama&#x27;s combination of lower land costs, favorable utility rates, and available grid capacity is increasingly competitive with saturated Tier 1 markets like Northern Virginia and Phoenix.</div>
+<div class="qs-id">EQT acquires Copia Power from Carlyle; platform has 2.6GW energy assets and 9GW+ of data centers in development plus 25GW solar/storage and 7GW gas pipeline.</div>
+<div class="qs-desc">EQT&#x27;s acquisition of Copia Power consolidates a vertically integrated platform spanning 2.6GW of operating assets, 25GW of solar/storage, 7GW of gas generation pipeline, and 9GW+ of co-located data center development, signaling that large infrastructure funds are moving aggressively to control both generation and load under one ownership structure. For data center developers and CRE investors, this deal reinforces the strategic premium now placed on platforms that can self-supply power at scale, tightening the competitive window for third parties seeking to secure grid capacity in contested markets.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/eqt-acquires-energy-and-data-center-developer-copia-power-from-carlyle/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: Data Center Dynamics</span></div>
+</div>
+<div class="qs-item">
+<div class="qs-id">Microsoft reports 25% YoY CO2 emissions rise driven by data center expansion; signed 40GW renewable capacity agreements (19GW online) across 26 countries.</div>
+<div class="qs-desc">Microsoft&#x27;s aggressive data center expansion has driven a 25% year-over-year CO2 emissions increase, exposing the widening gap between load growth and renewable energy availability even for the best-capitalized buyers. With 40GW contracted but only 19GW online across 26 countries, developers and investors should expect prolonged interconnection queues and offtake competition to intensify in markets where Microsoft is active.</div>
+<div class="qs-desc" style="margin-top:5px"><a href="https://www.datacenterdynamics.com/en/news/microsoft-reports-25-percent-increase-in-co2-emissions-on-back-on-data-center-growth/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="font-style:italic">Source: Data Center Dynamics</span></div>
 </div>
         </div>
       </div>
@@ -485,15 +520,16 @@ body {
     <!-- ══ LEAD STORY ══ -->
     <div class="sec">
 <div class="sec-label">Lead Story</div>
-<h2>QTS drops data center appeal, kills gigawatt PW Digital Gateway project in Virginia</h2>
+<h2>Anthropic signs $19bn, 20-year lease with TeraWulf for Kentucky data center capacity</h2>
 </div>
 
 <div class="lead-story">
-<p class="body-text">QTS Drops Appeal, Killing the Prince William Digital Gateway, and Putting Greenfield Entitlement Risk Back on the Table</p>
-<p class="body-text" style="margin-top:8px">On July 2, QTS Realty Trust filed notice withdrawing its appeal to the Virginia Supreme Court, formally terminating the Prince William Digital Gateway, a 2,100-acre campus near Manassas National Battlefield Park that would have been the largest proposed data center development in the world. At full buildout, the project encompassed 37 buildings and over 22 million square feet, a scale that made it a bellwether for hyperscale-era land strategies. What makes the collapse notable is what did not cause it: there was no financing failure, no demand shortfall, no utility rejection. The project died on a procedural defect in the county&#x27;s public notice process, which courts used to void the underlying rezoning approvals. Prince William County and co-developer Compass Datacenters had already withdrawn from litigation earlier in 2026; QTS, holding the position alone, finally concluded the fight was not winnable.</p>
-<p class="body-text" style="margin-top:8px">The market mechanics here deserve close attention. A project of this scale, backed by Blackstone, one of the most capitalized real estate platforms on earth, could not survive a title-level defect in its entitlement chain. That is the core lesson. Greenfield data center development depends on a sequence of approvals that, unlike most commercial real estate, often runs through politically contentious rezonings, frequently in jurisdictions where data centers are a newer and still-contested land use. When that sequence contains a procedural flaw, it does not merely create delay; it creates a vulnerability that opponents can exploit years into the development cycle, after capital has been committed and supply chain relationships have been established. For independent power producers and data center developers underwriting large-scale campuses, the Prince William outcome quantifies a category of risk that had previously been treated as manageable background noise.</p>
-<p class="body-text" style="margin-top:8px">For site selectors and queue strategists, the implications are immediate. First, due diligence on greenfield acquisitions needs to treat the integrity of the public notice and rezoning record as a hard underwriting criterion, not a legal formality to be confirmed at closing. Second, projects that rely on a single large rezoning action, rather than incremental approvals phased across multiple parcels or jurisdictions, carry concentrated entitlement exposure that does not diversify easily. Third, the Virginia market specifically is worth monitoring: the state remains the densest data center geography in the world, but the political and legal environment around large greenfield proposals has grown materially more complicated since 2022, and the Gateway&#x27;s collapse will not reduce scrutiny on future projects near sensitive historic or environmental corridors. Developers with active site control in Northern Virginia should be auditing their approval records now, not at the next litigation event.</p>
-<p class="body-text" style="margin-top:8px"><a href="https://www.datacenterdynamics.com/en/news/qts-drops-data-center-appeal-kills-gigawatt-pw-digital-gateway-project-in-virginia/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+<p class="dek">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf in Kentucky, signaling that frontier AI labs are now willing to sign ultra-long-term offtake agreements to secure dedicated power and infrastructure. For site selectors and CRE investors, this validates Kentucky as a serious AI compute market and demonstrates that nuclear-adjacent, low-cost power regions can command premium, decade-plus commitments from hyperscale-tier tenants.</p>
+<p class="body-text">Anthropic Signs $19B, 20-Year Lease with TeraWulf for Kentucky Data Center Capacity</p>
+<p class="body-text" style="margin-top:8px">Anthropic has committed $19 billion over 20 years to lease data center capacity from TeraWulf at its Kentucky campus, marking one of the longest and largest offtake agreements ever executed in the AI infrastructure sector. The deal is not simply a real estate transaction. It signals a structural shift in how frontier AI labs are approaching power and compute access: moving from flexible, short-cycle colocation arrangements toward decade-long, near-utility-scale commitments that lock in both capacity and power economics before either becomes competitively unavailable. At a moment when the interconnection queue is functionally broken in most Tier 1 markets and power procurement timelines stretch years, Anthropic is effectively paying a long-term premium to remove execution risk from its infrastructure roadmap.</p>
+<p class="body-text" style="margin-top:8px">For developers and IPPs, the deal reframes what creditworthy, bankable offtake looks like in the AI compute segment. A 20-year agreement from an investment-grade-adjacent counterparty transforms project finance calculus, enabling debt structures and return profiles that shorter-term leases cannot support. TeraWulf&#x27;s Kentucky position, anchored by access to low-cost, nuclear-influenced power through the TVA system, is the underlying asset being monetized here. That power cost advantage, combined with a purpose-built campus designed for high-density compute, is precisely what commanded this contract structure. The implication for developers is clear: sites with durable power cost advantages and grid certainty are not just easier to lease; they can attract a fundamentally different class of tenant on fundamentally different terms.</p>
+<p class="body-text" style="margin-top:8px">For site selectors and CRE investors, the immediate takeaway is that Kentucky has graduated from secondary market consideration to validated AI compute destination. Markets within the TVA and associated utility footprint, particularly those with nuclear baseload exposure and available transmission capacity, should be re-underwritten with updated demand assumptions. On queue strategy, this deal reinforces the value of controlling shovel-ready sites with existing or near-term interconnection rights rather than speculative positions deep in a congested queue. For power procurement, watch whether this structure inspires similar long-dated, tenant-driven agreements in other low-cost regions, including the Carolinas, the Midwest, and PJM markets with operating nuclear capacity.</p>
+<p class="body-text" style="margin-top:8px"><a href="https://www.datacenterdynamics.com/en/news/anthropic-signs-19bn-20-year-lease-for-kentucky-data-center-with-terawulf/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
 </div>
 
     <!-- ══ 2-COL STORIES ══ -->
@@ -504,16 +540,16 @@ body {
 
     <div class="story-grid">
     <div class="story">
-<div class="hed">Microsoft signs 20-year PPA with Chevron subsidiary for 2 GW behind-the-meter gas facility in West Texas</div>
-<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">Microsoft has signed a 20-year power purchase agreement with Energy Forge One LLC, a Chevron subsidiary, to co-locate a dedicated natural gas power facility with a new 2 GW data center campus in Pecos, Texas, one of the largest single capacity additions in the company&#x27;s history. The campus will operate under a behind-the-meter arrangement, fully independent of the public grid at launch, with a path to future interconnection as the project matures, marking a significant validation of the oil major-as-power-developer model for AI infrastructure.</p>
-<div class="dek" style="margin-top:6px;margin-bottom:0">Source: Orrick</div>
-<p class="body-text"><a href="https://www.orrick.com/en/News/2026/07/Microsoft-Expands-Global-Data-Center-Capacity-with-2-GW-Data-Center-and-Co-Located-Power-Facility" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+<div class="hed">Prince William County board votes 8-0 to deny the ~2,000-acre Dulles South Innovation Center comp plan amendment</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">The Prince William County Board of Supervisors voted 8-0 on July 7 to deny the comprehensive plan amendment for the roughly 2,000-acre Dulles South Innovation Center, killing the project outright. It is the county&#x27;s second ~2,000-acre denial this quarter, following the collapse of the Prince William Digital Gateway. Northern Virginia remains the densest data center market in the world, and the board has now twice refused to expand the land available for it at scale. For developers, the signal is that PW County entitlement risk is no longer a tail risk, it is the base case, and siting strategy has to shift to jurisdictions that will actually grant the land use.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: wtop.com</div>
+<p class="body-text"><a href="https://wtop.com/prince-william-county/2026/07/prince-william-co-supervisors-deny-2000-acre-dulles-south-data-center-plans/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
 </div>
 <div class="story">
-<div class="hed">Digital Realty acquires 1,440-acre Kansas City site for $475M, secures 2 GW utility power agreement</div>
-<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">Digital Realty has acquired 1,440 acres at Astra Enterprise Park near Kansas City for approximately $475 million in cash and operating partnership units, marking its entry into the seventh-largest U.S. data center market. The company has signed an Energy Service Agreement with the local utility to deliver 600 MW of power by early 2028, scaling to 2 GW at full buildout, a structure that signals how major colocation platforms are increasingly securing powered land positions in secondary markets ahead of hyperscale tenant demand.</p>
-<div class="dek" style="margin-top:6px;margin-bottom:0">Source: Globe Newswire</div>
-<p class="body-text"><a href="https://investor.digitalrealty.com/news-releases/news-release-details/digital-realty-announces-transactions-drive-continued-platform" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+<div class="hed">DOE Office of Electricity releases draft 2026 National Transmission Needs Study, finding pressing transmission need driven by data center load growth</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">DOE&#x27;s Office of Electricity published its draft 2026 National Transmission Needs Study on July 9, opening a 60-day comment period with comments due September 7. The study identifies a pressing near-term transmission need driven by data center load growth, and singles out NYISO, NorthernGrid South, and MISO as the regions with the highest congestion-relief potential. For developers and large loads, the comment window is the leverage point: the study frames the federal case for transmission buildout, and the regions named as congestion-relief priorities are where interconnection capacity is most likely to be unlocked.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: publicpower.org</div>
+<p class="body-text"><a href="https://www.publicpower.org/periodical/article/does-office-electricity-publishes-2026-draft-national-transmission-needs-study" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
 </div>
     </div>
 
@@ -528,16 +564,29 @@ body {
     <div class="flag-box">
       <div class="flag-label">This Week's Policy Flags</div>
       <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>State of New Jersey &middot; New Jersey</span>
-<span class="flag-note">New Jersey&#x27;s legislation creates a separate rate class for large DC loads in one of PJM&#x27;s most constrained service territories. The immediate uncertainty for developers with existing NJ facilities is how the new tariff interacts with executed interconnection agreements and any power purchase or utility service arrangements currently in place.</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Post-July 4 tax credit cliff: solar and wind projects that missed the construction-start deadline must be in service by Dec 31, 2027</span>
+<span class="flag-note">The July 4, 2026 construction-start deadline has now passed. Solar and wind projects that did not begin construction in time are locked out of the 30% ITC unless they are placed in service by December 31, 2027, an 18-month window that most greenfield projects cannot meet. Treasury Notice 2025-42 also replaced the 5% cost safe harbor with the Physical Work Test for solar projects above 1.5 MW, raising the bar for what counts as having started. The practical effect for large loads: the pool of tax-credit-eligible renewable supply is now fixed, and any project not already safe-harbored carries materially worse economics, which tightens the market for new offtake.</span>
+<span class="flag-src"><a href="https://pv-magazine-usa.com/2026/07/08/qualifying-for-solar-tax-credits-beyond-the-july-4th-deadline/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: pv magazine USA</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#54606e">Signal</span>FERC / US Grid Operators (PJM, MISO, SPP, CAISO, NYISO, ISO-NE)</span>
-<span class="flag-note">FERC&#x27;s show-cause orders signal a move toward formal rulemaking that would standardize large-load interconnection rules across all major ISO/RTO markets. For developers with active queue positions in PJM and MISO, this creates near-term exposure, any rule changes could trigger restudy obligations, revised cost allocation methodologies, or tariff amendments affecting in-flight projects.</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Analysts expect PPA prices to keep rising as clean energy tax credits phase out; ~170 GW safe-harbored pipeline becomes the scarce supply</span>
+<span class="flag-note">With the July 4 construction-start deadline past, the tax-credit-eligible renewable pipeline is effectively fixed. Crux estimated a roughly 170 GW pipeline of safe-harbored projects, and analysts expect PPA prices to rise for projects that no longer qualify for IRA credits. That makes the safe-harbored pipeline the scarce supply: buyers who fail to contract into it face materially higher costs. For large loads negotiating offtake now, the safe-harbor status of a counterparty&#x27;s project is the single most important diligence item in the term sheet.</span>
+<span class="flag-src"><a href="https://www.esgdive.com/news/rising-ppa-prices-anticipated-as-clean-energy-tax-credits-phase-out/824566/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: ESG Dive</span></span>
 </div>
 <div class="flag-item">
-<span class="flag-co"><span class="sector-badge" style="background:#8b2020">Policy</span>Unnamed AI company &middot; Alabama</span>
-<span class="flag-note">Nebius, a Netherlands-based AI company, has reversed planned expansion of its 300-MW Birmingham data center campus after the city enacted new mixed-use district zoning restrictions that residents and plaintiffs argue prohibit utility-scale AI infrastructure without a formal site-plan amendment and public hearing. A class-action lawsuit filed in Jefferson County Circuit Court alleges the city helped project developers accelerate over $34 million in permit filings ahead of a December 2025 data center moratorium, spotlighting the growing use of local zoning tools to challenge AI infrastructure siting decisions.</span>
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>Floodlight/Texas Tribune investigation: Texas data centers using minor air permits to build on-site gas plants with no public notice</span>
+<span class="flag-note">A Floodlight and Texas Tribune investigation found Texas data centers are permitting on-site gas generation under minor-source air permits, which carry no public notice requirement, then expanding, a &#x27;small first, big later&#x27; sequence that keeps each increment below the major-source threshold. The practice is drawing scrutiny under EPA&#x27;s aggregation policy, which can require related sources to be permitted as one. For anyone underwriting behind-the-meter gas as a queue bypass, permit-stacking risk now belongs in the model: an aggregation finding can retroactively pull a campus into major-source review.</span>
+<span class="flag-src"><a href="https://www.texastribune.org/2026/07/09/texas-data-centers-ai-power-plants-pollution-state-permits/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Texas Tribune</span></span>
+</div>
+<div class="flag-item">
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>PUCT weighs full-load emergency curtailment on the 525MW Crusoe/Ensign co-located AI campus, the first real test of the SB6 co-location framework</span>
+<span class="flag-note">ERCOT has recommended that the Crusoe One and Crusoe Two loads fully curtail 525.5MW of AI compute within 30 minutes of an emergency declaration, at the Goodnight campus sited behind an existing 265.5MW wind farm. The dispute is whether curtailment should be capped at the paired generator&#x27;s output or extend to the site&#x27;s entire load, and the answer sets the price of behind-the-meter co-location in ERCOT. This is the first real test of the SB6 co-location framework, with a PUCT decision expected later this summer. Anyone modeling BTM as a queue bypass should treat full-load curtailment as the downside case until this docket lands.</span>
+<span class="flag-src"><a href="https://www.datacenterknowledge.com/energy-power-supply/texas-tests-new-rules-for-ai-campuses-behind-existing-power-plants">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Data Center Knowledge</span></span>
+</div>
+<div class="flag-item">
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Regulatory</span>FERC generation adequacy reports due July 20: all six RTOs must explain how they will serve existing and new large loads</span>
+<span class="flag-note">Under the June 18 Section 206 show cause orders, all six RTOs and ISOs (PJM, MISO, SPP, CAISO, ISO-NE, NYISO) must file generation adequacy reports by July 20 explaining how they will ensure adequate generation to serve both existing and new large loads. A separate deadline on August 17 requires them to justify their current large-load interconnection tariffs or propose reforms. These filings are the clearest forward read available on how each market intends to ration capacity between incumbent load and new data centers, and they land inside the next two weeks.</span>
+<span class="flag-src"><a href="https://www.ferc.gov/news-events/news/ferc-launches-aggressive-targeted-action-speed-large-load-integration">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: FERC</span></span>
 </div>
     </div>
 
@@ -550,21 +599,31 @@ body {
     </div>
 
     <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
-    <p class="body-text">Sabanci Renewables has secured a PPA with Meta for a Texas solar PV portfolio, signaling continued hyperscaler appetite for contracted renewable capacity in ERCOT ahead of project completion. For data center developers and CRE investors, this reinforces Texas&#x27;s position as a priority market for long-term power offtake, tightening available clean energy inventory for future site entrants.</p>
+    <p class="body-text">LevelTen&#x27;s North American PPA Price Index shows solar PPA prices up roughly 13% and wind up roughly 24% year over year, the highest levels since LevelTen began indexing in 2018. With the July 4 construction-start deadline now passed, the pool of tax-credit-eligible projects is fixed, and analysts expect that escalation to continue rather than mean-revert. For large loads, the practical consequence is that renewable offtake priced off a safe-harbored project is now a scarce good, and the premium for arriving late to that pipeline compounds every quarter.</p><p class="body-text" style="margin-top:6px;font-size:11px"><a href="https://www.utilitydive.com/news/wind-solar-ppa-prices-levelten/817780/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more &rarr;</a> &nbsp;·&nbsp; <span style="color:var(--muted);font-style:italic">Source: Utility Dive</span></p>
     </div>
 
     <hr class="rule">
 
     <!-- ══ ABOUT ══ -->
     <div class="sec" style="margin-top:24px">
-      <div class="sec-label">About This Brief</div>
-      <h2>NexPhase Advisory</h2>
+      <div class="sec-label">About</div>
+      <h2>The Interconnect</h2>
     </div>
     <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
-      <em>The Interconnect</em> is produced by NexPhase Advisory, a power origination and interconnection strategy practice serving data center developers, IPPs, and investors navigating the US power market. Service lines include interconnection queue strategy, deliverability analysis (CAISO TPD, PJM NLTP, MISO GIA), PPA origination, and market entry advisory.
+      Power market intelligence from a practitioner with two decades in utility-scale development, from site origination and land control through interconnection, offtake, and delivery to NTP. 5+ GW delivered across major U.S. ISOs and RTOs. The analysis connects public news to what's actually moving in the queue.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is part of the NexPhase Intelligence Platform, alongside DC Site Intelligence and The Morning Read: <a href="https://intel.nexphaseadvisory.net/platform/" style="color:var(--accent);text-decoration:none;font-weight:600">intel.nexphaseadvisory.net/platform/</a>
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      This brief is complimentary intelligence, built from public news, queue data, and regulatory filings, filtered through a practitioner's read of what actually moves projects. It's the analysis I'd want on my desk on a Monday morning, shared because the market is moving faster than most coverage of it.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <strong style="color:var(--ink)">Coverage suggestions</strong> welcome &mdash; reply anytime. The best story tips come from people in the queue.
     </p>
     <p style="font-size:13px;line-height:1.65;color:var(--muted)">
-      Questions, feedback, or to discuss a specific market or project: <a href="mailto:chris@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">chris@nexphaseadvisory.net</a>
+      Chris Santiago<br>
+      <a href="mailto:chris@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">chris@nexphaseadvisory.net</a>
     </p>
 
   </div><!-- /body -->
@@ -574,16 +633,16 @@ body {
     <div class="footer-top">
       <div>
         <div class="brand">NexPhase Advisory</div>
-        <div class="tagline-f">Power Origination · Interconnection · Market Strategy</div>
+        <div class="tagline-f">Complimentary power market intelligence &middot; Chris Santiago</div>
       </div>
       <div style="text-align:right">
         <div><a href="mailto:chris@nexphaseadvisory.net">chris@nexphaseadvisory.net</a></div>
-        <div style="margin-top:3px">Week of July 4, 2026 &nbsp;·&nbsp; Vol. 1, No. 5</div>
+        <div style="margin-top:3px">Week of July 11, 2026 &nbsp;·&nbsp; Vol. 1, No. 6</div>
       </div>
     </div>
-    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available to subscribers on request.</div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available on request.</div>
     <div class="disc">
-      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of July 4, 2026. Market signals sourced from public news. Analysis represents the professional judgment of NexPhase Advisory and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:chris@nexphaseadvisory.net">chris@nexphaseadvisory.net</a>
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of July 11, 2026. Market signals sourced from public news. Analysis represents the professional judgment of Chris Santiago and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:chris@nexphaseadvisory.net">chris@nexphaseadvisory.net</a>
     </div>
   </div>
 
