@@ -9,6 +9,15 @@ Corrections may be logged automatically via the `morning-read-correct` webhook, 
 
 ---
 
+## 2026-07-14 — issue 2026-07-14
+**What:** The item reporting a U.S. stop-work order on an Ørsted offshore wind project causing shares
+to tumble (National & Policy) has been removed from the archived issue.
+**Why:** That referenced the Revolution Wind order from August 2025, which a federal court overturned
+on January 12, 2026; the affected projects were cleared to proceed by April 2026. It was not current
+and should not have run.
+
+---
+
 ## 2026-07-10 — issue 2026-07-10
 **What:** Fact-check corrections (5 items): fixed company attributions — Leeward Renewable Energy
 (not Google, the offtaker) on the Oklahoma solar PPA; DC Blox (not the hallucinated "Provident") on
