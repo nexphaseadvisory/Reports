@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Interconnect&#8482;, Week of July 18, 2026</title>
+<style>
+:root {
+  --ink:     #16191d;
+  --muted:   #54606e;
+  --faint:   #8a93a1;
+  --line:    #d8dce4;
+  --accent:  #0b5d4e;
+  --a-soft:  #e7f2ef;
+  --gold:    #a06d18;
+  --g-soft:  #f9f1de;
+  --flag:    #8b2020;
+  --paper:   #fdfcfa;
+  --data:    #1a3a6b;
+  --d-soft:  #eaf0f8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background: #ddd9d2;
+  line-height: 1.58;
+  padding: 28px 12px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 820px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: 0 4px 32px rgba(20,24,31,.18);
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 28px 42px 0;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 0;
+}
+.kicker {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.masthead h1 {
+  font-size: 52px;
+  letter-spacing: -1.5px;
+  line-height: .95;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.tagline {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: .2px;
+  margin-bottom: 14px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5px;
+  color: var(--faint);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+.meta-bar strong { color: var(--ink); }
+
+/* ── BODY ── */
+.body { padding: 0 42px 32px; }
+
+/* ── LEDE ── */
+.lede {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.lede p {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lede p + p { margin-top: 10px; }
+.lede .author {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 14px;
+}
+
+/* ── SECTION HEADERS ── */
+.sec {
+  margin: 28px 0 14px;
+}
+.sec-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.sec h2 {
+  font-size: 20px;
+  letter-spacing: -.3px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+
+/* ── LEAD STORY (full width) ── */
+.lead-story {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.lead-story .hed {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -.3px;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.lead-story .dek {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.lead-story .body-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.lead-story .body-text + .body-text { margin-top: 8px; }
+
+/* ── DATA CALLOUT BOX ── */
+.data-box {
+  background: var(--d-soft);
+  border-left: 3px solid var(--data);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.data-box .data-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--data);
+  margin-bottom: 8px;
+}
+.data-box .data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.data-item .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1;
+}
+.data-item .lbl {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* ── STORY GRID (2-col) ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 20px;
+}
+.story {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.story .hed {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+.story .dek {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.story .body-text {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── CONNECTOR MARKETS TABLE ── */
+.connector-section {
+  margin-bottom: 24px;
+}
+.connector-intro {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.connector-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.connector-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.connector-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.connector-table tr:nth-child(even) td { background: #f7f6f3; }
+.market-tag {
+  display: inline-block;
+  background: var(--flag);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  letter-spacing: .5px;
+}
+.load-name { font-weight: 700; color: var(--ink); }
+.mw-val { color: var(--data); font-weight: 700; font-size: 12px; }
+.supply-count {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.queue-note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sector-badge {
+  display: inline-block;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+/* ── QUEUE SPOTLIGHT ── */
+.queue-spotlight {
+  background: var(--a-soft);
+  border: 1px solid #b2d4cc;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.queue-spotlight .qs-label {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.qs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qs-item {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.qs-item .qs-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--data);
+  font-family: "Courier New", monospace;
+}
+.qs-item .qs-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── SIGNAL FLAGS ── */
+.flag-box {
+  background: var(--g-soft);
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  margin: 14px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11.5px;
+}
+.flag-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+/* Stacked flag: bold takeaway header (with its tag) on its own line, context paragraph BELOW it,
+   then a Read more link + source-of-truth attribution. Was a flex row (tag+entity beside the
+   note), which buried the takeaway in a narrow 130px column. */
+.flag-item {
+  display: block;
+  padding: 9px 0 10px;
+  border-bottom: 1px solid #e8dfc8;
+}
+.flag-item:last-child { border-bottom: none; }
+.flag-head {
+  display: block;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 12.5px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+.flag-head .sector-badge { margin-right: 6px; vertical-align: 1px; }
+.flag-note {
+  display: block;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.flag-src {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+}
+.flag-src a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.flag-src .flag-attr { color: var(--muted); font-style: italic; }
+/* legacy: kept so an older cached draft still renders sanely */
+.flag-co { font-weight: 700; color: var(--ink); font-size: 11px; }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: #b0b8c4;
+  padding: 20px 42px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.footer .footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 24px;
+}
+.footer .brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.3px;
+  font-family: Georgia, serif;
+  margin-bottom: 3px;
+}
+.footer .tagline-f { color: var(--accent); font-size: 10px; }
+.footer a { color: #7ab8ae; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .disc {
+  font-size: 9.5px;
+  color: #6b7580;
+  border-top: 1px solid #2a3040;
+  padding-top: 12px;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DIVIDER ── */
+.rule { border: none; border-top: 1px solid var(--line); margin: 22px 0; }
+.rule-thick { border: none; border-top: 2px solid var(--ink); margin: 24px 0; }
+
+/* ── MOBILE ── */
+@media(max-width: 600px) {
+  .sheet { box-shadow: none; }
+  .masthead, .body { padding-left: 20px; padding-right: 20px; }
+  .masthead h1 { font-size: 36px; }
+  .story-grid { grid-template-columns: 1fr; }
+  .data-box .data-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 18px 20px; }
+  .footer .footer-top { flex-direction: column; gap: 12px; }
+  .qs-row { flex-direction: column; gap: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ══ MASTHEAD ══ -->
+  <div class="masthead">
+    <div class="kicker">NexPhase Advisory &nbsp;·&nbsp; Power Market Intelligence</div>
+    <h1>The <em>Inter</em>connect<sup style="font-size:18px;vertical-align:super;letter-spacing:0;font-weight:400;color:var(--muted)">™</sup></h1>
+    <p class="tagline">Complimentary weekly intelligence on power procurement, interconnection queues, and data center development &mdash; for teams building at the grid edge.</p>
+    <div class="meta-bar">
+      <span><strong>Week of July 18, 2026</strong> &nbsp;·&nbsp; Vol. 1, No. 7<br>
+      <span style="font-size:12px;color:var(--muted);font-weight:400">News window: July 12–18, 2026</span></span>
+      <span>nexphaseadvisory.net</span>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div class="body">
+
+    <!-- LEDE -->
+    <!-- The credential paragraph that used to sit here was removed (2026-07-11): it is now stated
+         once, in the About block at the bottom. Stating it here too repeated it near-verbatim in
+         every issue. Do not re-add a credential line to the lede. -->
+    <div class="lede">
+      <p>Federal regulators are drawing a hard boundary around data center load growth: FERC&#x27;s order directing NERC to deliver mandatory reliability standards by December 2026 marks the end of the voluntary era and sets in motion a compliance clock that will reshape interconnection queues, load flexibility requirements, and development timelines across every major market. Texas is already moving ahead of that federal deadline, with the PUC&#x27;s new ride-through rules forcing developers to engineer grid resilience directly into their facility specs rather than treating it as a utility problem, raising upfront capital costs but also raising the bar for who gets to interconnect at scale. Meanwhile, Palm Beach County&#x27;s 5-1 rejection of the 600 MW Project Tango campus is a pointed reminder that the tightening regulatory environment isn&#x27;t only federal: even hyperscale AI infrastructure with legitimate power access can be stopped cold by local entitlement failures, which means site selectors who are still treating community alignment as a downstream task are already behind.</p>
+    </div>
+
+    <!-- ══ CONNECTOR MARKETS ══ -->
+    <div class="sec">
+      <div class="sec-label">Feature</div>
+      <h2>CONNECTOR MARKETS, Queue Depth &middot; Load Signal &middot; This Week</h2>
+    </div>
+
+    <div class="connector-section">
+      <p class="connector-intro">Where interconnection queue activity, load growth, and current market signals converge.</p>
+
+      <table class="connector-table">
+        <thead>
+          <tr>
+            <th>ISO</th>
+            <th>Queue Depth</th>
+            <th>Load Signal</th>
+            <th>This Week's Signal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr><td><span class="load-name">ERCOT</span></td><td><span class="supply-count">1,828</span></td><td><span style="color:#0b5d4e;font-weight:700">+3.1%</span></td><td><a href="https://www.utilitydive.com/news/texas-puc-approves-ride-through-rules-data-centers/825051/" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Texas PUC approves &#x27;ride-through&#x27; rules requiring data centers to withstand voltage and frequency excursions to protect grid reliability.</a></td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">FRCC</span></td><td><span class="supply-count">1,162</span></td><td><span style="color:#0b5d4e;font-weight:700">+0.9%</span></td><td><a href="https://www.datacenterknowledge.com/data-center-construction/project-tango-denial-challenges-wall-street-s-ai-power-bet" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Palm Beach County commissioners voted 5-1 to reject Project Tango, a 600 MW AI data center campus, citing noise, water, traffic, and land-use concerns.</a></td><td><span class="market-tag" style="background:#0b5d4e">PROCEED</span></td></tr>
+<tr><td><span class="load-name">SPP</span></td><td><span class="supply-count">1,072</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxQZzhKSmZSNVZGc1JnUm0tTm04aFU0dVZRWnRzV0QwY2JVRk41M1N4S3dLMEJuMUM2aDd3bUtQNEZwaVA3YTgwOWlLeWdSSHl6X2ZQbGUxMF9MeURYTGs2aDIwWnBoeTcxenhUcjdJczZ4MWJaa1NlM3ZRYndoUktjY2VfeFF0bXdBa3hlM3dWZ2hHOWZYOUdDb0NBZHdYNzV3N1lyVklyVU5Ob0hsOUlqa0RB0gHGAUFVX3lxTE50T0V6cDJMbVZscDV6TUhrMEdtWUFMYks4cUxkeXFFUnF6UG9DMVZMQS1uM2l3Z3NpbEVqZmRtc0MzcklzX0J2ei01NldkWU9EQUlGUVNGUDdVbE40bHRKMVE5dlBsb0tXRnVXT0FnVGtTLTFWdzJkcFZleE1rYkJza1E3X1c5TE5LajZjWHpxWTVrSFEwdGloMFNtNFZTandPOFZKQVA1WjU1QWhOYVAycFE3bzE4Z3RDTWpFRlNnc1MtUWRsdw?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Monolith plans to submit application by mid-July to build a data center in Hallam, Nebraska.</a></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">NYISO</span></td><td><span class="supply-count">343</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><a href="https://www.bisnow.com/new-york/news/data-center-development/kathy-hochul-new-york-data-center-moratorium-executive-order-135406" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">NY Gov. Hochul signs yearlong moratorium on data centers over 50MW, halting ~$10B pipeline and ~12GW in NYISO queue over cost and community concerns.</a></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">ISO-NE</span></td><td><span class="supply-count">373</span></td><td><span style="color:#54606e;font-weight:700">0.0%</span></td><td><span style="color:var(--muted)">No signals this week</span></td><td><span class="market-tag" style="background:#a06d18">MONITOR</span></td></tr>
+<tr><td><span class="load-name">WECC</span></td><td><span class="supply-count">1,564</span></td><td><span style="color:#8b2020;font-weight:700">-0.1%</span></td><td><a href="//www.rtoinsider.com/136644-arizona-starts-tapping-breaks-on-data-center-development/" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Arizona lawmakers moving to slow rapid data center development driven by AI-industry demand, joining other states tapping the brakes.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">MISO</span></td><td><span class="supply-count">1,655</span></td><td><span style="color:#8b2020;font-weight:700">-0.5%</span></td><td><a href="https://news.google.com/rss/articles/CBMixwFBVV95cUxOMWQyV29Jc0tITHd0WnFmdDU1N3A4cEpLSFJEZzdBMHp1TlJXNmI4NmxMV3NJb09jaHp3VFpnUF90R0ttREdoS1NyOUtLMWxjdzYtZWxwcXoxbWEyb0s5LXJ6UDFyaWpkZzZ4bUZwWXlidndockppSTdSbjFLYU1hMFlkVW43bnZXbDVjdDJEWTdha1haOFQtQ2VvSVl5eDhpNUszMDJxOFZzdXRwcjJSal8yby0xR3dHRGJaanNiU3IzVDV0Q3ln?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Meta expands Richland Parish, Louisiana data center campus to 5GW with $50bn investment.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">PJM</span></td><td><span class="supply-count">1,558</span></td><td><span style="color:#8b2020;font-weight:700">-1.5%</span></td><td><a href="https://news.google.com/rss/articles/CBMi4AFBVV95cUxOcUdQVEhwWHIyVkF2MzJKNmlMSGY4N25nekxNNFBSQ3BCSG5GM1BfZWJZRnM0Yi1zRmpzVjMwQ19fTnBSN1o3Ylp5VG9PemhKTGhwa19mMUFJZERuclhydWx0YXBFbGxKT2NsYkN6bldfUFNsVkpIWU4wUGZMVnF0cTFabUVZQ09hOWxkNEZsVG9GRGpEYlZ6RGlCYzB3YUxERDY4WjFxTWRuTXVLSjBZV2NjOUZNcmcxMldMVTZFdzVOaE9ZakNSUFJDUDRDUDBrejJCWXoxU3ZEUUlpa2I3WtIB9AFBVV95cUxNYm4xazBYWnFUbERMMnVQM2pGMllhS2RXU3VZRXU3OGMyOGZxSUlybGF2TWZCOVN2aHBBN1F6a2xUUkNHa1l5TGNXZ1A0UzNCV2ZOeGpfcWFIbEFCM0JvdXRiVzNMbU52QnZlMjU4dUNhYWJyaW5QeU92X0Y3VVhNVkpsMFZrVVdudGpkY3lQZ3NSSUhKTTRJQWxCUXJMQUtEWFZWN0F0bk1ubjRPak1XYXBqTlNhc0ZzS2hhVlFqMzBpVGxOaEJzcTZqdUZnTGh0MXhUelYzRmYySVhiRWU3SzZnZDBCOFZaZEVxZEpEcEtFQlF1?oc=5" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Michigan township removes cap on tax break for $43B Oracle-OpenAI data center campus near Ann Arbor, clearing incentive path.</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+<tr><td><span class="load-name">CAISO</span></td><td><span class="supply-count">358</span></td><td><span style="color:#8b2020;font-weight:700">-2.4%</span></td><td><a href="https://pv-magazine-usa.com/2026/07/14/avantus-signs-20-year-solar-plus-storage-ppa-with-clean-power-alliance/" style="color:inherit;text-decoration:none;border-bottom:1px solid var(--accent)">Avantus signs 20-yr PPA with Clean Power Alliance for 200MW/800MWh Rexford 2 solar-plus-storage project in Tulare County, CA</a></td><td><span class="market-tag" style="background:#8b2020">WATCH</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="queue-spotlight">
+        <div class="qs-label">Spotlight, Highest-Capacity Projects This Week</div>
+        <div class="qs-row">
+        <div class="qs-item"><div class="qs-desc">No queue spotlight this week.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule-thick">
+
+    <!-- ══ LEAD STORY ══ -->
+    <div class="sec">
+<div class="sec-label">Lead Story</div>
+<h2>FERC orders NERC to file mandatory reliability standards for data center and computational loads by Dec 31, 2026, citing grid stability risks.</h2>
+</div>
+
+<div class="lead-story">
+<p class="dek">FERC&#x27;s directive to NERC signals that data center load interconnection and operational behavior will shift from voluntary guidelines to enforceable reliability standards by end of 2026, fundamentally changing compliance obligations for large-scale compute developments. Site selectors and power procurement teams should anticipate stricter interconnection requirements, potential load flexibility mandates, and longer queue timelines as utilities and RTOs begin aligning processes ahead of the deadline.</p>
+<p class="body-text">FERC Orders NERC to File Mandatory Reliability Standards for Data Center and Computational Loads by Dec. 31, 2026, Citing Grid Stability Risks</p>
+<p class="body-text" style="margin-top:8px">FERC issued a directive last week ordering NERC to develop and submit enforceable reliability standards specifically addressing data center and large computational load interconnection and operational behavior, with a filing deadline of December 31, 2026. The order marks a decisive pivot from the current framework, under which voluntary guidelines and utility-specific tariff requirements have governed how hyperscale and colocation loads interact with the bulk power system. FERC&#x27;s stated rationale centers on grid stability: the Commission has concluded that the pace and concentration of data center load growth, particularly in constrained regions like PJM&#x27;s MAAC and ERCOT&#x27;s major metro zones, poses systemic reliability risks that voluntary measures are no longer sufficient to address. For the data center development community, this is not a distant regulatory signal. It is the beginning of a compliance architecture that will reshape project underwriting, site selection criteria, and power procurement strategy before the end of this decade.</p>
+<p class="body-text" style="margin-top:8px">The immediate market mechanic to understand is that enforceable standards carry a different weight than guidelines. Once NERC files and FERC approves these standards, RTOs and utilities will be obligated to incorporate them into interconnection procedures, tariff structures, and operational requirements. That means interconnection agreements for large-scale compute loads will likely require documented load flexibility commitments, ramp rate disclosures, and potentially curtailment obligations tied to reliability events. Developers who have structured projects around firm load assumptions and minimal grid interaction obligations should expect those assumptions to be stress-tested during interconnection studies. Independent Power Producers selling capacity or ancillary services to data center loads will also need to evaluate how operational mandates imposed on their offtakers could affect dispatch dynamics and contract terms.</p>
+<p class="body-text" style="margin-top:8px">For site selectors and power procurement teams, the practical implications break into three near-term priorities. First, queue strategy: projects currently in early-stage interconnection study phases in PJM, MISO, and SPP should anticipate that study scopes may expand as utilities begin aligning internal processes with anticipated NERC requirements, adding cycle time and potentially triggering restudy obligations for projects already in queue. Second, site selection criteria should now explicitly account for transmission headroom and substation flexibility in ways that go beyond current capacity thresholds, since regions with constrained infrastructure will face tighter scrutiny under any forthcoming reliability framework. Third, power procurement structures, including PPAs and utility service agreements, should be reviewed for force majeure and curtailment language that could be invoked under new reliability compliance obligations, particularly for behind-the-meter or hybrid configurations.</p>
+<p class="body-text" style="margin-top:8px"><a href="https://www.powermag.com/ferc-orders-mandatory-nerc-reliability-standards-for-data-center-and-other-computational-loads/" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+
+    <!-- ══ 2-COL STORIES ══ -->
+    <div class="sec">
+      <div class="sec-label">Development Activity</div>
+      <h2>Announcements</h2>
+    </div>
+
+    <div class="story-grid">
+    <div class="story">
+<div class="hed">FERC issues &#x27;show cause&#x27; orders to US grid operators (PJM, MISO, ERCOT, etc.) on large load integration rules for data centers</div>
+<p class="body-text" style="font-size:13.5px;line-height:1.65;color:var(--ink)">FERC&#x27;s show cause orders directed at PJM, MISO, ERCOT, and other grid operators signal federal pressure to standardize and accelerate large load interconnection rules that have been inconsistently applied across regions. For data center developers and CRE investors, this creates near-term regulatory uncertainty but points toward more structured, transparent queuing processes that could reshape site selection criteria and power procurement timelines across major colocation markets.</p>
+<div class="dek" style="margin-top:6px;margin-bottom:0">Source: Regulatory</div>
+<p class="body-text"><a href="https://news.google.com/rss/articles/CBMi1AFBVV95cUxQWl9TWC1FOE42bW56Rjd5ZUxIY3lxMENtRHY3T0lJVl82OUltNHZwYkdxS0NQQXRPTzlTU0RpMGM2VXE5LVZQR0NwMlNCSjNYNFBIZXZ4QUNjTUE4ZXhOZG5wdmx3RHg3ckFQajZ3Y1ZBV1NpRlNMcnI5WGcwMEZ5Z1VXQzlJWVNQMjRwc1RhbTVYX3lBbTNKV0dVYUQtdjFGc2RWT3ZzOHZON1hJUUJ3N2VUMDVtNUN6N3dJSTRPaW9uSzRNQ3Y4OVB4OFFqVHRnenVSaw?oc=5" style="color:var(--accent);text-decoration:none;font-weight:600">Read more →</a></p>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ REGULATORY ══ -->
+    <div class="sec">
+      <div class="sec-label">Regulatory &amp; Policy</div>
+      <h2>Signals Worth Watching</h2>
+    </div>
+
+    <div class="flag-box">
+      <div class="flag-label">This Week's Policy Flags</div>
+      <div class="flag-item">
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Texas PUC approves &#x27;ride-through&#x27; rules requiring data centers to withstand voltage and frequency excursions to protect grid reliability. <span style="font-weight:400;color:var(--muted)">&middot; Texas</span></span>
+<span class="flag-note">Texas regulators have mandated that data centers remain connected during grid stress events rather than disconnecting and amplifying instability, a direct response to the sector&#x27;s explosive load growth on ERCOT. Developers evaluating Texas sites must now factor ride-through compliance into UPS architecture, generator specs, and equipment procurement, adding upfront capital costs but potentially improving their standing with utilities during interconnection negotiations.</span>
+<span class="flag-src"><a href="https://www.utilitydive.com/news/texas-puc-approves-ride-through-rules-data-centers/825051/">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Utility Dive</span></span>
+</div>
+<div class="flag-item">
+<span class="flag-head"><span class="sector-badge" style="background:#8b2020">Policy</span>Palm Beach County commissioners voted 5-1 to reject Project Tango, a 600 MW AI data center campus, citing noise, water, traffic, and land-use concerns. <span style="font-weight:400;color:var(--muted)">&middot; Florida</span></span>
+<span class="flag-note">Palm Beach County&#x27;s 5-1 rejection of the 600 MW Project Tango campus signals that even high-demand AI infrastructure faces hard stops when local impact concerns, noise, water, traffic, and land use, aren&#x27;t adequately addressed in the entitlement strategy. For site selectors, this underscores that power availability alone doesn&#x27;t clear the path; community and regulatory alignment must be built in parallel, not as an afterthought.</span>
+<span class="flag-src"><a href="https://www.datacenterknowledge.com/data-center-construction/project-tango-denial-challenges-wall-street-s-ai-power-bet">Read more &rarr;</a> &nbsp;·&nbsp; <span class="flag-attr">Source: Data Center Knowledge</span></span>
+</div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ PPA MARKET ══ -->
+    <div class="sec">
+      <div class="sec-label">PPA &amp; Financing</div>
+      <h2>Market Pricing Context</h2>
+    </div>
+
+    <div class="lead-story" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+    <p class="body-text" style="color:var(--muted)">No PPA pricing context this week.</p>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══ ABOUT ══ -->
+    <div class="sec" style="margin-top:24px">
+      <div class="sec-label">About</div>
+      <h2>The Interconnect</h2>
+    </div>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      Power market intelligence from a practitioner with two decades in utility-scale development, from site origination and land control through interconnection, offtake, and delivery to NTP. 5+ GW delivered across major U.S. ISOs and RTOs. The analysis connects public news to what's actually moving in the queue.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <em>The Interconnect</em> is part of the NexPhase Intelligence Platform, alongside DC Site Intelligence and The Morning Read: <a href="https://intel.nexphaseadvisory.net/platform/" style="color:var(--accent);text-decoration:none;font-weight:600">intel.nexphaseadvisory.net/platform/</a>
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      This brief is complimentary intelligence, built from public news, queue data, and regulatory filings, filtered through a practitioner's read of what actually moves projects. It's the analysis I'd want on my desk on a Monday morning, shared because the market is moving faster than most coverage of it.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted);margin-bottom:10px">
+      <strong style="color:var(--ink)">Coverage suggestions</strong> welcome &mdash; reply anytime. The best story tips come from people in the queue.
+    </p>
+    <p style="font-size:13px;line-height:1.65;color:var(--muted)">
+      Chris Santiago<br>
+      <a href="mailto:chris@nexphaseadvisory.net" style="color:var(--accent);text-decoration:none;font-weight:600">chris@nexphaseadvisory.net</a>
+    </p>
+
+  </div><!-- /body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="brand">NexPhase Advisory</div>
+        <div class="tagline-f">Complimentary power market intelligence &middot; Chris Santiago</div>
+      </div>
+      <div style="text-align:right">
+        <div><a href="mailto:chris@nexphaseadvisory.net">chris@nexphaseadvisory.net</a></div>
+        <div style="margin-top:3px">Week of July 18, 2026 &nbsp;·&nbsp; Vol. 1, No. 7</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#5f5e5a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:12px">Sources available on request.</div>
+    <div class="disc">
+      Queue data sourced from public ISO/RTO interconnection queues (PJM, WECC, MISO, ERCOT, NYISO, SPP) as of July 18, 2026. Market signals sourced from public news. Analysis represents the professional judgment of Chris Santiago and does not constitute investment, legal, or regulatory advice. Recipients may forward with attribution. To be removed from distribution: <a href="mailto:chris@nexphaseadvisory.net">chris@nexphaseadvisory.net</a>
+    </div>
+  </div>
+
+</div><!-- /sheet -->
+</body>
+</html>
