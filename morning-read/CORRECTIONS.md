@@ -9,6 +9,12 @@ Corrections may be logged automatically via the `morning-read-correct` webhook, 
 
 ---
 
+## 2026-10-14: issue 2026-10-14
+**What:** removed "California electricity prices are double the national average; experts at GridLa"; item 2 text replaced; Bottom Line text replaced; Bottom Line sentence cut.
+**Why:** An item on California electricity prices was removed; it should not have run. The Dominion-NextEra merger item and the Bottom Line said the merger was tracking toward denial; they now report what Utility Dive reported: most officials at the Oct. 9 hearing asked for the merger to be denied or allowed contingent on guarantees.
+
+---
+
 ## 2026-07-14 — issue 2026-07-14
 **What:** The item reporting a U.S. stop-work order on an Ørsted offshore wind project causing shares
 to tumble (National & Policy) has been removed from the archived issue.
