@@ -10,6 +10,12 @@ Corrections may be logged automatically via the `morning-read-correct` webhook, 
 ---
 
 ## 2026-10-14: issue 2026-10-14
+**What:** item 4 text replaced; item 4 sentence cut; item 6 text replaced; item 6 text replaced.
+**Why:** The PG&E headline now uses Utility Dive's wording (more than two dozen counties, not 24+); a line saying there was nothing to reposition on was removed from that item; the Duke Energy Carolinas item now carries one Our read paragraph.
+
+---
+
+## 2026-10-14: issue 2026-10-14
 **What:** removed "California electricity prices are double the national average; experts at GridLa"; item 2 text replaced; Bottom Line text replaced; Bottom Line sentence cut.
 **Why:** An item on California electricity prices was removed; it should not have run. The Dominion-NextEra merger item and the Bottom Line said the merger was tracking toward denial; they now report what Utility Dive reported: most officials at the Oct. 9 hearing asked for the merger to be denied or allowed contingent on guarantees.
 
