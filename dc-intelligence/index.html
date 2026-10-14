@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DC Site Intelligence — NexPhase Advisory</title>
+<title>DC Site Intelligence | NexPhase Advisory</title>
 <style>
   :root {
     --paper:#fdfcfa; --outer:#e7e3da; --ink:#2b2b28; --muted:#6b665c;
@@ -15,7 +15,7 @@
   body { margin:0; background:var(--outer); color:var(--ink);
          font-family:var(--serif); line-height:1.55;
          -webkit-font-smoothing:antialiased; }
-  .paper { max-width:880px; margin:32px auto; background:var(--paper);
+  .paper { max-width:1080px; margin:32px auto; background:var(--paper);
            padding:56px 64px 40px; box-shadow:0 2px 24px rgba(40,36,28,.14);
            border:1px solid var(--rule); }
   .label { font-family:var(--sans); text-transform:uppercase;
@@ -41,6 +41,7 @@
 
   /* 3. Ranked table */
   table { width:100%; border-collapse:collapse; font-size:14px; }
+  .tablewrap { overflow-x:auto; }
   thead th { font-family:var(--sans); font-size:10.5px; text-transform:uppercase;
              letter-spacing:.08em; color:var(--muted); text-align:left;
              padding:6px 8px; border-bottom:2px solid var(--rule); }
@@ -68,6 +69,20 @@
   .btm.Restricted { background:#faf1dd; color:var(--gold); }
   .btm.Prohibitive { background:#f6e3df; color:#9a3b2f; }
   sup.cov { color:var(--gold); font-weight:700; cursor:help; font-size:10px; }
+  a.src { font-family:var(--sans); font-size:11px; color:var(--data); text-decoration:none; margin-left:3px; }
+  .tariff, .sig { font-family:var(--sans); font-size:11.5px; line-height:1.35; }
+  .tariff a, .sig a { color:var(--data); text-decoration:none; }
+  .tariff .u, .sig .d { color:var(--muted); font-size:10.5px; display:block; }
+  .tariff.Approved a.s { color:var(--accent); font-weight:600; }
+  .tariff.Filed a.s { color:var(--gold); font-weight:600; }
+  tr.main { cursor:pointer; }
+  tr.main td.st::before { content:"\25B8"; color:var(--muted); font-size:10px; margin-right:4px; }
+  tr.main.open td.st::before { content:"\25BE"; }
+  tr.detail td { background:#f8f6f0; font-family:var(--sans); font-size:12px; line-height:1.55; color:#39352e;
+                 padding:10px 14px 12px 34px; }
+  tr.detail .k { color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-size:10px; margin-right:4px; }
+  tr.detail p { margin:3px 0; }
+  tr.detail a { color:var(--data); }
   .footnote { font-size:11.5px; color:var(--muted); font-family:var(--sans); margin:8px 0 0; }
   .framing { font-size:12.5px; color:var(--muted); font-style:italic; margin:-6px 0 12px;
              line-height:1.5; }
@@ -83,6 +98,9 @@
 
   /* 4. Narratives */
   .market { margin:0 0 18px; }
+  .callout { background:#f6f3ec; border-left:3px solid var(--accent); padding:12px 16px 6px; margin:8px 0 6px; }
+  .callout p.rtg { margin:0 0 8px; font-size:14px; color:#3a362f; }
+  .callout .badge { font-family:var(--sans); font-size:12px; font-weight:700; color:var(--data); margin-left:6px; }
   .market h3 { font-family:var(--serif); font-size:20px; margin:0 0 4px; }
   .market h3 .badge { font-family:var(--sans); font-size:12px; font-weight:700;
                       color:var(--data); margin-left:8px; }
@@ -125,67 +143,74 @@
 
   <p class="lede" id="lede">Loading the latest market ranking…</p>
 
-  <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the 2-page PDF brief</a>
+  <a class="pdf-btn" href="DC_Site_Intelligence_Brief.pdf">↓&nbsp;&nbsp;Download the PDF brief</a>
 
-  <h2 class="section">Ranked Markets — 50 US Data-Center States</h2>
-  <p class="framing">Rankings reflect forward-looking site opportunity, not existing market
-  concentration. Saturated markets may rank lower due to permitting complexity, grid
-  constraints, and community opposition.</p>
-  <table>
+  <h2 class="section">Ranked Markets: 50 US Data-Center States</h2>
+  <p class="framing">The score ranks grid strength and load growth from measured data only:
+  interconnection-queue infrastructure density and depth, and EIA-861 retail sales growth. Market Tier,
+  Permitting and BTM are shown for context and are not scored.</p>
+  <div class="tablewrap"><table>
     <thead><tr>
       <th class="num">#</th><th>State</th><th class="num">Score</th>
-      <th>Market&nbsp;Tier</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
-      <th class="num">Load&nbsp;Growth</th>
-      <th title="Large-load siting & generation-permitting friction: Streamlined / Standard / Complex. Adjusted by a daily sentiment read from news coverage.">Permitting</th>
-      <th title="Behind-the-meter / on-site generation regulatory posture (informational): Permissive / Restricted / Prohibitive.">BTM</th>
-      <th title="Community/public sentiment toward data-center development, a daily read from news coverage.">Sentiment</th>
+      <th title="NexPhase assessment; method under Methodology">Market&nbsp;Tier*</th><th class="num" title="S = STRONG tier substations, M = MODERATE tier substations. Count of high-activity interconnection nodes in each state.">Grid&nbsp;Depth&nbsp;(S·M)</th>
+      <th class="num" id="growthHead" title="Change in EIA-861 retail electricity sales (average annual rate over the years shown), weighted by each utility's sales. Historical survey data, not a forecast.">EIA-861 retail sales, YoY (historical)</th>
+      <th title="NexPhase assessment of large-load siting and generation-permitting friction: Streamlined / Standard / Complex. Not in the score until every state's assessment has a primary source. The link is that source.">Permitting*</th>
+      <th title="NexPhase assessment of the state's behind-the-meter / on-site generation posture: Permissive / Restricted / Prohibitive. Informational, never in the score. The link is the primary source.">BTM*</th>
+      <th title="Status of a large-load / data-center tariff at the state's main utility or utilities: Approved, Filed or None, each with its commission or utility source. Blank where it could not be sourced.">Large-load tariff</th>
+      <th title="The most decision-relevant data-center or grid event in the last 90 days, linked to its primary source. Blank (-) when none had a primary source.">Latest signal</th>
     </tr></thead>
-    <tbody id="rows"><tr><td colspan="9" class="err" id="rowerr"></td></tr></tbody>
-  </table>
-  <p class="footnote">† Incomplete data coverage — no EIA-861 utility load-growth data matched
-  for this state, so the load-growth factor is floored (treated as a negative signal, not
-  neutral). Hover the marker for the coverage level.</p>
+    <tbody id="rows"><tr><td colspan="10" class="err" id="rowerr"></td></tr></tbody>
+  </table></div>
+  <p class="framing" style="font-size:12px">* Market Tier, Permitting and BTM are NexPhase assessments; the method is under
+  Methodology. A &#8599; link is the primary source behind an assessment (state statute, commission order or tariff).
+  <span id="srcCounts"></span> Click a state for its detail.</p>
+  <p class="footnote" id="covNote"></p>
+  <p class="footnote" id="toneLine"></p>
 
   <h2 class="section">Top 3 Markets</h2>
   <div id="narratives"></div>
 
+  <div class="callout">
+    <div class="label" style="color:var(--accent)">Room to grow</div>
+    <p class="framing" style="margin:2px 0 8px">The five highest-scoring states that are not Competitive markets
+    (Market Tier is a NexPhase assessment, shown for context).</p>
+    <div id="roomToGrow"></div>
+  </div>
+
   <h2 class="section">Methodology</h2>
   <div class="method">
-    <p class="framing">This index scores each state on its forward-looking viability for new
-    data center development — not current market size or existing inventory. States with large
-    existing concentrations (e.g. Northern Virginia) may rank lower due to grid saturation,
-    permitting complexity, and elevated community opposition, all of which increase cost and
-    timeline risk for new entrants. States with strong grid infrastructure, streamlined
-    permitting, and lower opposition density rank higher regardless of current market
-    maturity.</p>
+    <p class="framing">This index scores each state on the factors below, not on current market
+    size or existing inventory.</p>
     <p><b>What this index measures.</b> This report is a <em>Generation Infrastructure
     Density Index</em>. It measures where transmission and interconnection infrastructure
-    exists based on active interconnection-queue activity — the concentration of
-    utility-scale generation projects queuing to inject power at each substation. High
-    infrastructure density indicates that transmission lines have been built or are being
-    built, utilities have invested in that node, and power is moving through that location
-    at scale.</p>
+    exists based on active interconnection-queue activity: the concentration of
+    utility-scale generation projects queuing to inject power at each substation. A high
+    density score means many generation projects are queued at that substation.</p>
 
     <p><b>What it does not measure.</b> This index does not measure <em>load-serving
-    capacity</em> — the ability of a utility to serve a new large power consumer at a
+    capacity</em>, the ability of a utility to serve a new large power consumer at a
     specific location. A high-scoring state has strong transmission infrastructure but may
     still require a utility service availability study to confirm spare transformer capacity
     and large-load interconnection timelines.</p>
 
     <p><b>How to use this report.</b> Use this index to pre-screen markets before utility
-    outreach. High-scoring markets warrant further diligence. Low-scoring markets signal
-    thin grid infrastructure where large-load service timelines may extend 24–48+ months.</p>
+    outreach. High-scoring markets warrant further diligence. Low-scoring markets have less
+    queued generation at their substations; confirm large-load service timelines with the
+    utility.</p>
 
-    <p><b>How the index is scored.</b> Each market is scored <b>1–10</b> from five
-    min-max-normalized factors: infrastructure density, STRONG+MODERATE grid depth,
-    weighted utility load growth, market-saturation runway, and
-    <em>permitting ease</em>. The permitting-ease factor tiers each state by large-load
-    siting and generation-permitting friction — <b>Streamlined</b>, <b>Standard</b>, or
-    <b>Complex</b> — rewarding states where projects clear faster.</p>
+    <p><b>How the index is scored.</b> Each market is scored <b>1-10</b> from measured data only,
+    weighted: <span id="weights">loading…</span>. Market Tier, Permitting and BTM are NexPhase
+    assessments shown for context; they are not scored.</p>
+    <p><b>Scaling.</b> Continuous factors (infrastructure density, grid depth, load growth) are scaled by percentile rank: a state's position among the 50 states, from 0 (lowest) to 1 (highest), with tied states sharing the lower position; no manual caps.</p>
+    <p><b>Changed October 14, 2026:</b> factors now scaled by percentile rank, which raises most scores relative to earlier versions.</p>
+    <p id="methodNote"><b>Changed October 14, 2026:</b> Market Tier is no longer scored. The score now uses measured
+    data only (infrastructure density 42%, grid depth 29%, load growth 29%); Market Tier, Permitting and BTM are shown
+    for context. Built-out markets are no longer marked down for having less room to grow.</p>
 
-    <p><b>Community sentiment.</b> Permitting ease is adjusted by a daily sentiment read
-    from news coverage of data-center development. The Sentiment column shows each state's
-    current label.</p>
+    <p><b>Market tiers.</b> <span id="tierMethod">loading…</span></p>
+
+    <p><b>Community sentiment.</b> A daily read of news coverage of data-center development.
+    <span id="sentMethod"></span> <span id="sentNote"></span></p>
 
     <div class="disclaimer"><b>This report does not replace a utility service availability
     confirmation.</b> It is a pre-screening tool that identifies power-advantaged markets for
@@ -199,21 +224,23 @@
   <h2 class="section">Data Sources</h2>
   <div class="method">
     <ul>
-      <li><b>Interconnection queue data</b> — live as of <span id="queueDate"></span>,
-        sourced from ISO/RTO public queues (MISO, PJM, CAISO, ERCOT, WECC).</li>
-      <li><b>EIA substation data</b> — <span id="v860"></span> vintage (EIA-860).</li>
-      <li><b>Utility load data</b> — <span id="v861"></span> vintage (EIA-861).</li>
-      <li><b>Community sentiment</b> — a daily read from news coverage of data-center
-        development; refreshed <b>daily</b>.</li>
+      <li><b>Interconnection queue data</b>: live as of <span id="queueDate"></span>,
+        from ISO/RTO public queues (PJM, MISO, ERCOT, SPP, CAISO, NYISO, ISO-NE) and the
+        queue files West and Southeast utilities post on their OASIS sites.</li>
+      <li><b>EIA substation data</b>: <span id="v860"></span> vintage (EIA-860).</li>
+      <li><b>Utility load data</b>: EIA-861 retail sales, <span id="v861"></span> (historical).</li>
+      <li><b>Community sentiment</b>: a daily read of news coverage of data-center
+        development (Google News search results, each headline kept with its outlet and link);
+        refreshed <b>daily</b>.</li>
     </ul>
   </div>
 
   <footer>
     <div class="by">Chris Santiago &nbsp;·&nbsp; NexPhase Advisory</div>
-    <div class="credo">Two decades in utility-scale development &nbsp;·&nbsp; 5+ GW delivered across major U.S. ISOs and RTOs</div>
+    <div class="credo">Two decades in utility-scale development &nbsp;·&nbsp; 5+ GW taken to NTP across major U.S. ISOs and RTOs</div>
 <div class="credo" style="margin-top:6px">DC Site Intelligence is part of the NexPhase Intelligence Platform, alongside The Interconnect and The Morning Read: <a href="https://intel.nexphaseadvisory.net/platform/">intel.nexphaseadvisory.net/platform/</a></div>
-    <div>Compiled from publicly available sources — ISO/RTO interconnection queue data,
-    EIA-860 &amp; EIA-861 surveys, and utility commission records. Analysis reflects
+    <div>Compiled from publicly available sources: ISO/RTO and utility interconnection queue
+    data and the EIA-860 &amp; EIA-861 surveys. Analysis reflects
     Chris Santiago's independent professional assessment. Scores refresh weekly.</div>
     <div class="updated" id="updated"></div>
     <div class="vintage" id="vintage"></div>
@@ -241,22 +268,75 @@ function fmtUpdated(g){
   return `${MONTHS[mo-1]} ${day}, ${y}` + (t ? ` · ${t}` : "");
 }
 const scoreColor = s => s>=6.5 ? "var(--accent)" : s>=4.5 ? "var(--gold)" : "var(--data)";
-const fmtGrowth = g => (g>=0?"+":"") + g.toFixed(1) + "%";
+const fmtGrowth = g => g==null ? "n/a" : (g>=0?"+":"") + g.toFixed(1) + "%";
 const tierClass = t => t.replace(/\s+/g,"");
-const tierClause = t => t==="Underdeveloped" ? "an underdeveloped DC market with open runway (grid infrastructure ahead of current build-out)"
-                      : t==="Emerging" ? "an emerging DC market building momentum, not yet crowded"
-                      : "a competitive, built-out DC market";
+let GROWTH_SPAN = null;   // {from, to} of the EIA-861 years; set from data_vintage
+function growthPeriod(){ return GROWTH_SPAN ? `${GROWTH_SPAN.from}-${GROWTH_SPAN.to}` : ""; }
+function multiYear(){ return GROWTH_SPAN && GROWTH_SPAN.to - GROWTH_SPAN.from >= 2; }
+const tierClause = t => `a${/^[AEIOU]/.test(t) ? "n" : ""} ${t} market (NexPhase assessment)`;
+
+function esc(v){ return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function fmtDay(iso){
+  if(!iso) return "";
+  const [y,mo,dd] = iso.split("-").map(Number);
+  return `${MONTHS[mo-1].slice(0,3)} ${dd}, ${y}`;
+}
+function shortUtil(u){ return String(u||"").replace(/\s*\(.*?\)\s*/g," ").replace(/\s+/g," ").trim(); }
+const ordinal = n => n + (n%100>=11 && n%100<=13 ? "th" : ({1:"st",2:"nd",3:"rd"}[n%10] || "th"));
+function srcLine(label, e){
+  if (!e || !e.url) return "";
+  return `<p><span class="k">${label}</span><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.publisher || "source")}${e.title ? ": " + esc(e.title) : ""}</a>${e.shows ? ". " + esc(e.shows) : ""}</p>`;
+}
+function detail(x){
+  const r = x.factor_rank || {};
+  const kv = x.avg_max_voltage_kv ? `; average max voltage ${x.avg_max_voltage_kv.toFixed(0)} kV` : "";   // hidden when missing
+  const rk = ["infra","depth","growth"].filter(k => r[k]).map(k =>
+      `${{infra:"infrastructure density",depth:"grid depth",growth:"load growth"}[k]} ${ordinal(r[k])}`).join(", ");
+  const t = (x.large_load_tariff || []).map(u =>
+      `<a href="${esc(u.url)}" target="_blank" rel="noopener">${esc(shortUtil(u.utility))}: ${esc(u.status)}</a>`
+      + `${u.name ? " (" + esc(u.name) + (u.docket ? ", " + esc(u.docket) : "") + ")" : ""}`).join("; ");
+  const s = x.latest_signal;
+  return `<p><span class="k">Queue</span>${Math.round(x.total_queued_mw||0).toLocaleString()} MW queued across ${x.substation_count} substations${kv}.</p>`
+    + `<p><span class="k">Factor ranks (of 50)</span>${rk || "n/a"}. <span class="k" style="margin-left:8px">Market Tier</span>${esc(x.saturation_tier)} (NexPhase assessment).</p>`
+    + `<p>${narrative(x)}</p>`
+    + (s ? `<p><span class="k">Latest signal</span>${esc(fmtDay(s.date))}: ${esc(s.text)} <a href="${esc(s.primary_url)}" target="_blank" rel="noopener">${esc(s.primary_publisher || "primary source")}</a></p>` : "")
+    + srcLine("Permitting source", x.permitting_source) + srcLine("BTM source", x.btm_source)
+    + (t ? `<p><span class="k">Large-load tariff</span>${t}</p>` : "")
+    + (x.tariff_note ? `<p><span class="k">Large-load tariff</span>${esc(x.tariff_note)}`
+       + (x.tariff_note_sources||[]).map((u,i) => ` <a href="${esc(u)}" target="_blank" rel="noopener">[${i+1}]</a>`).join("") + `</p>` : "")
+    + ((x.large_load_tariff||[]).filter(u => u.note && u.status === "None").map(u =>
+       `<p><span class="k">Note</span>${esc(shortUtil(u.utility))}: ${esc(u.note)}</p>`).join(""));
+}
+
+function tierLabel(x, rw){
+  if (x.saturation_tier !== "Underdeveloped") return x.saturation_tier;
+  return rw.includes(x.state) ? "Underdeveloped, established data-center market" : "Underdeveloped, no established market yet";
+}
+function roomLine(x){
+  const r = x.factor_rank || {}, g = x.weighted_load_growth_pct;
+  const per = GROWTH_SPAN ? ` (${growthPeriod()})` : "";
+  const growth = g == null ? "no EIA-861 retail sales data"
+    : `EIA-861 retail sales ${g >= 0 ? "up" : "down"} ${Math.abs(g).toFixed(1)}% a year${per}`;
+  return `Infrastructure density ${ordinal(r.infra)} of 50, grid depth ${ordinal(r.depth)}; ${growth}.`;
+}
 
 function narrative(m){
   const name = FULL[m.state]||m.state;
   const depthClause = (m.strong_substations + m.moderate_substations) >= 5
       ? `${m.strong_substations} STRONG and ${m.moderate_substations} MODERATE density substations (avg ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} queue substations)`
       : `an average infrastructure density of ${m.avg_infra_density_score.toFixed(2)}/10 across ${m.substation_count} interconnection-queue substations`;
-  const growthClause = m.weighted_load_growth_pct>=1
-      ? `utility load is growing (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`
-      : m.weighted_load_growth_pct<=-1
-      ? `load growth is soft (${fmtGrowth(m.weighted_load_growth_pct)} weighted), so the case rests on grid capacity rather than demand momentum`
-      : `load growth is roughly flat (${fmtGrowth(m.weighted_load_growth_pct)} weighted)`;
+  const g = m.weighted_load_growth_pct;
+  const growthClause = g==null
+      ? `EIA-861 retail sales data is not available for this state, so its score rests on the other factors`
+      : multiYear()
+      ? (g>=1 ? `EIA-861 retail sales grew an average of ${Math.abs(g).toFixed(1)}% a year over ${growthPeriod()} (historical)`
+        : g<=-1 ? `EIA-861 retail sales fell an average of ${Math.abs(g).toFixed(1)}% a year over ${growthPeriod()} (historical), so the case rests on grid capacity rather than demand momentum`
+        : `EIA-861 retail sales were roughly flat over ${growthPeriod()} (${fmtGrowth(g)} a year, historical)`)
+      : g>=1
+      ? `EIA-861 retail sales rose ${Math.abs(g).toFixed(1)}% year over year (historical)`
+      : g<=-1
+      ? `EIA-861 retail sales fell ${Math.abs(g).toFixed(1)}% year over year (historical), so the case rests on grid capacity rather than demand momentum`
+      : `EIA-861 retail sales were roughly flat year over year (${fmtGrowth(g)}, historical)`;
   return `${name} ranks <b>#${m.rank}</b> at <b>${m.dc_site_score.toFixed(1)}/10</b>, carried by ${depthClause}. As ${tierClause(m.saturation_tier)}, ${growthClause}.`;
 }
 
@@ -271,39 +351,104 @@ fetch("ranked_markets.json", {cache:"no-store"})
 
     // Data vintage
     const dv = d.data_vintage || {};
+    if (dv.eia_861_prior_year && dv.eia_861_latest_year)
+      GROWTH_SPAN = {from: +dv.eia_861_prior_year, to: +dv.eia_861_latest_year};
+    if (d.growth_label) document.getElementById("growthHead").textContent = d.growth_label;
+    const v861 = dv.eia_861_prior_year && dv.eia_861_prior_year !== dv.eia_861_latest_year
+      ? `${dv.eia_861_prior_year}-${dv.eia_861_latest_year}` : (dv.eia_861_latest_year || "2023");
     const qd = dv.queue_live_as_of || (d.generated||"").split(" ")[0];
     if (document.getElementById("queueDate")) document.getElementById("queueDate").textContent = qd;
     if (document.getElementById("v860")) document.getElementById("v860").textContent = dv.eia_860_year || "2023";
-    if (document.getElementById("v861")) document.getElementById("v861").textContent = dv.eia_861_latest_year || "2023";
+    if (document.getElementById("v861")) document.getElementById("v861").textContent = v861;
     document.getElementById("vintage").textContent =
       `Queue data: live as of ${qd}  |  EIA substation data: ${dv.eia_860_year||"2023"} vintage (EIA-860)`
-      + `  |  Utility load data: ${dv.eia_861_latest_year||"2023"} vintage (EIA-861)`;
+      + `  |  Utility load data: EIA-861 retail sales, ${v861} (historical)`;
 
     // Lede
-    const under = m.filter(x=>x.saturation_tier==="Underdeveloped").length;
     const t = m.slice(0,3).map(x=>FULL[x.state]||x.state);
     document.getElementById("lede").innerHTML =
       `Across all 50 US data-center markets, <strong>${t[0]}</strong> leads NexPhase's `
       + `Site Intelligence ranking at <strong>${m[0].dc_site_score.toFixed(1)}/10</strong> on grid `
       + `infrastructure depth and quality, followed by <strong>${t[1]}</strong> and `
-      + `<strong>${t[2]}</strong>. ${under} of the 50 markets remain underdeveloped for data centers — `
-      + `open runway where grid infrastructure is ahead of current build-out.`;
+      + `<strong>${t[2]}</strong>.`;
 
-    // Table
-    document.getElementById("rows").innerHTML = m.map(x => {
+    // Weights actually used (measured data only since 2026-10-14) and the tier method.
+    const W = d.weights || [];
+    document.getElementById("weights").textContent = W.length
+      ? W.map(w => `${w.factor} ${Math.round(w.weight*100)}%`).join(", ") : "see ranked_markets.json";
+    document.getElementById("sentNote").textContent = "It is not scored.";
+    document.getElementById("tierMethod").textContent = d.tier_method || "NexPhase assessment.";
+    // Room to grow (owner, 2026-10-14): the five highest-scoring states that are not Competitive.
+    const rw = (d.runway_states||[]);
+    document.getElementById("roomToGrow").innerHTML = m.filter(x => x.saturation_tier !== "Competitive").slice(0,5)
+      .map(x => `<p class="rtg"><b>${FULL[x.state]||x.state}</b> <span class="badge">#${x.rank} · ${x.dc_site_score.toFixed(1)}/10 · `
+        + `${esc(tierLabel(x, rw))}</span><br>${roomLine(x)}</p>`).join("");
+
+    // Missing EIA-861 data (owner, 2026-10-14): n/a, left out of that state's score, weights rescaled.
+    const naCount = m.filter(x => x.weighted_load_growth_pct == null).length;
+    document.getElementById("covNote").textContent = (naCount
+      ? "† No EIA-861 retail sales data for this state: the column shows n/a and that factor is left out of the state's score, with the remaining factor weights rescaled to 100% for that state."
+      : "EIA-861 retail sales data covers all 50 states. Where EIA has no data for a state, the column shows n/a and that factor is left out of the state's score, with the remaining weights rescaled to 100%.")
+      + " Missing data is not scored as a negative. (Changed October 14, 2026: earlier versions scored missing data as the lowest growth.)";
+
+    // Sentiment (owner, 2026-10-14): while the read is one-sided it is shown only as Coverage tone counts, with no
+    // per-state label and no colour; the per-state column returns once the read differentiates states.
+    const tone = d.coverage_tone || {};
+    const sentOn = tone.differentiates === true;
+    if (!sentOn) document.querySelectorAll("th.sentcol").forEach(th => th.remove());
+    const tc = tone.counts || {};
+    document.getElementById("toneLine").textContent = sentOn ? "" :
+      `Coverage tone (news headlines, latest daily read${tone.date ? ", " + tone.date : ""}, ${tone.states||0} states): `
+      + `${tc["Positive"]||0} positive, ${tc["Neutral"]||0} neutral, ${tc["Moderate Negative"]||0} moderately negative, `
+      + `${tc["Strong Negative"]||0} strongly negative. The read does not yet separate states, so no per-state label is shown.`;
+    document.getElementById("sentMethod").textContent = sentOn
+      ? "A state's label is shown only when its headlines come from two or more independent outlets."
+      : "The read is currently one-sided (almost every state reads negative), so the page shows only the Coverage tone counts under the table and no per-state label.";
+
+    // Table. N37 (owner, 2026-10-13): Permitting / BTM come from State Policy and stay off the public page until every
+    // state has a source link (policy_sourced); a sentiment label shows only when its headlines come from 2+ outlets.
+    // Owner, 2026-10-14: Permitting / BTM shown again, labelled a NexPhase assessment, each with its primary source
+    // when one supports it; the large-load tariff and the Latest signal (replaces the per-state sentiment) are sourced
+    // or blank; every row expands to its detail (data already in ranked_markets.json).
+    const sc = d.sources_summary || {};
+    document.getElementById("srcCounts").textContent = sc.permitting_sourced != null
+      ? `Sourced: Permitting ${sc.permitting_sourced} of 50, BTM ${sc.btm_sourced} of 50, large-load tariff ${sc.tariff_sourced} of 50.` : "";
+    const srcLink = e => e && e.url ? ` <a class="src" href="${esc(e.url)}" target="_blank" rel="noopener" title="${esc((e.publisher||"") + (e.title ? ": " + e.title : ""))}">&#8599;</a>` : "";
+    const tariffCell = x => {
+      const t = x.large_load_tariff || [];
+      if (!t.length) return "";
+      const top = t.filter(r => r.status === x.tariff_status);
+      return `<span class="tariff ${esc(x.tariff_status)}"><a class="s" href="${esc(top[0].url)}" target="_blank" rel="noopener" title="${esc(top[0].publisher||"")}">${esc(x.tariff_status)}</a>`
+        + `<span class="u">${top.map(r => esc(shortUtil(r.utility))).join(", ")}</span></span>`;
+    };
+    const sigCell = x => {
+      const s = x.latest_signal;
+      if (!s) return "-";
+      return `<span class="sig"><a href="${esc(s.primary_url)}" target="_blank" rel="noopener" title="${esc(s.text)}">${esc(s.company)}</a>`
+        + `<span class="d">${esc(fmtDay(s.date))}</span></span>`;
+    };
+    document.getElementById("rows").innerHTML = m.map((x, i) => {
       const g = x.weighted_load_growth_pct;
-      return `<tr>
+      return `<tr class="main" data-i="${i}">
         <td class="num rk">${x.rank}</td>
-        <td class="st">${x.state}${x.data_coverage && x.data_coverage!=="Full" ? `<sup class="cov" title="Data coverage: ${x.data_coverage} — load-growth factor floored for this state">†</sup>` : ""}</td>
+        <td class="st">${x.state}${x.weighted_load_growth_pct==null ? `<sup class="cov" title="No EIA-861 retail sales data: left out of this state's score, other weights rescaled">†</sup>` : ""}</td>
         <td class="num"><span class="score-chip" style="background:${scoreColor(x.dc_site_score)}">${x.dc_site_score.toFixed(1)}</span></td>
         <td><span class="tier ${tierClass(x.saturation_tier)}">${x.saturation_tier}</span></td>
         <td class="num">${x.strong_substations} · ${x.moderate_substations}</td>
-        <td class="num ${g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
-        <td>${x.permitting_ease ? `<span class="permit ${x.permitting_ease}">${x.permitting_ease}</span>` : "—"}</td>
-        <td>${x.btm_policy ? `<span class="btm ${tierClass(x.btm_policy)}">${x.btm_policy}</span>` : "—"}</td>
-        <td>${x.sentiment_label ? `<span class="sent ${tierClass(x.sentiment_label)}">${x.sentiment_label}</span>` : "—"}</td>
-      </tr>`;
+        <td class="num ${g==null?'':g>=0?'pos':'neg'}">${fmtGrowth(g)}</td>
+        <td style="white-space:nowrap">${x.permitting_ease ? `<span class="permit ${x.permitting_ease}">${x.permitting_ease}</span>` : "-"}${srcLink(x.permitting_source)}</td>
+        <td style="white-space:nowrap">${x.btm_policy ? `<span class="btm ${tierClass(x.btm_policy)}">${x.btm_policy}</span>` : "-"}${srcLink(x.btm_source)}</td>
+        <td>${tariffCell(x)}</td>
+        <td>${sigCell(x)}</td>
+      </tr>
+      <tr class="detail" hidden><td colspan="10">${detail(x)}</td></tr>`;
     }).join("");
+    document.querySelectorAll("#rows tr.main").forEach(tr => tr.addEventListener("click", ev => {
+      if (ev.target.closest("a")) return;
+      const det = tr.nextElementSibling;
+      det.hidden = !det.hidden;
+      tr.classList.toggle("open", !det.hidden);
+    }));
 
     // Narratives
     document.getElementById("narratives").innerHTML = m.slice(0,3).map(x =>
@@ -313,8 +458,8 @@ fetch("ranked_markets.json", {cache:"no-store"})
   .catch(e => {
     document.getElementById("lede").innerHTML =
       `<span class="err">Could not load ranked_markets.json (${e.message}). `
-      + `Serve this page over HTTP (e.g. GitHub Pages) — a local <code>file://</code> open blocks the data fetch.</span>`;
-    document.getElementById("rowerr").textContent = "No data — see note above.";
+      + `Serve this page over HTTP (e.g. GitHub Pages); a local <code>file://</code> open blocks the data fetch.</span>`;
+    document.getElementById("rowerr").textContent = "No data: see note above.";
   });
 </script>
 </body>
